@@ -1,0 +1,37 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { PageIntro } from "@/components/pages/PageIntro";
+import { specialtiesFeatured, siteMeta } from "@/content/site-config";
+
+export const metadata: Metadata = {
+  title: "Specialties",
+  description:
+    "VoiceDocAI specialty templates—radiology, gastroenterology, dermatology, paediatrics, orthopaedics, OT notes, discharge summaries, and more.",
+  alternates: { canonical: `${siteMeta.domain}/specialties` },
+};
+
+export default function SpecialtiesIndexPage() {
+  return (
+    <>
+      <PageIntro
+        eyebrow="Clinical breadth"
+        title="Specialty templates mapped to Indian caseloads"
+        conciseAnswer="Each specialty page should deep-link to anonymised sample outputs, matching case studies, and tagged blog posts—managed entirely through the CMS collection powering this grid."
+      />
+      <section className="container-page py-[var(--section-y)]">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {specialtiesFeatured.map((s) => (
+            <Link
+              key={s.slug}
+              href={`/specialties/${s.slug}`}
+              className="rounded-2xl border border-indigo/10 bg-white p-6 shadow-card transition-transform hover:-translate-y-1"
+            >
+              <h2 className="font-display text-lg font-bold text-navy">{s.title}</h2>
+              <p className="mt-2 text-sm text-slate">{s.blurb}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
