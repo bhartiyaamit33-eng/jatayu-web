@@ -72,8 +72,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sora.variable} ${inter.variable} ${jetbrains.variable}`}>
-      <body>
+    <html
+      lang="en"
+      className={`${sora.variable} ${inter.variable} ${jetbrains.variable}`}
+      suppressHydrationWarning
+    >
+      <body suppressHydrationWarning>
         <JsonLd data={organizationLd} />
         <SiteHeader />
         <main id="main-content">{children}</main>

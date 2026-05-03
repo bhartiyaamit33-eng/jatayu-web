@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { mainNavItems } from "@/lib/nav";
+import { headerNavItems, mainNavItems } from "@/lib/nav";
 import { getLoginUrl } from "@/lib/login-url";
 import { siteMeta } from "@/content/site-config";
 import { Logo } from "@/components/brand/Logo";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const items = mainNavItems();
+  const headerItems = headerNavItems();
+  const mobileItems = mainNavItems();
 
   return (
     <header className="sticky top-0 z-[100] border-b border-indigo/10 bg-white/90 shadow-nav backdrop-blur-xl">
@@ -19,47 +20,50 @@ export function SiteHeader() {
       >
         Skip to content
       </a>
-      <div className="container-page flex h-[68px] items-center justify-between gap-4">
+      <div className="container-page flex h-16 items-center justify-between gap-6">
         <Link
           href="/"
           aria-label={`${siteMeta.legalName} home`}
-          className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight text-navy"
+          className="flex shrink-0 items-center gap-2.5 font-display text-base font-bold tracking-tight text-navy"
         >
-          <Logo size={36} decorative />
-          <span className="hidden sm:inline">
+          <Logo size={32} decorative />
+          <span className="hidden whitespace-nowrap sm:inline">
             Jatayu · {siteMeta.productName}
           </span>
-          <span className="sm:hidden">{siteMeta.productName}</span>
+          <span className="whitespace-nowrap sm:hidden">{siteMeta.productName}</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {items.map((item) => (
+        <nav
+          className="hidden min-w-0 flex-1 items-center justify-center gap-7 xl:flex"
+          aria-label="Primary"
+        >
+          {headerItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-slate transition-colors duration-200 ease-clinical hover:text-navy"
+              className="whitespace-nowrap text-sm font-medium text-slate transition-colors duration-200 ease-clinical hover:text-navy"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <Link
             href={getLoginUrl()}
-            className="hidden rounded-lg border border-indigo/20 px-[18px] py-2 text-sm font-medium text-navy transition-colors duration-200 ease-clinical hover:border-indigo hover:text-indigo sm:inline-block"
+            className="hidden whitespace-nowrap rounded-lg border border-indigo/20 px-4 py-2 text-sm font-medium text-navy transition-colors duration-200 ease-clinical hover:border-indigo hover:text-indigo sm:inline-block"
           >
             Login
           </Link>
           <Link
             href="/trial"
-            className="rounded-lg bg-grad-accent px-5 py-2 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(155,47,145,0.35)] transition-transform duration-200 ease-clinical hover:-translate-y-px"
+            className="whitespace-nowrap rounded-lg bg-grad-accent px-4 py-2 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(155,47,145,0.35)] transition-transform duration-200 ease-clinical hover:-translate-y-px sm:px-5"
           >
             Start free trial
           </Link>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-indigo/15 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-indigo/15 xl:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
@@ -77,13 +81,13 @@ export function SiteHeader() {
       {open ? (
         <div
           id="mobile-nav"
-          className="border-t border-indigo/10 bg-white lg:hidden"
+          className="border-t border-indigo/10 bg-white xl:hidden"
         >
           <nav
             className="container-page flex flex-col gap-1 py-4"
             aria-label="Mobile primary"
           >
-            {items.map((item) => (
+            {mobileItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
