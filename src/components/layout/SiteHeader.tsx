@@ -5,6 +5,7 @@ import { useState } from "react";
 import { mainNavItems } from "@/lib/nav";
 import { getLoginUrl } from "@/lib/login-url";
 import { siteMeta } from "@/content/site-config";
+import { Logo } from "@/components/brand/Logo";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -19,13 +20,12 @@ export function SiteHeader() {
         Skip to content
       </a>
       <div className="container-page flex h-[68px] items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight text-navy">
-          <span
-            className="flex h-[34px] w-[34px] items-center justify-center rounded-[9px] bg-grad-accent text-sm font-extrabold text-white"
-            aria-hidden
-          >
-            J
-          </span>
+        <Link
+          href="/"
+          aria-label={`${siteMeta.legalName} home`}
+          className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight text-navy"
+        >
+          <Logo size={36} decorative />
           <span className="hidden sm:inline">
             Jatayu · {siteMeta.productName}
           </span>

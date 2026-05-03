@@ -14,7 +14,7 @@ export type MetricItem = {
   id: string;
   value: string;
   label: string;
-  /** Citation key for GEO — surface on /about/facts */
+  /** Citation key for GEO - surface on /about/facts */
   sourceRef: string;
 };
 
@@ -59,7 +59,7 @@ export const siteMeta = {
   legalName: "Jatayu Healthcare Technologies Pvt. Ltd.",
   productName: "VoiceDocAI",
   domain: "https://jatayuhealth.com",
-  defaultTitle: "VoiceDocAI by Jatayu Healthcare — Voice-first clinical documentation",
+  defaultTitle: "VoiceDocAI by Jatayu Healthcare · Voice-first clinical documentation",
   defaultDescription:
     "Voice-first medical AI built for Indian doctors. From conversation to structured English clinical note in under a minute, in 50+ languages. IIT Bombay incubated.",
   positioningLine:
@@ -68,7 +68,7 @@ export const siteMeta = {
   founderEmail: "aparnaoruganty.das@jatayuhealth.com",
 };
 
-/** Primary navigation — toggling showInMainNav simulates CMS “show in nav” */
+/** Primary navigation - toggling showInMainNav simulates CMS “show in nav” */
 export const navigationMain: NavItem[] = [
   { label: "Home", href: "/", showInMainNav: true, order: 0 },
   { label: "Product", href: "/product", showInMainNav: true, order: 10 },
@@ -99,20 +99,48 @@ export const navigationMain: NavItem[] = [
 ].sort((a, b) => a.order - b.order);
 
 export const homeHero = {
-  badge:
-    "Built for Indian clinics, hospitals, and HMIS partners — pocket-friendly and hands-free.",
-  headline: "Spend less time typing. More time with patients.",
+  badge: "Pocket-friendly. Hands-free. Built at IIT Bombay.",
+  headline: "From the conversation, to the clinical note. In under a minute.",
   subheadline:
-    "VoiceDocAI listens to real doctor–patient conversations in Hindi, Marathi, English, or any mix, and turns them into structured English clinical notes you can verify and file.",
+    "Hindi, Marathi, English, or all three at once. VoiceDocAI drafts the structured note. You verify and file it.",
   trustLine:
-    "IIT Bombay incubated. Piloted at KEM Hospital, MGM, ILBS Delhi, and DY Patil Navi Mumbai.",
+    "Pilots at KEM Hospital, MGM, ILBS Delhi, and DY Patil Navi Mumbai. Reviewed by clinicians, not autopilots.",
   primaryCta: { label: "Start 7-day free trial", href: "/trial" },
-  secondaryCta: { label: "Talk to our team", href: "/contact" },
+  secondaryCta: { label: "Book a 20-minute walkthrough", href: "/contact" },
 };
 
-/** 40–60 word concise answer for AEO (editable per page in CMS) */
+export const audienceSplit = {
+  doctor: {
+    title: "I am a doctor",
+    body: "Time saved per day, multilingual clinics, pocket-friendly workflows.",
+    cta: "Show me what is relevant",
+    href: "/for-doctors",
+  },
+  hospital: {
+    title: "I am a hospital or HMIS partner",
+    body: "APIs, India-resident data, SLAs, on-prem options, audit logs.",
+    chip: "Data resident in India",
+    cta: "Take me to integrations",
+    href: "/for-hospitals-and-hmis",
+  },
+};
+
+export const patientConsentBlock = {
+  title: "Patient consent, kept simple",
+  body: "Capture begins only after the clinician confirms the patient has agreed. Consent state is logged with the encounter so audit and clinical governance teams can review it later.",
+  bullets: [
+    "Doctor confirms verbal consent before recording starts.",
+    "Capture indicator stays visible on the doctor's device throughout.",
+    "Consent metadata is stored with the encounter, separate from the audio.",
+  ],
+};
+
+/** 40-60 word concise answer for AEO (editable per page in CMS) */
 export const homeConciseAnswer =
-  "VoiceDocAI is an Indian, IIT Bombay–incubated voice assistant for medicine. It captures multilingual clinic conversations, reduces background noise, and drafts structured English notes—consultation notes, discharge summaries, OT notes, radiology reports, and prescriptions—for clinician review before filing or HMIS push.";
+  "VoiceDocAI is an Indian, IIT Bombay incubated voice assistant for medicine. It captures multilingual clinic conversations, reduces background noise, and drafts structured English notes (consultation notes, discharge summaries, OT notes, radiology reports, and prescriptions) for clinician review before filing or HMIS push.";
+
+/** Plain-language label paired with the concise answer block (was "In one minute:") */
+export const homeConciseAnswerLabel = "What it is";
 
 export const homeMetrics: MetricItem[] = [
   {
@@ -159,7 +187,7 @@ export const logoWall: LogoItem[] = [
 export const howItWorksSteps = [
   {
     title: "Capture the conversation",
-    body: "Hands-free capture in noisy OPDs and wards—multilingual speech, not templated scripts.",
+    body: "Hands-free capture in noisy OPDs and wards. Multilingual speech, not templated scripts.",
   },
   {
     title: "Process and structure",
@@ -167,11 +195,11 @@ export const howItWorksSteps = [
   },
   {
     title: "Review and verify",
-    body: "You edit, approve, and sign off—clinical responsibility stays with the treating physician.",
+    body: "You edit, approve, and sign off-clinical responsibility stays with the treating physician.",
   },
   {
     title: "Push or copy",
-    body: "Export, API push, or HMIS integration—avoid re-keying into legacy systems.",
+    body: "Export, API push, or HMIS integration-avoid re-keying into legacy systems.",
   },
 ];
 
@@ -225,16 +253,16 @@ export const caseStudySpotlight = {
   pullQuote:
     "Significant reduction in documentation time, improved workflow efficiency, and accurate conversion of multilingual conversations into structured English records.",
   metricsLine:
-    "95 cases · 18 clinicians · 5 departments · 70–90 dB ambient noise — see the published pilot summary for methodology.",
+    "95 cases, 18 clinicians, 5 departments, 70 to 90 dB ambient noise. See the published pilot summary for methodology.",
   linkLabel: "Read the full pilot report",
 };
 
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "Across the pilot, clinicians reported faster turnaround from encounter to filed note, with multilingual Hindi–Marathi–English conversations consolidated into English records suitable for HMIS workflows.",
+      "Across the pilot, clinicians reported faster turnaround from encounter to filed note, with multilingual Hindi-Marathi-English conversations consolidated into English records suitable for HMIS workflows.",
     attribution: "VoiceDocAI pilot evaluation",
-    role: "Seth G.S. Medical College & KEM Hospital — aggregate clinician feedback (Dec 2025)",
+    role: "Seth G.S. Medical College and KEM Hospital, aggregate clinician feedback (Dec 2025)",
   },
 ];
 
@@ -264,22 +292,22 @@ export const deploymentModes = [
 export const complianceBand = [
   {
     title: "HIPAA-aligned posture",
-    body: "Security page documents our alignment scope—confirm exact claims before procurement.",
+    body: "We use HIPAA-aligned, not HIPAA-compliant. The Security page explains the exact scope.",
     href: "/security",
   },
   {
     title: "DPDP Act 2023",
-    body: "Indian privacy obligations reviewed with counsel—status detailed on Security.",
+    body: "Indian privacy obligations reviewed with counsel. Status detailed on Security.",
     href: "/security",
   },
   {
     title: "ISO 27001",
-    body: "Certification status is founder-confirmed and published—no aspirational language.",
+    body: "Certification status is founder-confirmed and published, with no aspirational language.",
     href: "/security",
   },
   {
-    title: "Encryption & residency",
-    body: "TLS in transit, AES-256 at rest, India-focused residency story.",
+    title: "Encryption and residency",
+    body: "TLS in transit, AES-256 at rest, and India-resident data by default.",
     href: "/security",
   },
 ];
@@ -288,7 +316,7 @@ export const founderNote = {
   name: "Dr. Aparna Oruganty Das",
   role: "Director & CEO, Jatayu Healthcare Technologies",
   quote:
-    "We built VoiceDocAI so Indian physicians can stay present with patients—hands-free, pocket-friendly, and rigorous about clinical verification.",
+    "We built VoiceDocAI so Indian physicians can stay present with patients. Hands-free, pocket-friendly, and rigorous about clinical verification.",
   aboutHref: "/about",
 };
 
@@ -296,34 +324,34 @@ export const awards: AwardItem[] = [
   { name: "BIRAC-supported innovation pathway", detail: "Confirm listing copy in CMS" },
   { name: "MIT WPU engagement", detail: "Confirm listing copy in CMS" },
   { name: "BITS Hyderabad collaboration", detail: "Confirm listing copy in CMS" },
-  { name: "Koita Foundation — Virtual Venture Development Dialogues (V2DD)", detail: "Confirm listing copy in CMS" },
+  { name: "Koita Foundation, Virtual Venture Development Dialogues (V2DD)", detail: "Confirm listing copy in CMS" },
 ];
 
 export const homeFaqs: FAQItem[] = [
   {
     question: "What is VoiceDocAI?",
     answer:
-      "VoiceDocAI captures doctor–patient conversations and drafts structured English clinical documentation—consult notes, discharge summaries, prescriptions, radiology narratives, and OT notes—for clinician review before filing or HMIS integration.",
+      "VoiceDocAI captures doctor-patient conversations and drafts structured English clinical documentation (consult notes, discharge summaries, prescriptions, radiology narratives, and OT notes) for clinician review before filing or HMIS integration.",
   },
   {
     question: "Which languages does VoiceDocAI support?",
     answer:
-      "VoiceDocAI is built for Indian multilingual practice—including Hindi, Marathi, English, and mixed conversations—with broader language coverage managed per deployment; publish the exact supported list only after founder confirmation.",
+      "VoiceDocAI is built for Indian multilingual practice (including Hindi, Marathi, English, and mixed conversations) with broader language coverage managed per deployment; publish the exact supported list only after founder confirmation.",
   },
   {
     question: "Is audio stored?",
     answer:
-      "Retention and processing posture must match your hospital agreement and applicable law. Use the Security & Compliance page for the definitive statement after legal review—never guess on procurement calls.",
+      "Retention and processing posture must match your hospital agreement and applicable law. Use the Security & Compliance page for the definitive statement after legal review-never guess on procurement calls.",
   },
   {
     question: "Can hospitals integrate via API?",
     answer:
-      "Yes—HMIS and EHR partners can integrate using documented APIs and deployment models including on-premise where required; integration timelines depend on your environment and governance.",
+      "Yes-HMIS and EHR partners can integrate using documented APIs and deployment models including on-premise where required; integration timelines depend on your environment and governance.",
   },
   {
     question: "How long is the free trial?",
     answer:
-      "The public site promotes a 7-day trial—confirm what the trial unlocks (web account, desktop client, or license key) before advertising specifics.",
+      "The public site promotes a 7-day trial-confirm what the trial unlocks (web account, desktop client, or license key) before advertising specifics.",
   },
 ];
 
@@ -338,19 +366,19 @@ export const caseStudiesIndex: CaseStudySummary[] = [
     slug: "mgm",
     title: "MGM",
     institution: "MGM",
-    excerpt: "Deployment narrative — load final copy from CMS.",
+    excerpt: "Deployment narrative pending. Load the final copy from CMS.",
   },
   {
     slug: "ilbs-delhi",
     title: "ILBS Delhi",
     institution: "ILBS Delhi",
-    excerpt: "Deployment narrative — load final copy from CMS.",
+    excerpt: "Deployment narrative pending. Load the final copy from CMS.",
   },
   {
     slug: "dy-patil-navi-mumbai",
     title: "DY Patil Navi Mumbai",
     institution: "DY Patil Navi Mumbai",
-    excerpt: "Deployment narrative — load final copy from CMS.",
+    excerpt: "Deployment narrative pending. Load the final copy from CMS.",
   },
   {
     slug: "souter-street-dispensary",

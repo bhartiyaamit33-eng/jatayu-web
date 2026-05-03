@@ -31,7 +31,7 @@ body {
   }
 }
 
-/* Calm waveform — disabled when user prefers reduced motion */
+/* Calm waveform - disabled when user prefers reduced motion */
 @keyframes wave-bar {
   0%,
   100% {
@@ -54,5 +54,42 @@ body {
     animation: none;
     opacity: 0.85;
     transform: scaleY(0.65);
+  }
+}
+
+/* Print: simplify Security page for procurement PDF capture */
+@media print {
+  header,
+  footer,
+  nav,
+  [aria-hidden="true"] {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #13233f !important;
+    font-size: 11pt;
+  }
+  main {
+    padding: 0 !important;
+  }
+  a {
+    color: #13233f !important;
+    text-decoration: none !important;
+  }
+  details > summary {
+    list-style: none;
+  }
+  details {
+    page-break-inside: avoid;
+  }
+  details:not([open]) > *:not(summary) {
+    display: none;
+  }
+  .shadow-card,
+  .shadow-elevated,
+  .shadow-sm,
+  .shadow-nav {
+    box-shadow: none !important;
   }
 }

@@ -12,7 +12,7 @@ export function HeroVisual() {
           <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" aria-hidden />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" aria-hidden />
           <p className="mx-auto font-mono text-[11px] text-slate">
-            VoiceDocAI — clinical documentation (illustration, not live audio)
+            VoiceDocAI - clinical documentation (illustration, not live audio)
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
@@ -33,7 +33,7 @@ export function HeroVisual() {
               ))}
             </div>
             <p className="mt-3 text-sm italic leading-relaxed text-slate">
-              Multilingual speech becomes structured English fields—filtered for
+              Multilingual speech becomes structured English fields-filtered for
               ward noise, written for HMIS handoff.
             </p>
           </div>

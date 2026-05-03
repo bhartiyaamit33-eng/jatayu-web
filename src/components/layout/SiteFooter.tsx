@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { footerColumns, siteMeta } from "@/content/site-config";
+import { Logo } from "@/components/brand/Logo";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -8,18 +9,15 @@ export function SiteFooter() {
     <footer className="bg-[#09152e] px-6 py-14 text-white/60 md:px-12">
       <div className="container-page grid gap-10 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2 font-display text-lg font-bold text-white">
-            <span
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-grad-accent text-sm font-extrabold"
-              aria-hidden
-            >
-              J
+          <div className="flex items-center gap-2.5 font-display text-lg font-bold text-white">
+            <span className="rounded-lg bg-white p-1.5">
+              <Logo size={32} decorative />
             </span>
             Jatayu Healthcare
           </div>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/65">
             {siteMeta.productName}: voice-first clinical documentation for
-            Indian healthcare—hands-free, pocket-friendly, built for verification
+            Indian healthcare. Hands-free, pocket-friendly, built for verification
             before filing.
           </p>
         </div>

@@ -7,7 +7,7 @@ export type BlogPostSummary = {
   readMinutes: number;
 };
 
-/** Placeholder posts — replace via CMS */
+/** Placeholder posts - replace via CMS */
 export const blogPosts: BlogPostSummary[] = [
   {
     slug: "voice-documentation-indian-opd",
@@ -22,7 +22,7 @@ export const blogPosts: BlogPostSummary[] = [
     slug: "hmis-integration-checklist",
     title: "HMIS integration without re-keying: patterns that survive audits",
     excerpt:
-      "How structured notes travel from capture to filing—with audit trails hospital IT teams expect.",
+      "How structured notes travel from capture to filing, with audit trails hospital IT teams expect.",
     category: "HMIS / EHR",
     publishedAt: "2026-03-28",
     readMinutes: 6,

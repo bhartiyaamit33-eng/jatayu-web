@@ -1,8 +1,14 @@
 import type { MetadataRoute } from "next";
-import { blogPosts } from "@/content/blog-posts";
-import { caseStudiesIndex, specialtiesFeatured, siteMeta } from "@/content/site-config";
+import { getCaseStudies, getPosts, getSiteMeta, getSpecialties } from "@/lib/cms";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [siteMeta, specialties, studies, posts] = await Promise.all([
+    getSiteMeta(),
+    getSpecialties(),
+    getCaseStudies(),
+    getPosts(),
+  ]);
+
   const lastModified = new Date();
 
   const staticPaths = [
@@ -34,7 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: path === "" ? 1 : 0.7,
   }));
 
-  specialtiesFeatured.forEach((s) => {
+  specialties.forEach((s) => {
     entries.push({
       url: `${siteMeta.domain}/specialties/${s.slug}`,
       lastModified,
@@ -43,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  caseStudiesIndex.forEach((c) => {
+  studies.forEach((c) => {
     entries.push({
       url: `${siteMeta.domain}/case-studies/${c.slug}`,
       lastModified,
@@ -52,7 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  blogPosts.forEach((p) => {
+  posts.forEach((p) => {
     entries.push({
       url: `${siteMeta.domain}/blog/${p.slug}`,
       lastModified,

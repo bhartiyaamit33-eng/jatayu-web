@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { siteMeta } from "@/content/site-config";
+import { revalidateTag } from "next/cache";
+import { getPayloadClient } from "@/lib/payload";
 
 type TrialPayload = {
   fullName?: string;
@@ -11,6 +12,8 @@ type TrialPayload = {
   country?: string;
   password?: string;
 };
+
+const allowedRoles = ["doctor", "hospital_admin", "ehr_partner", "other"] as const;
 
 export async function POST(request: Request) {
   let body: TrialPayload;
@@ -37,22 +40,53 @@ export async function POST(request: Request) {
     );
   }
 
-  const allowedRoles = ["doctor", "hospital_admin", "ehr_partner", "other"];
-  if (!body.role || !allowedRoles.includes(body.role)) {
+  if (!body.role || !allowedRoles.includes(body.role as (typeof allowedRoles)[number])) {
     return NextResponse.json({ ok: false, error: "Invalid role." }, { status: 400 });
   }
 
-  // TODO: Persist to Postgres, enqueue Gmail SMTP + drip scheduler, notify sales.
-  if (process.env.NODE_ENV !== "production") {
-    console.info("[trial signup]", {
-      ...body,
-      password: "[redacted]",
-      salesEmail: siteMeta.salesEmail,
-    });
-  }
+  try {
+    const payload = await getPayloadClient();
 
-  return NextResponse.json({
-    ok: true,
-    received: true,
-  });
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-real-ip") ??
+      "";
+    const userAgent = request.headers.get("user-agent") ?? "";
+
+    await payload.create({
+      collection: "leads",
+      data: {
+        fullName: String(body.fullName).trim(),
+        workEmail: String(body.workEmail).trim().toLowerCase(),
+        phone: String(body.phone).trim(),
+        role: body.role as (typeof allowedRoles)[number],
+        specialty: body.specialty?.trim() || undefined,
+        hospitalOrCompany: String(body.hospitalOrCompany).trim(),
+        country: String(body.country).trim(),
+        status: "new",
+        source: "trial-form",
+        consent: {
+          termsAcceptedAt: new Date().toISOString(),
+          ip,
+          userAgent,
+        },
+      },
+    });
+
+    revalidateTag("leads", "max");
+
+    // TODO: enqueue Gmail SMTP welcome + drip scheduler. Sales notification handled
+    // by reading new leads from /admin or via a Payload afterChange hook.
+
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("Lead persist failed", err);
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "We could not submit your request right now. Please try again or email sales@jatayuhealth.com.",
+      },
+      { status: 500 },
+    );
+  }
 }
