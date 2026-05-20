@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { azureBlobStorage } from "@payloadcms/storage-azure";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
@@ -30,6 +31,27 @@ import { HomepageConciseAnswer } from "./globals/HomepageConciseAnswer";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+// In production, persist media uploads to Azure Blob Storage. Locally and in
+// CI builds (where AZURE_STORAGE_CONNECTION_STRING is unset) Payload falls
+// back to disk via the Media collection's `staticDir`.
+const azureConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const azureContainer = process.env.AZURE_STORAGE_CONTAINER_NAME ?? "media";
+const azureAccountUrl = process.env.AZURE_STORAGE_ACCOUNT_BASEURL;
+
+const plugins =
+  process.env.NODE_ENV === "production" && azureConnectionString && azureAccountUrl
+    ? [
+        azureBlobStorage({
+          enabled: true,
+          collections: { media: true },
+          allowContainerCreate: false,
+          baseURL: `${azureAccountUrl}/${azureContainer}`,
+          connectionString: azureConnectionString,
+          containerName: azureContainer,
+        }),
+      ]
+    : [];
 
 export default buildConfig({
   admin: {
@@ -68,6 +90,7 @@ export default buildConfig({
     HomepageConciseAnswer,
   ],
   editor: lexicalEditor({}),
+  plugins,
   sharp,
   secret: process.env.PAYLOAD_SECRET ?? "dev-secret-change-me-in-prod",
   typescript: {

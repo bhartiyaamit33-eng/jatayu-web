@@ -7,8 +7,12 @@ import { getCaseStudies, getCaseStudyBySlug, getSiteMeta } from "@/lib/cms";
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  const studies = await getCaseStudies();
-  return studies.map((c) => ({ slug: c.slug }));
+  try {
+    const studies = await getCaseStudies();
+    return studies.map((c) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -64,13 +64,32 @@ Move them into Payload incrementally by adding new globals/collections and updat
 
 ## Production deployment
 
-1. Provision a Postgres database. Cloud SQL on GCP works well; the connection string format matches `DATABASE_URI` in `.env.example`.
+### Azure (current path)
+
+The full runbook lives at [`infra/README.md`](./infra/README.md). Short version:
+
+1. `brew install azure-cli && az login && az account set --subscription <id>`
+2. `bash infra/azure-deploy.sh` — idempotent, provisions Resource Group → ACR → Key Vault → Postgres Flexible Server → Storage Account → Log Analytics → App Insights → Container Apps Environment → Container App. Builds the image with `az acr build` and rolls a revision.
+3. Visit the FQDN it prints and create the first super-admin at `/admin`.
+4. Seed content:
+   ```bash
+   SECRET=$(az keyvault secret show --vault-name <kv> --name payload-secret --query value -o tsv)
+   curl -X POST -H "x-seed-secret: $SECRET" https://<fqdn>/api/seed
+   ```
+5. For continuous deploys on every `main` push, set up OIDC federation per `infra/README.md` and add the three GitHub Actions secrets — `.github/workflows/azure-deploy.yml` handles the rest.
+
+**Security posture in production:** secrets live in Key Vault, referenced by Container Apps via the system-assigned managed identity. No plaintext PAYLOAD_SECRET or DB password is stored in env files, ACR, or GitHub. The `/api/seed` route is still gated by the same secret — disable or rename it after the first seed for defense in depth.
+
+### Generic (any host)
+
+1. Provision a Postgres database (Azure Flexible Server, Cloud SQL, RDS, Neon — all work).
 2. Set environment variables in your hosting provider:
-   - `DATABASE_URI` — production Postgres connection string
-   - `PAYLOAD_SECRET` — generate with `openssl rand -base64 48`
-   - `NEXT_PUBLIC_SITE_URL` — production domain
-   - `NEXT_PUBLIC_LOGIN_URL` — production app login URL
-3. Deploy.
+   - `DATABASE_URI` — production Postgres connection string (include `sslmode=require` for managed databases).
+   - `PAYLOAD_SECRET` — generate with `openssl rand -base64 48`.
+   - `NEXT_PUBLIC_SITE_URL` — production domain.
+   - `NEXT_PUBLIC_LOGIN_URL` — production app login URL.
+   - `AZURE_STORAGE_*` (only if using Azure Blob for media; otherwise leave unset and uploads land on disk).
+3. Build a Docker image with the bundled `Dockerfile` and run it on any container host.
 4. Visit `<your-domain>/admin` and create the first super-admin user.
 5. Seed once: `curl -X POST -H "x-seed-secret: <PAYLOAD_SECRET>" https://<your-domain>/api/seed`
 6. **Disable or rate-limit `/api/seed`** in production by adding the route to a middleware allowlist or simply renaming the file after seeding (it requires the secret already, but defense in depth).

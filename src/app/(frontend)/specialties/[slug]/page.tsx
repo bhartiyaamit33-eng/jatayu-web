@@ -7,8 +7,12 @@ import { getSiteMeta, getSpecialties, getSpecialtyBySlug } from "@/lib/cms";
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  const specialties = await getSpecialties();
-  return specialties.map((s) => ({ slug: s.slug }));
+  try {
+    const specialties = await getSpecialties();
+    return specialties.map((s) => ({ slug: s.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

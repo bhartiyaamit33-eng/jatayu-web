@@ -7,8 +7,14 @@ import { getPostBySlug, getPosts, getSiteMeta } from "@/lib/cms";
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  const posts = await getPosts();
-  return posts.map((p) => ({ slug: p.slug }));
+  try {
+    const posts = await getPosts();
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    // Build runs without DB access (CI / ACR build). Fall back to fully dynamic
+    // rendering; pages still cache via Payload's unstable_cache at runtime.
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
