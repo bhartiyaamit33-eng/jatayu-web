@@ -1,0 +1,155 @@
+/**
+ * One-off: crop branded regions out of the founder deck PDF (rendered to PNG)
+ * and write them to public/brand/* for the home page logo wall, supporter
+ * strip, awards section, hospital partner panel, and case-study spotlight.
+ *
+ * All source slides are 4000x2250 (200 DPI of a 16:9 deck). Coordinates below
+ * were eyeballed off the rendered PNG previews.
+ *
+ * Run:  cd jatayu-web && node scripts/extract-assets.mjs
+ */
+import sharp from "sharp";
+import { mkdir } from "node:fs/promises";
+import path from "node:path";
+
+const SLIDES = "/Users/amitbhartiya/Desktop/Jatayu Frontend/extracted/slides";
+const OUT = "/Users/amitbhartiya/Desktop/Jatayu Frontend/jatayu-web/public/brand";
+
+// Each entry: source slide PNG → crop rect → output relative path.
+// Rect = { left, top, width, height } in pixels of the 4000x2250 slide.
+const JOBS = [
+  // --- Supporter strip (slide 01: bottom-right logo band) ---
+  // Combined single strip is more faithful to the deck and avoids fragile
+  // per-logo coordinate hunting at the small scale these print.
+  {
+    src: "slide-01.png",
+    rect: { left: 2280, top: 1840, width: 1680, height: 260 },
+    out: "supporters/supporters-strip.png",
+  },
+
+  // --- Hospital partner row (slide 08, top half) ---
+  // Combined row of 3 logos. Tighter than per-logo splits and avoids picking
+  // up neighbouring title text. Title strip stripped; logo band only.
+  {
+    src: "slide-08.png",
+    rect: { left: 100, top: 300, width: 3500, height: 820 },
+    out: "hospitals/hospital-row.png",
+  },
+
+  // --- EHR / HMIS partner row (slide 08, bottom half) ---
+  // Combined row of 4 logos. Same rationale as hospital row above.
+  {
+    src: "slide-08.png",
+    rect: { left: 100, top: 1340, width: 3700, height: 540 },
+    out: "ehr/ehr-row.png",
+  },
+
+  // --- Award photos (slide 07) ---
+  {
+    src: "slide-07.png",
+    rect: { left: 200, top: 280, width: 720, height: 880 },
+    out: "awards/tide-meity-hack-reboot.png",
+  },
+  {
+    src: "slide-07.png",
+    rect: { left: 940, top: 280, width: 720, height: 880 },
+    out: "awards/chers-pilot-shark-tank.png",
+  },
+  {
+    src: "slide-07.png",
+    rect: { left: 200, top: 1240, width: 720, height: 880 },
+    out: "awards/healthtech-meetup.png",
+  },
+  {
+    src: "slide-07.png",
+    rect: { left: 940, top: 1240, width: 720, height: 880 },
+    out: "awards/top-woman-entrepreneur.png",
+  },
+  {
+    src: "slide-07.png",
+    rect: { left: 1680, top: 1240, width: 1000, height: 880 },
+    out: "awards/v2dd-koita-foundation.png",
+  },
+  {
+    src: "slide-07.png",
+    rect: { left: 2700, top: 1240, width: 1100, height: 880 },
+    out: "awards/medicircle-feature.png",
+  },
+
+  // --- KEM case-study charts (slide 12) ---
+  {
+    src: "slide-12.png",
+    rect: { left: 360, top: 380, width: 1700, height: 1600 },
+    out: "case-studies/kem-time-saved-bar.png",
+  },
+  {
+    src: "slide-12.png",
+    rect: { left: 2200, top: 240, width: 1700, height: 970 },
+    out: "case-studies/kem-specialty-distribution.png",
+  },
+  {
+    src: "slide-12.png",
+    rect: { left: 2200, top: 1200, width: 1700, height: 1000 },
+    out: "case-studies/kem-language-distribution.png",
+  },
+
+  // --- How VoiceDocAI Works diagram (slide 05, left half) ---
+  {
+    src: "slide-05.png",
+    rect: { left: 120, top: 250, width: 2080, height: 1900 },
+    out: "product/how-it-works-flow.png",
+  },
+
+  // --- Product UI screenshots (slide 06) ---
+  // Slide title runs y=80-300; web app screenshot sits y=420-1480.
+  {
+    src: "slide-06.png",
+    rect: { left: 280, top: 470, width: 1380, height: 1080 },
+    out: "product/voicedocai-web-app.png",
+  },
+  {
+    src: "slide-06.png",
+    rect: { left: 1800, top: 320, width: 2120, height: 1900 },
+    out: "product/voicedocai-pdf-reports.png",
+  },
+
+  // --- Founder portrait (slide 07: "Top Woman Entrepreneur" panel) ---
+  // The Medicircle feature image at the right side has the clearest Aparna headshot.
+  {
+    src: "slide-07.png",
+    rect: { left: 3320, top: 1320, width: 480, height: 540 },
+    out: "founders/aparna-das-headshot.png",
+  },
+
+  // --- Crisp Jatayu phoenix mark (slide 17) ---
+  {
+    src: "slide-17.png",
+    rect: { left: 3120, top: 80, width: 770, height: 770 },
+    out: "jatayu-mark.png",
+  },
+
+  // --- MGM validation letter (slide 16) ---
+  {
+    src: "slide-16.png",
+    rect: { left: 220, top: 420, width: 1600, height: 1660 },
+    out: "case-studies/mgm-validation-letter.png",
+  },
+];
+
+async function main() {
+  for (const job of JOBS) {
+    const inPath = path.join(SLIDES, job.src);
+    const outPath = path.join(OUT, job.out);
+    await mkdir(path.dirname(outPath), { recursive: true });
+    await sharp(inPath)
+      .extract(job.rect)
+      .png({ compressionLevel: 9, palette: false })
+      .toFile(outPath);
+    console.log("wrote", path.relative(OUT, outPath));
+  }
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

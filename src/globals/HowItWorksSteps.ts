@@ -6,6 +6,12 @@ export const HowItWorksSteps: GlobalConfig = {
   access: { read: () => true },
   fields: [
     {
+      name: "flowDiagram",
+      label: "Single full-flow diagram (used when individual step visuals are not yet supplied)",
+      type: "upload",
+      relationTo: "media",
+    },
+    {
       name: "steps",
       type: "array",
       minRows: 1,
@@ -13,6 +19,7 @@ export const HowItWorksSteps: GlobalConfig = {
       fields: [
         { name: "title", type: "text", required: true },
         { name: "body", type: "textarea", required: true },
+        { name: "visual", type: "upload", relationTo: "media" },
       ],
     },
   ],

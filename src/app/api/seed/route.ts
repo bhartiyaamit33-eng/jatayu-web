@@ -8,6 +8,8 @@
  *
  * For production: bump PAYLOAD_SECRET, then call once after deploy. Do not expose.
  */
+import { readFile, stat } from "node:fs/promises";
+import path from "node:path";
 import { NextResponse } from "next/server";
 import { getPayloadClient } from "@/lib/payload";
 import {
@@ -25,6 +27,7 @@ import {
   homeMetrics,
   howItWorksSteps,
   logoWall,
+  partnerRowImages,
   patientConsentBlock,
   siteMeta,
   specialtiesFeatured,
@@ -36,6 +39,9 @@ import { trialDripEmails } from "@/content/trial-emails";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+const BRAND_DIR = path.join(process.cwd(), "public", "brand");
+
+type Payload = Awaited<ReturnType<typeof getPayloadClient>>;
 type CollectionSlug =
   | "home-faqs"
   | "specialties"
@@ -45,8 +51,49 @@ type CollectionSlug =
   | "trial-emails"
   | "posts";
 
+async function uploadMedia(
+  payload: Payload,
+  relativePath: string,
+  alt: string,
+  log: string[],
+): Promise<string | number | null> {
+  const absPath = path.join(BRAND_DIR, relativePath);
+  try {
+    const stats = await stat(absPath);
+    if (!stats.isFile()) return null;
+  } catch {
+    log.push(`media-skip (missing): ${relativePath}`);
+    return null;
+  }
+  const filename = path.basename(absPath);
+  // Idempotent: if a media doc with this filename already exists, reuse it.
+  const existing = await payload.find({
+    collection: "media",
+    where: { filename: { equals: filename } },
+    limit: 1,
+    depth: 0,
+  });
+  if (existing.docs[0]) {
+    log.push(`media-reuse: ${relativePath}`);
+    return (existing.docs[0] as { id: string | number }).id;
+  }
+  const buffer = await readFile(absPath);
+  const doc = await payload.create({
+    collection: "media",
+    data: { alt },
+    file: {
+      data: buffer,
+      mimetype: "image/png",
+      name: filename,
+      size: buffer.length,
+    },
+  });
+  log.push(`media-upload: ${relativePath}`);
+  return (doc as { id: string | number }).id;
+}
+
 async function upsert<T extends Record<string, unknown>>(
-  payload: Awaited<ReturnType<typeof getPayloadClient>>,
+  payload: Payload,
   collection: CollectionSlug,
   uniqueField: string,
   rows: T[],
@@ -88,6 +135,34 @@ export async function POST(req: Request) {
   try {
     const payload = await getPayloadClient();
 
+    // ---------- Media uploads (idempotent) ----------
+    const mediaIds: Record<string, string | number | null> = {};
+    const mediaUploads: Array<{ key: string; path: string; alt: string }> = [
+      { key: "supportersStrip", path: partnerRowImages.supporters, alt: "Jatayu supporter ecosystem strip: Google Cloud for Startups, BIRAC, MeitY, SINE IIT Bombay" },
+      { key: "hospitalsRow", path: partnerRowImages.hospitals, alt: "Hospital partner row: Basavatarakam Cancer Centre Hyderabad, ILBS Delhi, MGM Medical College Kamothe" },
+      { key: "ehrRow", path: partnerRowImages.ehrs, alt: "EHR / HMIS partner row: Akhil Systems, Dataman Computer Systems, Ohum Healthcare, Jeena Sikho" },
+      { key: "howItWorksFlow", path: "product/how-it-works-flow.png", alt: "VoiceDocAI five-step flow: conversation, capture, structuring, doctor verification, HMIS integration" },
+      { key: "voicedocaiWebApp", path: "product/voicedocai-web-app-clean.png", alt: "VoiceDocAI web app — Summary Data with structured clinical sections" },
+      { key: "voicedocaiPdfReports", path: "product/voicedocai-pdf-reports.png", alt: "VoiceDocAI structured PDF reports for HMIS handoff" },
+      { key: "kemTimeSavedBar", path: "case-studies/kem-time-saved-bar.png", alt: "KEM Hospital pilot — manual vs VoiceDocAI documentation time (5 min vs 1 min)" },
+      { key: "kemSpecialtyDistribution", path: "case-studies/kem-specialty-distribution.png", alt: "KEM Hospital pilot — distribution of reports across specialties" },
+      { key: "kemLanguageDistribution", path: "case-studies/kem-language-distribution.png", alt: "KEM Hospital pilot — distribution of languages used in patient encounters" },
+      { key: "kemDoctorFeedback", path: "case-studies/kem-doctor-feedback-ratings.png", alt: "KEM Hospital pilot — average clinician ratings: adoption 4.7, multilingual 4.6, noise 4.2, speed 4.1" },
+      { key: "mgmValidationLetter", path: "case-studies/mgm-validation-letter-clean.png", alt: "MGM Medical College, Kamothe — written validation letter for VoiceDocAI" },
+      { key: "jatayuMark", path: "jatayu-mark.png", alt: "Jatayu Healthcare phoenix mark" },
+    ];
+    // Award images (one per award where we have one)
+    for (const award of awards) {
+      if (award.imagePath) {
+        mediaUploads.push({ key: `award-${award.name}`, path: award.imagePath, alt: award.name });
+      }
+    }
+
+    for (const item of mediaUploads) {
+      mediaIds[item.key] = await uploadMedia(payload, item.path, item.alt, log);
+    }
+
+    // ---------- Globals ----------
     await payload.updateGlobal({
       slug: "site-meta",
       data: {
@@ -96,7 +171,7 @@ export async function POST(req: Request) {
         domain: siteMeta.domain,
         salesEmail: siteMeta.salesEmail,
         supportEmail: siteMeta.founderEmail,
-        addressLine: "Mumbai, India",
+        addressLine: "6005A, 6th floor, SINE, Rahul Bajaj Technology Innovation Centre, IIT Bombay, Powai, Mumbai 400076",
         defaultTitle: siteMeta.defaultTitle,
         defaultDescription: siteMeta.defaultDescription,
       },
@@ -151,19 +226,33 @@ export async function POST(req: Request) {
         role: founderNote.role,
         quote: founderNote.quote,
         aboutHref: founderNote.aboutHref,
+        // portrait left null - founder to supply professional headshot
       },
     });
     log.push("global founder-note");
 
     await payload.updateGlobal({
       slug: "logo-wall",
-      data: { logos: logoWall.map((l) => ({ name: l.name, consentOnFile: false })) },
+      data: {
+        logos: logoWall.map((l) => ({
+          name: l.name,
+          category: l.category ?? "hospital",
+          consentOnFile: false,
+          href: l.href ?? null,
+        })),
+        hospitalRowImage: mediaIds.hospitalsRow ?? null,
+        ehrRowImage: mediaIds.ehrRow ?? null,
+        supportersRowImage: mediaIds.supportersStrip ?? null,
+      },
     });
     log.push("global logo-wall");
 
     await payload.updateGlobal({
       slug: "how-it-works-steps",
-      data: { steps: howItWorksSteps },
+      data: {
+        flowDiagram: mediaIds.howItWorksFlow ?? null,
+        steps: howItWorksSteps,
+      },
     });
     log.push("global how-it-works-steps");
 
@@ -173,6 +262,7 @@ export async function POST(req: Request) {
     });
     log.push("global homepage-concise-answer");
 
+    // ---------- Collections ----------
     await upsert(
       payload,
       "home-faqs",
@@ -205,6 +295,8 @@ export async function POST(req: Request) {
       "slug",
       caseStudiesIndex.map((c, i) => {
         const isSpotlight = c.slug === caseStudySpotlight.slug;
+        const isKem = c.slug === "kem-hospital";
+        const isMgm = c.slug === "mgm";
         return {
           slug: c.slug,
           institution: c.institution,
@@ -219,6 +311,28 @@ export async function POST(req: Request) {
             : new Date().toISOString(),
           order: (i + 1) * 10,
           _status: "published",
+          coverImage: isKem
+            ? mediaIds.kemTimeSavedBar
+            : isMgm
+              ? mediaIds.mgmValidationLetter
+              : null,
+          charts: isKem
+            ? {
+                timeSaved: mediaIds.kemTimeSavedBar ?? null,
+                specialtyDistribution: mediaIds.kemSpecialtyDistribution ?? null,
+                languageDistribution: mediaIds.kemLanguageDistribution ?? null,
+                doctorRatings: mediaIds.kemDoctorFeedback ?? null,
+                validationLetter: null,
+              }
+            : isMgm
+              ? {
+                  timeSaved: null,
+                  specialtyDistribution: null,
+                  languageDistribution: null,
+                  doctorRatings: null,
+                  validationLetter: mediaIds.mgmValidationLetter ?? null,
+                }
+              : {},
         };
       }),
       log,
@@ -245,6 +359,8 @@ export async function POST(req: Request) {
       awards.map((a, i) => ({
         name: a.name,
         detail: a.detail ?? "",
+        image: a.imagePath ? mediaIds[`award-${a.name}`] ?? null : null,
+        sourceUrl: a.sourceUrl ?? null,
         order: (i + 1) * 10,
       })),
       log,

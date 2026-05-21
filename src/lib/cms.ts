@@ -136,6 +136,18 @@ export const getDeploymentModes = unstable_cache(
   { tags: [TAG, "deployment-modes"] },
 );
 
+type MediaDoc = { id: string | number; url?: string; alt?: string };
+
+function mediaUrl(value: unknown): string | null {
+  if (!value || typeof value !== "object") return null;
+  const m = value as MediaDoc;
+  return typeof m.url === "string" ? m.url : null;
+}
+function mediaAlt(value: unknown, fallback = ""): string {
+  if (!value || typeof value !== "object") return fallback;
+  return (value as MediaDoc).alt ?? fallback;
+}
+
 export const getFounderNote = unstable_cache(
   async () => {
     const p = await payload();
@@ -145,6 +157,8 @@ export const getFounderNote = unstable_cache(
       role: row.role as string ?? founderFallback.role,
       quote: row.quote as string ?? founderFallback.quote,
       aboutHref: row.aboutHref as string ?? founderFallback.aboutHref,
+      portraitUrl: mediaUrl(row.portrait),
+      portraitAlt: mediaAlt(row.portrait, founderFallback.name),
     };
   },
   ["global", "founder-note"],
@@ -154,10 +168,25 @@ export const getFounderNote = unstable_cache(
 export const getLogoWall = unstable_cache(
   async () => {
     const p = await payload();
-    const row = await p.findGlobal({ slug: "logo-wall", depth: 0 }) as Record<string, unknown>;
-    const logos = row.logos as Array<{ name: string }> | undefined;
-    if (logos && Array.isArray(logos) && logos.length > 0) return logos;
-    return logoWallFallback.map((l) => ({ name: l.name }));
+    const row = await p.findGlobal({ slug: "logo-wall", depth: 1 }) as Record<string, unknown>;
+    const rawLogos = row.logos as Array<{ name: string; category?: string; logo?: unknown; href?: string }> | undefined;
+    const logos = (rawLogos && rawLogos.length > 0)
+      ? rawLogos.map((l) => ({
+          name: l.name,
+          category: l.category ?? "hospital",
+          href: l.href,
+          imageUrl: mediaUrl(l.logo),
+        }))
+      : logoWallFallback.map((l) => ({ name: l.name, category: l.category ?? "hospital", href: l.href, imageUrl: null }));
+    return {
+      logos,
+      hospitalRowUrl: mediaUrl(row.hospitalRowImage),
+      hospitalRowAlt: mediaAlt(row.hospitalRowImage, "Hospital partner row"),
+      ehrRowUrl: mediaUrl(row.ehrRowImage),
+      ehrRowAlt: mediaAlt(row.ehrRowImage, "EHR / HMIS partner row"),
+      supportersRowUrl: mediaUrl(row.supportersRowImage),
+      supportersRowAlt: mediaAlt(row.supportersRowImage, "Supporter ecosystem strip"),
+    };
   },
   ["global", "logo-wall"],
   { tags: [TAG, "logo-wall"] },
@@ -166,9 +195,16 @@ export const getLogoWall = unstable_cache(
 export const getHowItWorksSteps = unstable_cache(
   async () => {
     const p = await payload();
-    const row = await p.findGlobal({ slug: "how-it-works-steps", depth: 0 }) as Record<string, unknown>;
-    const steps = row.steps as typeof stepsFallback | undefined;
-    return (steps && Array.isArray(steps) && steps.length > 0) ? steps : stepsFallback;
+    const row = await p.findGlobal({ slug: "how-it-works-steps", depth: 1 }) as Record<string, unknown>;
+    const rawSteps = row.steps as Array<{ title: string; body: string; visual?: unknown }> | undefined;
+    const steps = (rawSteps && rawSteps.length > 0)
+      ? rawSteps.map((s) => ({ title: s.title, body: s.body, visualUrl: mediaUrl(s.visual) }))
+      : stepsFallback.map((s) => ({ title: s.title, body: s.body, visualUrl: null as string | null }));
+    return {
+      steps,
+      flowDiagramUrl: mediaUrl(row.flowDiagram),
+      flowDiagramAlt: mediaAlt(row.flowDiagram, "VoiceDocAI five-step flow diagram"),
+    };
   },
   ["global", "how-it-works-steps"],
   { tags: [TAG, "how-it-works-steps"] },
@@ -262,9 +298,27 @@ export const getSpotlightCaseStudy = unstable_cache(
       where: { spotlight: { equals: true } },
       sort: "-publishedAt",
       limit: 1,
-      depth: 0,
+      depth: 2,
     });
-    if (res.docs[0]) return res.docs[0];
+    if (res.docs[0]) {
+      const doc = res.docs[0] as Record<string, unknown>;
+      const charts = (doc.charts as Record<string, unknown> | undefined) ?? {};
+      return {
+        slug: doc.slug as string,
+        institution: doc.institution as string,
+        pullQuote: doc.pullQuote as string,
+        metricsLine: doc.metricsLine as string,
+        linkLabel: doc.linkLabel as string,
+        spotlight: true,
+        coverImageUrl: mediaUrl(doc.coverImage),
+        coverImageAlt: mediaAlt(doc.coverImage, (doc.institution as string) ?? ""),
+        chartTimeSavedUrl: mediaUrl(charts.timeSaved),
+        chartSpecialtyUrl: mediaUrl(charts.specialtyDistribution),
+        chartLanguageUrl: mediaUrl(charts.languageDistribution),
+        chartDoctorRatingsUrl: mediaUrl(charts.doctorRatings),
+        validationLetterUrl: mediaUrl(charts.validationLetter),
+      };
+    }
     return {
       slug: spotlightFallback.slug,
       institution: spotlightFallback.institution,
@@ -272,6 +326,13 @@ export const getSpotlightCaseStudy = unstable_cache(
       metricsLine: spotlightFallback.metricsLine,
       linkLabel: spotlightFallback.linkLabel,
       spotlight: true,
+      coverImageUrl: null,
+      coverImageAlt: "",
+      chartTimeSavedUrl: null,
+      chartSpecialtyUrl: null,
+      chartLanguageUrl: null,
+      chartDoctorRatingsUrl: null,
+      validationLetterUrl: null,
     };
   },
   ["coll", "case-studies", "spotlight"],
@@ -325,9 +386,24 @@ export const getTestimonials = unstable_cache(
 export const getAwards = unstable_cache(
   async () => {
     const p = await payload();
-    const res = await p.find({ collection: "awards", sort: "order", limit: 50, depth: 0 });
-    if (res.docs.length > 0) return res.docs;
-    return awardsFallback.map((a, i) => ({ name: a.name, detail: a.detail ?? "", order: (i + 1) * 10 }));
+    const res = await p.find({ collection: "awards", sort: "order", limit: 50, depth: 1 });
+    if (res.docs.length > 0) {
+      return res.docs.map((d) => {
+        const doc = d as Record<string, unknown>;
+        return {
+          id: doc.id as string | number,
+          name: doc.name as string,
+          detail: (doc.detail as string) ?? "",
+          imageUrl: mediaUrl(doc.image),
+          imageAlt: mediaAlt(doc.image, doc.name as string),
+          sourceUrl: (doc.sourceUrl as string) ?? null,
+        };
+      });
+    }
+    return awardsFallback.map((a, i) => ({
+      id: i, name: a.name, detail: a.detail ?? "",
+      imageUrl: null, imageAlt: a.name, sourceUrl: a.sourceUrl ?? null,
+    }));
   },
   ["coll", "awards"],
   { tags: [TAG, "awards"] },

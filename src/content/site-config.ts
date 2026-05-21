@@ -22,6 +22,8 @@ export type LogoItem = {
   name: string;
   /** Greyscale treatment in UI; consent tracked in CMS */
   href?: string;
+  category?: "hospital" | "ehr" | "strategic" | "supporter";
+  imagePath?: string;
 };
 
 export type SpecialtySummary = {
@@ -53,6 +55,8 @@ export type FAQItem = {
 export type AwardItem = {
   name: string;
   detail?: string;
+  imagePath?: string;
+  sourceUrl?: string;
 };
 
 export const siteMeta = {
@@ -176,13 +180,31 @@ export const homeMetrics: MetricItem[] = [
 ];
 
 export const logoWall: LogoItem[] = [
-  { name: "KEM Hospital" },
-  { name: "MGM" },
-  { name: "ILBS Delhi" },
-  { name: "DY Patil Navi Mumbai" },
-  { name: "Souter Street Dispensary" },
-  { name: "HMIS / EHR partners (named with consent)" },
+  { name: "Seth G.S. Medical College & KEM Hospital", category: "hospital" },
+  { name: "MGM Medical College & Hospital, Kamothe", category: "hospital" },
+  { name: "ILBS, Delhi", category: "hospital" },
+  { name: "DY Patil Hospital, Navi Mumbai", category: "hospital" },
+  { name: "Basavatarakam Indo-American Cancer Centre, Hyderabad", category: "hospital" },
+  { name: "Souter Street Dispensary, BMC Mumbai", category: "hospital" },
+  { name: "Akhil Systems Pvt. Ltd.", category: "ehr" },
+  { name: "Dataman Computer Systems Pvt. Ltd.", category: "ehr" },
+  { name: "Ohum Healthcare", category: "ehr" },
+  { name: "Jeena Sikho", category: "ehr" },
+  { name: "Koita Foundation (V2DD Leadership)", category: "strategic" },
+  { name: "Google Cloud for Startups", category: "supporter" },
+  { name: "BIRAC, Department of Biotechnology, Govt of India", category: "supporter" },
+  { name: "MeitY, Ministry of Electronics and IT", category: "supporter" },
+  { name: "SINE, IIT Bombay", category: "supporter" },
+  { name: "IIT Bombay", category: "supporter" },
+  { name: "IIT Kanpur", category: "supporter" },
 ];
+
+/** Combined-row supporter / partner band image paths (rendered via media uploads, see seed). */
+export const partnerRowImages = {
+  supporters: "supporters/supporters-strip.png",
+  hospitals: "hospitals/hospital-row.png",
+  ehrs: "ehr/ehr-row.png",
+};
 
 export const howItWorksSteps = [
   {
@@ -321,10 +343,52 @@ export const founderNote = {
 };
 
 export const awards: AwardItem[] = [
-  { name: "BIRAC-supported innovation pathway", detail: "Confirm listing copy in CMS" },
-  { name: "MIT WPU engagement", detail: "Confirm listing copy in CMS" },
-  { name: "BITS Hyderabad collaboration", detail: "Confirm listing copy in CMS" },
-  { name: "Koita Foundation, Virtual Venture Development Dialogues (V2DD)", detail: "Confirm listing copy in CMS" },
+  {
+    name: "BIG-19 grant — BIRAC, Govt. of India",
+    detail: "One of 10 final awardees in the Diagnostics category.",
+  },
+  {
+    name: "TIDE grant — MeitY · Hack & Reboot 2.0 winner",
+    detail: "Recognised at Hack & Reboot 2.0 for clinical voice AI.",
+    imagePath: "awards/tide-meity-hack-reboot.png",
+  },
+  {
+    name: "Startup India Seed grant",
+    detail: "Department for Promotion of Industry and Internal Trade.",
+  },
+  {
+    name: "Shark Tank winner — CHERS Pilot, BITS Hyderabad",
+    detail: "Winner of the CHERS Pilot Shark Tank event, BITS Hyderabad.",
+    imagePath: "awards/chers-pilot-shark-tank.png",
+  },
+  {
+    name: "Healthtech Business Meet-Up speakership",
+    detail: "Featured panellist on AI in clinical workflows.",
+    imagePath: "awards/healthtech-meetup.png",
+  },
+  {
+    name: "Member of V2DD Leadership team — Koita Foundation",
+    detail: "Driving Voice AI adoption frameworks for Indian healthcare.",
+    imagePath: "awards/v2dd-koita-foundation.png",
+  },
+  {
+    name: "Top Woman Entrepreneur Award — Dr. Aparna Das",
+    detail: "Awarded for AI-led healthcare entrepreneurship.",
+    imagePath: "awards/top-woman-entrepreneur.png",
+  },
+  {
+    name: "Medicircle feature — Dr. Aparna Das",
+    detail: "Magazine feature on Jatayu's AI for Indian clinics.",
+    imagePath: "awards/medicircle-feature.png",
+  },
+  {
+    name: "IIT Bombay — equity stakeholder",
+    detail: "IIT Bombay holds equity in Jatayu Healthcare Technologies.",
+  },
+  {
+    name: "IIT Kanpur — equity stakeholder",
+    detail: "IIT Kanpur holds equity in Jatayu Healthcare Technologies.",
+  },
 ];
 
 export const homeFaqs: FAQItem[] = [
