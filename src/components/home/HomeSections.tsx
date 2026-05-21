@@ -11,13 +11,14 @@ import {
   getHomeHero,
   getHomeMetrics,
   getHomepageConciseAnswer,
-  getHowItWorksSteps,
-  getLogoWall,
   getSiteMeta,
   getSpotlightCaseStudy,
   getTestimonials,
 } from "@/lib/cms";
 import { HeroVisual } from "@/components/home/HeroVisual";
+import { FlowDiagram } from "@/components/home/FlowDiagram";
+import { KemCharts } from "@/components/home/KemCharts";
+import { PARTNER_SECTIONS, PartnerSection } from "@/components/home/PartnerWalls";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/Button";
@@ -39,8 +40,6 @@ export async function HomeSections() {
     complianceBand,
     founderNote,
     awards,
-    logoWall,
-    howItWorks,
   ] = await Promise.all([
     getSiteMeta(),
     getHomeHero(),
@@ -55,8 +54,6 @@ export async function HomeSections() {
     getComplianceBand(),
     getFounderNote(),
     getAwards(),
-    getLogoWall(),
-    getHowItWorksSteps(),
   ]);
 
   const faqLd = {
@@ -160,25 +157,12 @@ export async function HomeSections() {
       </section>
 
       {/* ---------- SUPPORTER STRIP (per brief §5.3) ---------- */}
-      {logoWall.supportersRowUrl ? (
-        <section className="border-b border-indigo/10 bg-white py-8 md:py-10" aria-labelledby="supporters-heading">
-          <div className="container-page flex flex-col items-center gap-5">
-            <h2 id="supporters-heading" className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate">
-              Supported by an ecosystem built in India
-            </h2>
-            <div className="relative w-full max-w-[1080px]">
-              <Image
-                src={logoWall.supportersRowUrl}
-                alt={logoWall.supportersRowAlt}
-                width={1680}
-                height={260}
-                sizes="(min-width: 1024px) 1080px, 100vw"
-                className="mx-auto h-auto w-full max-h-20 object-contain opacity-90 grayscale transition-all hover:grayscale-0 hover:opacity-100"
-              />
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <section className="border-b border-indigo/10 bg-white py-14 md:py-16" aria-labelledby="supporters-heading">
+        <div className="container-page">
+          <h2 id="supporters-heading" className="sr-only">Supporters</h2>
+          <PartnerSection section={PARTNER_SECTIONS.SUPPORTERS} columns={3} />
+        </div>
+      </section>
 
       {/* ---------- AUDIENCE SPLITTER ---------- */}
       <section className="border-y border-[#eaecf5] bg-white py-12 md:py-16" aria-labelledby="audience-split-heading">
@@ -262,48 +246,12 @@ export async function HomeSections() {
         </div>
       </section>
 
-      {/* ---------- HOSPITAL PARTNER WALL ---------- */}
+      {/* ---------- HOSPITAL + EHR PARTNER WALLS ---------- */}
       <section className="bg-white py-[var(--section-y)]" aria-labelledby="logos-heading">
-        <div className="container-page text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Trusted deployments and pilots</p>
-          <h2 id="logos-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy">
-            Hospitals and HMIS partners on board
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate">
-            Logos shown with written consent on file. Procurement teams: see Security &amp; Compliance for data residency and audit posture.
-          </p>
-
-          {logoWall.hospitalRowUrl ? (
-            <div className="mt-10 rounded-2xl border border-indigo/10 bg-canvas p-8 md:p-10">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate">Hospital partners</p>
-              <div className="relative mt-4 w-full">
-                <Image
-                  src={logoWall.hospitalRowUrl}
-                  alt={logoWall.hospitalRowAlt}
-                  width={3500}
-                  height={820}
-                  sizes="(min-width: 1024px) 960px, 100vw"
-                  className="mx-auto h-auto w-full max-w-[960px] object-contain"
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {logoWall.ehrRowUrl ? (
-            <div className="mt-6 rounded-2xl border border-indigo/10 bg-canvas p-8 md:p-10">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate">EHR / HMIS partners</p>
-              <div className="relative mt-4 w-full">
-                <Image
-                  src={logoWall.ehrRowUrl}
-                  alt={logoWall.ehrRowAlt}
-                  width={3700}
-                  height={540}
-                  sizes="(min-width: 1024px) 960px, 100vw"
-                  className="mx-auto h-auto w-full max-w-[960px] object-contain"
-                />
-              </div>
-            </div>
-          ) : null}
+        <div className="container-page space-y-16">
+          <h2 id="logos-heading" className="sr-only">Hospital and HMIS partners</h2>
+          <PartnerSection section={PARTNER_SECTIONS.HOSPITAL_PARTNERS} columns={3} />
+          <PartnerSection section={PARTNER_SECTIONS.EHR_PARTNERS} columns={4} />
         </div>
       </section>
 
@@ -320,33 +268,9 @@ export async function HomeSections() {
             </p>
           </div>
 
-          {howItWorks.flowDiagramUrl ? (
-            <figure className="mt-10 overflow-hidden rounded-2xl border border-indigo/10 bg-white p-6 shadow-card md:p-10">
-              <Image
-                src={howItWorks.flowDiagramUrl}
-                alt={howItWorks.flowDiagramAlt}
-                width={2080}
-                height={1900}
-                sizes="(min-width: 1024px) 980px, 100vw"
-                className="mx-auto h-auto w-full max-w-[860px] object-contain"
-              />
-              <figcaption className="mt-4 text-center text-xs text-slate">
-                Illustrative flow from the founder deck. Editable from CMS → Globals → How It Works Steps.
-              </figcaption>
-            </figure>
-          ) : null}
-
-          <ol className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {howItWorks.steps.map((step, index) => (
-              <li key={step.title} className="relative rounded-2xl border border-indigo/10 bg-white p-6 shadow-card">
-                <span className="absolute -top-3 left-6 inline-flex h-6 items-center justify-center rounded-full bg-grad-accent px-3 font-mono text-[11px] font-bold text-white">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-2 font-display text-base font-bold text-navy">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate">{step.body}</p>
-              </li>
-            ))}
-          </ol>
+          <div className="mt-12">
+            <FlowDiagram />
+          </div>
         </div>
       </section>
 
@@ -398,68 +322,7 @@ export async function HomeSections() {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {spotlightCase.chartTimeSavedUrl ? (
-                <figure className="rounded-2xl border border-indigo/15 bg-white p-5 shadow-card">
-                  <Image
-                    src={spotlightCase.chartTimeSavedUrl}
-                    alt="KEM pilot: documentation time, manual vs VoiceDocAI"
-                    width={1700}
-                    height={1600}
-                    sizes="(min-width: 1024px) 360px, 50vw"
-                    className="h-auto w-full object-contain"
-                  />
-                  <figcaption className="mt-2 text-center text-[11px] font-semibold text-navy/70">
-                    Manual 5 min → VoiceDocAI ~1 min
-                  </figcaption>
-                </figure>
-              ) : null}
-              {spotlightCase.chartSpecialtyUrl ? (
-                <figure className="rounded-2xl border border-indigo/15 bg-white p-5 shadow-card">
-                  <Image
-                    src={spotlightCase.chartSpecialtyUrl}
-                    alt="KEM pilot: report distribution across specialties"
-                    width={1700}
-                    height={970}
-                    sizes="(min-width: 1024px) 360px, 50vw"
-                    className="h-auto w-full object-contain"
-                  />
-                  <figcaption className="mt-2 text-center text-[11px] font-semibold text-navy/70">
-                    Reports by specialty
-                  </figcaption>
-                </figure>
-              ) : null}
-              {spotlightCase.chartLanguageUrl ? (
-                <figure className="rounded-2xl border border-indigo/15 bg-white p-5 shadow-card">
-                  <Image
-                    src={spotlightCase.chartLanguageUrl}
-                    alt="KEM pilot: language distribution across encounters"
-                    width={1700}
-                    height={1000}
-                    sizes="(min-width: 1024px) 360px, 50vw"
-                    className="h-auto w-full object-contain"
-                  />
-                  <figcaption className="mt-2 text-center text-[11px] font-semibold text-navy/70">
-                    Languages captured
-                  </figcaption>
-                </figure>
-              ) : null}
-              {spotlightCase.chartDoctorRatingsUrl ? (
-                <figure className="rounded-2xl border border-indigo/15 bg-white p-5 shadow-card">
-                  <Image
-                    src={spotlightCase.chartDoctorRatingsUrl}
-                    alt="KEM pilot: clinician ratings (adoption 4.7, multilingual 4.6, noise 4.2, speed 4.1)"
-                    width={1491}
-                    height={764}
-                    sizes="(min-width: 1024px) 360px, 50vw"
-                    className="h-auto w-full object-contain"
-                  />
-                  <figcaption className="mt-2 text-center text-[11px] font-semibold text-navy/70">
-                    Clinician ratings (5-point scale)
-                  </figcaption>
-                </figure>
-              ) : null}
-            </div>
+            <KemCharts />
           </div>
         </section>
       ) : null}

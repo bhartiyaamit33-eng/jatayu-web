@@ -27,21 +27,46 @@ const JOBS = [
     out: "supporters/supporters-strip.png",
   },
 
-  // --- Hospital partner row (slide 08, top half) ---
-  // Combined row of 3 logos. Tighter than per-logo splits and avoids picking
-  // up neighbouring title text. Title strip stripped; logo band only.
+  // --- Hospital partner logos (slide 08, top half — per-logo crops) ---
+  // Coordinates derived from the slide-08 1000-wide preview (×4 scale).
+  // Hospital row y=320..940 in original; per-logo widths differ.
   {
     src: "slide-08.png",
-    rect: { left: 100, top: 300, width: 3500, height: 820 },
-    out: "hospitals/hospital-row.png",
+    rect: { left: 280, top: 320, width: 620, height: 580 },
+    out: "hospitals/basavatarakam.png",
+  },
+  {
+    src: "slide-08.png",
+    rect: { left: 1240, top: 320, width: 800, height: 580 },
+    out: "hospitals/ilbs-delhi.png",
+  },
+  {
+    src: "slide-08.png",
+    rect: { left: 2160, top: 320, width: 720, height: 580 },
+    out: "hospitals/mgm-kamothe.png",
   },
 
-  // --- EHR / HMIS partner row (slide 08, bottom half) ---
-  // Combined row of 4 logos. Same rationale as hospital row above.
+  // --- EHR / HMIS partner logos (slide 08, bottom half — per-logo crops) ---
+  // EHR row y=1240..1760 in original; per-logo widths differ.
   {
     src: "slide-08.png",
-    rect: { left: 100, top: 1340, width: 3700, height: 540 },
-    out: "ehr/ehr-row.png",
+    rect: { left: 240, top: 1340, width: 920, height: 380 },
+    out: "ehr/akhil-systems.png",
+  },
+  {
+    src: "slide-08.png",
+    rect: { left: 1180, top: 1340, width: 600, height: 460 },
+    out: "ehr/dataman.png",
+  },
+  {
+    src: "slide-08.png",
+    rect: { left: 1880, top: 1340, width: 620, height: 380 },
+    out: "ehr/ohum-healthcare.png",
+  },
+  {
+    src: "slide-08.png",
+    rect: { left: 2620, top: 1340, width: 620, height: 380 },
+    out: "ehr/jeena-sikho.png",
   },
 
   // --- Award photos (slide 07) ---
