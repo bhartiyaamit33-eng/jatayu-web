@@ -11,6 +11,7 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { getPayloadClient } from "@/lib/payload";
 import {
   audienceSplit,
@@ -396,6 +397,10 @@ export async function POST(req: Request) {
       })),
       log,
     );
+
+    // Bust the unstable_cache layer so the frontend re-reads fresh data.
+    revalidateTag("cms");
+    log.push("revalidated tag: cms");
 
     return NextResponse.json({ ok: true, count: log.length, log });
   } catch (err) {

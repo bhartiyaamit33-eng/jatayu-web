@@ -94,9 +94,10 @@ const JOBS = [
   },
 
   // --- How VoiceDocAI Works diagram (slide 05, left half) ---
+  // Start below the "Our Solution: VoiceDocAI" title; capture only the flow.
   {
     src: "slide-05.png",
-    rect: { left: 120, top: 250, width: 2080, height: 1900 },
+    rect: { left: 80, top: 360, width: 2060, height: 1740 },
     out: "product/how-it-works-flow.png",
   },
 
