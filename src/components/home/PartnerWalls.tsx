@@ -1,8 +1,9 @@
 /**
- * Branded partner cards. No rasterized logos.
- * Each card is text + an abstract category-coloured glyph. Admin can swap in
- * vector logos later via CMS → Globals → Logo Wall → per-logo upload.
+ * Branded partner cards. Renders an uploaded logo (via CMS → Globals → Logo
+ * Wall) when one matches the partner by name; falls back to a category-
+ * coloured monogram glyph otherwise.
  */
+import Image from "next/image";
 import { type ReactNode } from "react";
 import { Reveal } from "@/components/home/Reveal";
 
@@ -11,6 +12,8 @@ type Partner = {
   detail?: string;
   /** override the auto-generated glyph */
   monogram?: string;
+  /** CMS-supplied logo URL. When set, shown instead of the monogram. */
+  imageUrl?: string | null;
 };
 
 type Section = {
@@ -125,12 +128,26 @@ function PartnerCard({
         aria-hidden
         className={`pointer-events-none absolute inset-y-0 left-0 w-1 origin-top scale-y-50 bg-gradient-to-b ${style.accent} opacity-60 transition-transform duration-300 ease-clinical group-hover:scale-y-100 group-hover:opacity-100`}
       />
-      <span
-        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl font-display text-sm font-extrabold tracking-tight ${style.monogram}`}
-        aria-hidden
-      >
-        {monogram}
-      </span>
+      {partner.imageUrl ? (
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1.5 ring-1 ring-indigo/10">
+          <Image
+            src={partner.imageUrl}
+            alt=""
+            width={40}
+            height={40}
+            sizes="48px"
+            className="h-full w-full object-contain"
+            aria-hidden
+          />
+        </span>
+      ) : (
+        <span
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl font-display text-sm font-extrabold tracking-tight ${style.monogram}`}
+          aria-hidden
+        >
+          {monogram}
+        </span>
+      )}
       <div className="min-w-0">
         <p className="truncate font-display text-sm font-bold text-navy">{partner.name}</p>
         {partner.detail ? (

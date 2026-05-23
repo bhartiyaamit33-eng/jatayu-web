@@ -11,6 +11,7 @@ import {
   getHomeHero,
   getHomeMetrics,
   getHomepageConciseAnswer,
+  getLogoWall,
   getSiteMeta,
   getSpotlightCaseStudy,
   getTestimonials,
@@ -46,6 +47,7 @@ export async function HomeSections() {
     complianceBand,
     founderNote,
     awards,
+    logoWall,
   ] = await Promise.all([
     getSiteMeta(),
     getHomeHero(),
@@ -60,7 +62,36 @@ export async function HomeSections() {
     getComplianceBand(),
     getFounderNote(),
     getAwards(),
+    getLogoWall(),
   ]);
+
+  // Match a hardcoded partner name against CMS-uploaded logos using a
+  // case-insensitive prefix match — handles "BIRAC" ↔ "BIRAC, Department of
+  // Biotechnology, Govt of India" without forcing exact-name parity between
+  // PartnerWalls' editorial labels and the CMS logo wall entries.
+  const cmsLogoFor = (partnerName: string): string | null => {
+    const needle = partnerName.toLowerCase().trim();
+    const hit = logoWall.logos.find((l) => {
+      if (!l.imageUrl) return false;
+      const hay = l.name.toLowerCase().trim();
+      return hay === needle || hay.startsWith(needle);
+    });
+    return hit?.imageUrl ?? null;
+  };
+
+  const enrichSection = <T extends { partners: Array<{ name: string }> }>(
+    section: T,
+  ): T => ({
+    ...section,
+    partners: section.partners.map((p) => ({
+      ...p,
+      imageUrl: cmsLogoFor(p.name),
+    })),
+  });
+
+  const supportersSection = enrichSection(PARTNER_SECTIONS.SUPPORTERS);
+  const hospitalSection = enrichSection(PARTNER_SECTIONS.HOSPITAL_PARTNERS);
+  const ehrSection = enrichSection(PARTNER_SECTIONS.EHR_PARTNERS);
 
   const faqLd = {
     "@context": "https://schema.org",
@@ -172,7 +203,7 @@ export async function HomeSections() {
       <section className="border-b border-indigo/10 bg-white py-14 md:py-16" aria-labelledby="supporters-heading">
         <div className="container-page">
           <h2 id="supporters-heading" className="sr-only">Supporters</h2>
-          <PartnerSection section={PARTNER_SECTIONS.SUPPORTERS} columns={3} />
+          <PartnerSection section={supportersSection} columns={3} />
         </div>
       </section>
 
@@ -220,8 +251,8 @@ export async function HomeSections() {
       <section className="bg-white py-[var(--section-y)]" aria-labelledby="logos-heading">
         <div className="container-page space-y-16">
           <h2 id="logos-heading" className="sr-only">Hospital and HMIS partners</h2>
-          <PartnerSection section={PARTNER_SECTIONS.HOSPITAL_PARTNERS} columns={3} />
-          <PartnerSection section={PARTNER_SECTIONS.EHR_PARTNERS} columns={4} />
+          <PartnerSection section={hospitalSection} columns={3} />
+          <PartnerSection section={ehrSection} columns={4} />
         </div>
       </section>
 
