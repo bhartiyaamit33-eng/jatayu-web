@@ -12,9 +12,14 @@ export const SiteMeta: GlobalConfig = {
     { name: "addressLine", type: "text", required: true },
     { name: "defaultTitle", type: "text", required: true },
     { name: "defaultDescription", type: "textarea", required: true },
-    // NOTE: a `logo` upload field belongs here so the brand mark is editable
-    // via CMS. Adding it now would require a manual ALTER TABLE on the prod
-    // Postgres (push: true does not run on the standalone server) — track as
-    // a follow-up: run `payload migrate` against prod, then re-add this field.
+    {
+      name: "logo",
+      type: "upload",
+      relationTo: "media",
+      admin: {
+        description:
+          "Brand logo shown in the site header, footer, and hero. Square (1:1) PNG or SVG recommended. Falls back to /brand/jatayu-logo.png when empty.",
+      },
+    },
   ],
 };
