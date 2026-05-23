@@ -12,5 +12,14 @@ export const SiteMeta: GlobalConfig = {
     { name: "addressLine", type: "text", required: true },
     { name: "defaultTitle", type: "text", required: true },
     { name: "defaultDescription", type: "textarea", required: true },
+    {
+      name: "logo",
+      type: "upload",
+      relationTo: "media",
+      admin: {
+        description:
+          "Brand logo shown in the site header, footer, and hero. Square (1:1) PNG or SVG recommended. Falls back to /brand/jatayu-logo.png when empty.",
+      },
+    },
   ],
 };

@@ -7,7 +7,12 @@ import { getLoginUrl } from "@/lib/login-url";
 import { siteMeta } from "@/content/site-config";
 import { Logo } from "@/components/brand/Logo";
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  logoUrl?: string | null;
+  logoAlt?: string;
+};
+
+export function SiteHeader({ logoUrl, logoAlt }: SiteHeaderProps = {}) {
   const [open, setOpen] = useState(false);
   const headerItems = headerNavItems();
   const mobileItems = mainNavItems();
@@ -26,7 +31,7 @@ export function SiteHeader() {
           aria-label={`${siteMeta.legalName} home`}
           className="flex shrink-0 items-center gap-2.5 font-display text-base font-bold tracking-tight text-navy"
         >
-          <Logo size={32} decorative />
+          <Logo size={32} decorative src={logoUrl} alt={logoAlt} />
           <span className="hidden whitespace-nowrap sm:inline">
             Jatayu · {siteMeta.productName}
           </span>

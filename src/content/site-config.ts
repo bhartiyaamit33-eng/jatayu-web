@@ -78,7 +78,7 @@ export const navigationMain: NavItem[] = [
   { label: "Product", href: "/product", showInMainNav: true, order: 10 },
   { label: "For Doctors", href: "/for-doctors", showInMainNav: true, order: 20 },
   {
-    label: "For Hospitals & HMIS",
+    label: "For HMS & HMIS",
     href: "/for-hospitals-and-hmis",
     showInMainNav: true,
     order: 30,

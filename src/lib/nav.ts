@@ -12,7 +12,7 @@ export function mainNavItems() {
 const HEADER_NAV = [
   { label: "Product", href: "/product" },
   { label: "For Doctors", href: "/for-doctors" },
-  { label: "For Hospitals", href: "/for-hospitals-and-hmis" },
+  { label: "For HMS & HMIS", href: "/for-hospitals-and-hmis" },
   { label: "Pricing", href: "/pricing" },
   { label: "Customers", href: "/case-studies" },
   { label: "Security", href: "/security" },

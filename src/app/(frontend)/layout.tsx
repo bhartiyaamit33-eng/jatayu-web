@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteMeta } from "@/content/site-config";
+import { getSiteMeta } from "@/lib/cms";
 
 // Every public page reads from Payload (Postgres) via lib/cms.ts. Build-time
 // prerendering inside ACR has no DB access, so render on-demand at runtime
@@ -71,11 +72,12 @@ const organizationLd = {
   description: siteMeta.defaultDescription,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cmsSiteMeta = await getSiteMeta();
   return (
     <html
       lang="en"
@@ -84,9 +86,9 @@ export default function RootLayout({
     >
       <body suppressHydrationWarning>
         <JsonLd data={organizationLd} />
-        <SiteHeader />
+        <SiteHeader logoUrl={cmsSiteMeta.logoUrl} logoAlt={cmsSiteMeta.logoAlt} />
         <main id="main-content">{children}</main>
-        <SiteFooter />
+        <SiteFooter logoUrl={cmsSiteMeta.logoUrl} logoAlt={cmsSiteMeta.logoAlt} />
       </body>
     </html>
   );

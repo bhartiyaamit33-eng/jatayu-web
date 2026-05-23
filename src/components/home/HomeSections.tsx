@@ -19,6 +19,8 @@ import { HeroVisual } from "@/components/home/HeroVisual";
 import { FlowDiagram } from "@/components/home/FlowDiagram";
 import { KemCharts } from "@/components/home/KemCharts";
 import { PARTNER_SECTIONS, PartnerSection } from "@/components/home/PartnerWalls";
+import { AudienceCards } from "@/components/home/AudienceCards";
+import { Reveal } from "@/components/home/Reveal";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/Button";
@@ -96,7 +98,13 @@ export async function HomeSections() {
 
         <div className="container-page flex flex-col items-center text-center">
           <div className="mb-5 flex items-center gap-3">
-            <Logo size={48} decorative className="rounded-full bg-white p-1 shadow-sm" />
+            <Logo
+              size={48}
+              decorative
+              src={siteMeta.logoUrl}
+              alt={siteMeta.logoAlt}
+              className="rounded-full bg-white p-1 shadow-sm"
+            />
             <span className="font-display text-sm font-semibold text-indigo">Jatayu Healthcare</span>
           </div>
           <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo/15 bg-white px-4 py-1.5 text-xs font-medium text-navy shadow-sm">
@@ -172,49 +180,7 @@ export async function HomeSections() {
       <section className="border-y border-[#eaecf5] bg-white py-12 md:py-16" aria-labelledby="audience-split-heading">
         <div className="container-page">
           <h2 id="audience-split-heading" className="sr-only">Choose your path</h2>
-          <div className="grid gap-7 md:grid-cols-2">
-            <Link
-              href={audienceSplit.doctor.href}
-              className="group relative rounded-[20px] bg-gradient-to-br from-[#0e1e3d] to-[#1a2d68] p-9 text-white shadow-card transition-transform duration-200 ease-clinical hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magenta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
-            >
-              <div className="mb-5 flex h-[52px] w-[52px] items-center justify-center rounded-[14px] bg-white/15 text-white" aria-hidden>
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                  <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27" />
-                </svg>
-              </div>
-              <h3 className="font-display text-2xl font-extrabold tracking-tight">{audienceSplit.doctor.title}</h3>
-              <p className="mt-2 text-sm text-white/80">{audienceSplit.doctor.body}</p>
-              <span className="mt-6 inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/15 px-5 py-2.5 text-sm font-semibold transition-colors group-hover:bg-white/25">
-                {audienceSplit.doctor.cta}
-                <span aria-hidden>→</span>
-              </span>
-            </Link>
-            <Link
-              href={audienceSplit.hospital.href}
-              className="group relative rounded-[20px] bg-gradient-to-br from-[#2a0e3d] to-[#4a1e5e] p-9 text-white shadow-card transition-transform duration-200 ease-clinical hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magenta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
-            >
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <div className="flex h-[52px] w-[52px] items-center justify-center rounded-[14px] bg-white/15 text-white" aria-hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 21V8l9-5 9 5v13" />
-                    <path d="M9 21V12h6v9" />
-                    <path d="M12 6v3" />
-                    <path d="M10.5 7.5h3" />
-                  </svg>
-                </div>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">
-                  {audienceSplit.hospital.chip}
-                </span>
-              </div>
-              <h3 className="font-display text-2xl font-extrabold tracking-tight">{audienceSplit.hospital.title}</h3>
-              <p className="mt-2 text-sm text-white/80">{audienceSplit.hospital.body}</p>
-              <span className="mt-6 inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/15 px-5 py-2.5 text-sm font-semibold transition-colors group-hover:bg-white/25">
-                {audienceSplit.hospital.cta}
-                <span aria-hidden>→</span>
-              </span>
-            </Link>
-          </div>
+          <AudienceCards audienceSplit={audienceSplit} />
         </div>
       </section>
 

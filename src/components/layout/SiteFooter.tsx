@@ -2,7 +2,12 @@ import Link from "next/link";
 import { footerColumns, siteMeta } from "@/content/site-config";
 import { Logo } from "@/components/brand/Logo";
 
-export function SiteFooter() {
+type SiteFooterProps = {
+  logoUrl?: string | null;
+  logoAlt?: string;
+};
+
+export function SiteFooter({ logoUrl, logoAlt }: SiteFooterProps = {}) {
   const year = new Date().getFullYear();
 
   return (
@@ -11,7 +16,7 @@ export function SiteFooter() {
         <div>
           <div className="flex items-center gap-2.5 font-display text-lg font-bold text-white">
             <span className="rounded-lg bg-white p-1.5">
-              <Logo size={32} decorative />
+              <Logo size={32} decorative src={logoUrl} alt={logoAlt} />
             </span>
             Jatayu Healthcare
           </div>

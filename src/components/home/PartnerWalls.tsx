@@ -4,6 +4,7 @@
  * vector logos later via CMS → Globals → Logo Wall → per-logo upload.
  */
 import { type ReactNode } from "react";
+import { Reveal } from "@/components/home/Reveal";
 
 type Partner = {
   name: string;
@@ -150,18 +151,22 @@ export function PartnerSection({ section, columns }: { section: Section; columns
         : "sm:grid-cols-2";
   return (
     <div className="text-center">
-      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-magenta">
-        {section.eyebrow}
-      </p>
-      <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-navy md:text-3xl">
-        {section.title}
-      </h3>
-      {section.description ? (
-        <p className="mx-auto mt-3 max-w-2xl text-sm text-slate">{section.description}</p>
-      ) : null}
+      <Reveal>
+        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-magenta">
+          {section.eyebrow}
+        </p>
+        <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-navy md:text-3xl">
+          {section.title}
+        </h3>
+        {section.description ? (
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate">{section.description}</p>
+        ) : null}
+      </Reveal>
       <div className={`mt-9 grid gap-4 text-left ${colClass}`}>
-        {section.partners.map((p) => (
-          <PartnerCard key={p.name} partner={p} category={section.category} />
+        {section.partners.map((p, i) => (
+          <Reveal key={p.name} delay={80 + i * 70}>
+            <PartnerCard partner={p} category={section.category} />
+          </Reveal>
         ))}
       </div>
     </div>

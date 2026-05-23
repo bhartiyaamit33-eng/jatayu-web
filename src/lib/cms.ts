@@ -41,16 +41,18 @@ async function payload() {
 export const getSiteMeta = unstable_cache(
   async () => {
     const p = await payload();
-    const row = await p.findGlobal({ slug: "site-meta", depth: 0 });
+    const row = (await p.findGlobal({ slug: "site-meta", depth: 1 })) as Record<string, unknown>;
     return {
-      productName: row.productName ?? siteMetaFallback.productName,
-      legalName: row.legalName ?? siteMetaFallback.legalName,
-      domain: row.domain ?? siteMetaFallback.domain,
-      salesEmail: row.salesEmail ?? siteMetaFallback.salesEmail,
-      supportEmail: (row as Record<string, unknown>).supportEmail as string ?? siteMetaFallback.founderEmail,
-      defaultTitle: row.defaultTitle ?? siteMetaFallback.defaultTitle,
-      defaultDescription: row.defaultDescription ?? siteMetaFallback.defaultDescription,
+      productName: (row.productName as string) ?? siteMetaFallback.productName,
+      legalName: (row.legalName as string) ?? siteMetaFallback.legalName,
+      domain: (row.domain as string) ?? siteMetaFallback.domain,
+      salesEmail: (row.salesEmail as string) ?? siteMetaFallback.salesEmail,
+      supportEmail: (row.supportEmail as string) ?? siteMetaFallback.founderEmail,
+      defaultTitle: (row.defaultTitle as string) ?? siteMetaFallback.defaultTitle,
+      defaultDescription: (row.defaultDescription as string) ?? siteMetaFallback.defaultDescription,
       founderEmail: siteMetaFallback.founderEmail,
+      logoUrl: mediaUrl(row.logo),
+      logoAlt: mediaAlt(row.logo, siteMetaFallback.legalName),
     };
   },
   ["global", "site-meta"],
