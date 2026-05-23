@@ -4,11 +4,8 @@
  */
 import config from "@payload-config";
 import "@payloadcms/next/css";
-import {
-  RootLayout,
-  handleServerFunctions,
-  type ServerFunctionClient,
-} from "@payloadcms/next/layouts";
+import { RootLayout, handleServerFunctions } from "@payloadcms/next/layouts";
+import type { ServerFunctionClient } from "payload";
 import type { ReactNode } from "react";
 
 import { importMap } from "./admin/importMap";

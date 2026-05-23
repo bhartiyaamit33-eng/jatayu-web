@@ -6,9 +6,10 @@ WORKDIR /app
 
 # libc6, libstdc++, ca-certs are already present in bookworm-slim.
 # sharp ships prebuilt binaries for linux-x64/glibc - no native build needed here.
+# (We avoid BuildKit-specific `RUN --mount=type=cache` so this image can be
+# built by ACR's default builder, which does not enable BuildKit.)
 COPY package.json package-lock.json* ./
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund
+RUN npm ci --no-audit --no-fund
 
 # ---- builder: produce .next/standalone ----
 FROM node:20-bookworm-slim AS builder

@@ -4,7 +4,7 @@ import sharp from "sharp";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { azureBlobStorage } from "@payloadcms/storage-azure";
+import { azureStorage } from "@payloadcms/storage-azure";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
@@ -42,7 +42,7 @@ const azureAccountUrl = process.env.AZURE_STORAGE_ACCOUNT_BASEURL;
 const plugins =
   process.env.NODE_ENV === "production" && azureConnectionString && azureAccountUrl
     ? [
-        azureBlobStorage({
+        azureStorage({
           enabled: true,
           collections: { media: true },
           allowContainerCreate: false,

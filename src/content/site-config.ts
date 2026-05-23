@@ -342,19 +342,15 @@ export const founderNote = {
   aboutHref: "/about",
 };
 
+// Awards in the home-page grid all require a photo. Text-only recognitions
+// (BIG-19 grant, Startup India Seed grant, IIT Bombay / IIT Kanpur equity)
+// are surfaced via the Supporters strip subtitles, where they fit the
+// "ecosystem partner" framing better than a card without imagery.
 export const awards: AwardItem[] = [
-  {
-    name: "BIG-19 grant by BIRAC, Govt. of India",
-    detail: "One of 10 final awardees in the Diagnostics category.",
-  },
   {
     name: "TIDE grant, MeitY · Hack & Reboot 2.0 winner",
     detail: "Recognised at Hack & Reboot 2.0 for clinical voice AI.",
     imagePath: "awards/tide-meity-hack-reboot.png",
-  },
-  {
-    name: "Startup India Seed grant",
-    detail: "Department for Promotion of Industry and Internal Trade.",
   },
   {
     name: "Shark Tank winner: CHERS Pilot, BITS Hyderabad",
@@ -380,14 +376,6 @@ export const awards: AwardItem[] = [
     name: "Medicircle feature on Dr. Aparna Das",
     detail: "Magazine feature on Jatayu's AI for Indian clinics.",
     imagePath: "awards/medicircle-feature.png",
-  },
-  {
-    name: "IIT Bombay equity stakeholder",
-    detail: "IIT Bombay holds equity in Jatayu Healthcare Technologies.",
-  },
-  {
-    name: "IIT Kanpur equity stakeholder",
-    detail: "IIT Kanpur holds equity in Jatayu Healthcare Technologies.",
   },
 ];
 

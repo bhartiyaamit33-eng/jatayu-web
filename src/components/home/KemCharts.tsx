@@ -12,7 +12,7 @@
 const SPECIALTY = [
   { label: "Radiology", value: 28, color: "#2F5597" },
   { label: "Paediatrics", value: 5, color: "#7C4481" },
-  { label: "Surgical Gastroenterology", value: 23, color: "#8B3A9E" },
+  { label: "Surgical Gastro.", value: 23, color: "#8B3A9E" },
   { label: "Orthopaedics", value: 24, color: "#243F86" },
   { label: "Dermatology", value: 20, color: "#5F6B7A" },
 ];
@@ -21,8 +21,8 @@ const LANGUAGE = [
   { label: "English", value: 42, color: "#243F86" },
   { label: "Hindi", value: 26, color: "#7C4481" },
   { label: "Marathi", value: 8, color: "#8B3A9E" },
-  { label: "Eng-Hin Mix", value: 18, color: "#2F5597" },
-  { label: "Hindi-Marathi Mix", value: 5, color: "#D0D1EC" },
+  { label: "Eng-Hin mix", value: 18, color: "#2F5597" },
+  { label: "Hin-Mar mix", value: 5, color: "#D0D1EC" },
 ];
 
 const RATINGS = [
@@ -53,8 +53,8 @@ function PieChart({ data, ariaLabel }: { data: typeof SPECIALTY; ariaLabel: stri
   const total = data.reduce((sum, d) => sum + d.value, 0);
   let cursor = 0;
   return (
-    <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
-      <svg viewBox="0 0 120 120" className="h-32 w-32 shrink-0" role="img" aria-label={ariaLabel}>
+    <div className="flex flex-col items-center gap-4">
+      <svg viewBox="0 0 120 120" className="h-28 w-28 shrink-0" role="img" aria-label={ariaLabel}>
         <circle cx="60" cy="60" r="54" fill="white" stroke="#EEF4FF" strokeWidth="1" />
         {data.map((d) => {
           const start = (cursor / total) * 360;
@@ -72,18 +72,18 @@ function PieChart({ data, ariaLabel }: { data: typeof SPECIALTY; ariaLabel: stri
         })}
         <circle cx="60" cy="60" r="22" fill="white" />
       </svg>
-      <ul className="grid w-full gap-1.5 text-xs">
+      <ul className="grid w-full gap-1 text-[11px] leading-tight">
         {data.map((d) => (
           <li key={d.label} className="flex items-center justify-between gap-3">
-            <span className="flex items-center gap-2 text-navy/85">
+            <span className="flex min-w-0 items-center gap-2 text-navy/85">
               <span
-                className="inline-block h-2 w-2 rounded-sm"
+                className="inline-block h-2 w-2 shrink-0 rounded-sm"
                 style={{ backgroundColor: d.color }}
                 aria-hidden
               />
-              {d.label}
+              <span className="truncate">{d.label}</span>
             </span>
-            <span className="font-mono text-navy/70">{d.value}%</span>
+            <span className="shrink-0 font-mono text-navy/70">{d.value}%</span>
           </li>
         ))}
       </ul>
