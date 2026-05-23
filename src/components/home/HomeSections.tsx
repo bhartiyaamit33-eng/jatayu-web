@@ -23,7 +23,11 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/Button";
 
-const heroVideoSrc = process.env.NEXT_PUBLIC_HERO_VIDEO_URL;
+// File ships in `public/` so we can always serve it; the env var override is
+// kept for swapping in a CDN URL later, but it MUST be defined at build time
+// to be picked up (NEXT_PUBLIC_* are baked into the bundle).
+const heroVideoSrc =
+  process.env.NEXT_PUBLIC_HERO_VIDEO_URL ?? "/voicedocai-hero-30s.mp4";
 
 export async function HomeSections() {
   const [
