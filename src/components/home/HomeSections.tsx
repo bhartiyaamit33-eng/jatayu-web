@@ -341,7 +341,7 @@ export async function HomeSections() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             {testimonials.map((t) => (
-              <figure key={t.id ?? t.attribution} className="rounded-[18px] border border-indigo/10 bg-white p-7 shadow-card">
+              <figure key={t.attribution} className="rounded-[18px] border border-indigo/10 bg-white p-7 shadow-card">
                 <span className="font-display text-5xl leading-none text-lavender" aria-hidden>&ldquo;</span>
                 <blockquote className="-mt-3 text-base leading-relaxed text-navy/85">{t.quote}</blockquote>
                 <figcaption className="mt-6 text-sm font-bold text-navy">{t.attribution}</figcaption>
@@ -484,7 +484,7 @@ export async function HomeSections() {
           </div>
           <div className="mt-10 divide-y divide-indigo/10 rounded-2xl border border-indigo/10 bg-canvas">
             {faqs.map((f) => (
-              <details key={f.id ?? f.question} className="group px-5 py-4">
+              <details key={f.question} className="group px-5 py-4">
                 <summary className="cursor-pointer list-none font-display text-base font-semibold text-navy [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-4">
                     {f.question}

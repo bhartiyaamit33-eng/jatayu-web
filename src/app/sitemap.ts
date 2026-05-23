@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { getCaseStudies, getPosts, getSiteMeta, getSpecialties } from "@/lib/cms";
 
+// Needs runtime DB access for slug enumeration. Skip build-time prerender.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [siteMeta, specialties, studies, posts] = await Promise.all([
     getSiteMeta(),

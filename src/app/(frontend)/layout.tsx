@@ -6,6 +6,11 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteMeta } from "@/content/site-config";
 
+// Every public page reads from Payload (Postgres) via lib/cms.ts. Build-time
+// prerendering inside ACR has no DB access, so render on-demand at runtime
+// instead. `unstable_cache` still keeps DB hits cheap after the first request.
+export const dynamic = "force-dynamic";
+
 const sora = Sora({
   subsets: ["latin"],
   variable: "--font-sora",

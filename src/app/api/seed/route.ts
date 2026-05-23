@@ -399,7 +399,8 @@ export async function POST(req: Request) {
     );
 
     // Bust the unstable_cache layer so the frontend re-reads fresh data.
-    revalidateTag("cms");
+    // Next 16 requires the profile argument; "max" matches the old default.
+    revalidateTag("cms", "max");
     log.push("revalidated tag: cms");
 
     return NextResponse.json({ ok: true, count: log.length, log });

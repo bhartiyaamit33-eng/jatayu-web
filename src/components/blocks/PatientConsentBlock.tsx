@@ -2,7 +2,7 @@ import { getPatientConsent } from "@/lib/cms";
 
 export async function PatientConsentBlock() {
   const block = await getPatientConsent();
-  const bullets = (block.bullets ?? []) as Array<{ text: string }>;
+  const bullets = (block.bullets ?? []) as string[];
 
   return (
     <section
@@ -21,12 +21,12 @@ export async function PatientConsentBlock() {
       <p className="mt-3 max-w-2xl text-sm leading-relaxed text-navy/85">{block.body}</p>
       <ul className="mt-5 space-y-2 text-sm text-navy/85">
         {bullets.map((b) => (
-          <li key={b.text} className="flex items-start gap-2">
+          <li key={b} className="flex items-start gap-2">
             <span
               className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-magenta"
               aria-hidden
             />
-            <span>{b.text}</span>
+            <span>{b}</span>
           </li>
         ))}
       </ul>

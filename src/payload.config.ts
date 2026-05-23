@@ -102,6 +102,10 @@ export default buildConfig({
         process.env.DATABASE_URI ??
         "postgres://jatayu:jatayu_dev_password@localhost:5432/jatayu_cms",
     },
+    // Push schema on connect so fresh Azure deployments auto-provision tables.
+    // For a hardened production cutover, set this to false and run
+    // `payload migrate` as a one-off job.
+    push: true,
   }),
   cors: [process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"].filter(
     Boolean,
