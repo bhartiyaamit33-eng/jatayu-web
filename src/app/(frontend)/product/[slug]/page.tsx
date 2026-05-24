@@ -21,9 +21,18 @@ type RouteProps = { params: Promise<{ slug: string }> };
 // ---------------------------------------------------------------------------
 // Static params — pre-render every known product at build time.
 // ---------------------------------------------------------------------------
+//
+// The build inside the ACR container has no Postgres reachable, so this
+// function falls back to an empty list when getProducts() throws. The parent
+// layout sets `dynamic = "force-dynamic"` anyway, so missing static params
+// just means every request renders on-demand — same as the homepage.
 export async function generateStaticParams() {
-  const products = await getProducts();
-  return products.map((p) => ({ slug: p.slug }));
+  try {
+    const products = await getProducts();
+    return products.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 // ---------------------------------------------------------------------------
