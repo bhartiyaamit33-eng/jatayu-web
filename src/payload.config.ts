@@ -9,6 +9,7 @@ import { azureStorage } from "@payloadcms/storage-azure";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
+import { Products } from "./collections/Products";
 import { Specialties } from "./collections/Specialties";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Testimonials } from "./collections/Testimonials";
@@ -28,6 +29,9 @@ import { FounderNote } from "./globals/FounderNote";
 import { LogoWall } from "./globals/LogoWall";
 import { HowItWorksSteps } from "./globals/HowItWorksSteps";
 import { HomepageConciseAnswer } from "./globals/HomepageConciseAnswer";
+import { ProductsPage } from "./globals/ProductsPage";
+import { ForDoctorsPage } from "./globals/ForDoctorsPage";
+import { ForHospitalsPage } from "./globals/ForHospitalsPage";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -68,6 +72,7 @@ export default buildConfig({
     Users,
     Media,
     Posts,
+    Products,
     Specialties,
     CaseStudies,
     Testimonials,
@@ -88,6 +93,9 @@ export default buildConfig({
     LogoWall,
     HowItWorksSteps,
     HomepageConciseAnswer,
+    ProductsPage,
+    ForDoctorsPage,
+    ForHospitalsPage,
   ],
   editor: lexicalEditor({}),
   plugins,

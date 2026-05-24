@@ -1,8 +1,10 @@
 import type { GlobalConfig } from "payload";
+import { revalidateCmsTag } from "@/lib/cms-hooks";
 
 export const SiteMeta: GlobalConfig = {
   slug: "site-meta",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateCmsTag] },
   fields: [
     { name: "productName", type: "text", required: true },
     { name: "legalName", type: "text", required: true },

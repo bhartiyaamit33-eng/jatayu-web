@@ -1,9 +1,11 @@
 import type { GlobalConfig } from "payload";
+import { revalidateCmsTag } from "@/lib/cms-hooks";
 
 export const ComplianceBand: GlobalConfig = {
   slug: "compliance-band",
   label: "Compliance Band",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateCmsTag] },
   fields: [
     {
       name: "items",

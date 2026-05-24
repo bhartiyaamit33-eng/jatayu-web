@@ -1,9 +1,11 @@
 import type { GlobalConfig } from "payload";
+import { revalidateCmsTag } from "@/lib/cms-hooks";
 
 export const HowItWorksSteps: GlobalConfig = {
   slug: "how-it-works-steps",
   label: "How It Works Steps",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateCmsTag] },
   fields: [
     {
       name: "flowDiagram",
