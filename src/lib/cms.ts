@@ -27,6 +27,7 @@ import {
   caseStudySpotlight as spotlightFallback,
   testimonials as testimonialsFallback,
   awards as awardsFallback,
+  footerColumns as footerColumnsFallback,
 } from "@/content/site-config";
 import { blogPosts as blogFallback } from "@/content/blog-posts";
 
@@ -765,4 +766,114 @@ export const getForHospitalsPage = unstable_cache(
   },
   ["global", "for-hospitals-page"],
   { tags: [TAG, "for-hospitals-page"] },
+);
+
+// ---------- /SiteFooter (footer global) ----------
+//
+// Shape returned to the SiteFooter component. Designed to be the only thing
+// the component reads, so the rest of the JSX is plain mapping.
+
+export type FooterSocialPlatform =
+  | "linkedin"
+  | "instagram"
+  | "x"
+  | "youtube"
+  | "facebook";
+
+export type FooterLink = { label: string; href: string };
+export type FooterSocialLink = { platform: FooterSocialPlatform; href: string };
+
+export type SiteFooterContent = {
+  tagline: string;
+  productLinks: FooterLink[];
+  companyLinks: FooterLink[];
+  legalLinks: FooterLink[];
+  socialLinks: FooterSocialLink[];
+  bottomStrapline: string;
+};
+
+const siteFooterDefaults: SiteFooterContent = {
+  tagline:
+    "VoiceDocAI: voice-first clinical documentation for Indian healthcare. Hands-free, pocket-friendly, built for verification before filing.",
+  productLinks: footerColumnsFallback.product.map((l) => ({
+    label: l.label,
+    href: l.href,
+  })),
+  companyLinks: footerColumnsFallback.company.map((l) => ({
+    label: l.label,
+    href: l.href,
+  })),
+  legalLinks: footerColumnsFallback.legal.map((l) => ({
+    label: l.label,
+    href: l.href,
+  })),
+  // Defaults seeded from the URLs the founder shared on 2026-05-24. Editors
+  // can change / add / remove these in /admin without code changes.
+  socialLinks: [
+    {
+      platform: "linkedin",
+      href: "https://www.linkedin.com/company/jatayu-healthcare-technologies",
+    },
+    { platform: "instagram", href: "https://www.instagram.com/jatayuhealth/" },
+  ],
+  bottomStrapline: "Made for Indian clinicians and hospital IT teams.",
+};
+
+/** Cheap runtime guard — only accept platforms the SocialIcon component knows. */
+const KNOWN_PLATFORMS: FooterSocialPlatform[] = [
+  "linkedin",
+  "instagram",
+  "x",
+  "youtube",
+  "facebook",
+];
+function isFooterSocialPlatform(value: unknown): value is FooterSocialPlatform {
+  return typeof value === "string" && (KNOWN_PLATFORMS as string[]).includes(value);
+}
+
+export const getSiteFooter = unstable_cache(
+  async (): Promise<SiteFooterContent> => {
+    try {
+      const p = await payload();
+      const row = (await p.findGlobal({
+        slug: "site-footer",
+        depth: 0,
+      })) as Record<string, unknown> | null | undefined;
+      if (!row) return siteFooterDefaults;
+
+      const productLinks = (row.productLinks as FooterLink[] | undefined) ?? [];
+      const companyLinks = (row.companyLinks as FooterLink[] | undefined) ?? [];
+      const legalLinks = (row.legalLinks as FooterLink[] | undefined) ?? [];
+      const socialLinksRaw =
+        (row.socialLinks as Array<{ platform: unknown; href: string }> | undefined) ?? [];
+
+      return {
+        tagline: (row.tagline as string) ?? siteFooterDefaults.tagline,
+        productLinks:
+          productLinks.length > 0 ? productLinks : siteFooterDefaults.productLinks,
+        companyLinks:
+          companyLinks.length > 0 ? companyLinks : siteFooterDefaults.companyLinks,
+        legalLinks:
+          legalLinks.length > 0 ? legalLinks : siteFooterDefaults.legalLinks,
+        // Drop any rows whose platform value isn't in the SocialIcon switch —
+        // otherwise we'd render a blank circle.
+        socialLinks:
+          socialLinksRaw.length > 0
+            ? socialLinksRaw
+                .filter((s) => isFooterSocialPlatform(s.platform) && !!s.href)
+                .map((s) => ({
+                  platform: s.platform as FooterSocialPlatform,
+                  href: s.href,
+                }))
+            : siteFooterDefaults.socialLinks,
+        bottomStrapline:
+          (row.bottomStrapline as string) ?? siteFooterDefaults.bottomStrapline,
+      };
+    } catch (err) {
+      warnCmsRead("getSiteFooter", err);
+      return siteFooterDefaults;
+    }
+  },
+  ["global", "site-footer"],
+  { tags: [TAG, "site-footer"] },
 );

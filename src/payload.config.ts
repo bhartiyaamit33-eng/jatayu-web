@@ -32,6 +32,7 @@ import { HomepageConciseAnswer } from "./globals/HomepageConciseAnswer";
 import { ProductsPage } from "./globals/ProductsPage";
 import { ForDoctorsPage } from "./globals/ForDoctorsPage";
 import { ForHospitalsPage } from "./globals/ForHospitalsPage";
+import { SiteFooter } from "./globals/SiteFooter";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -96,6 +97,7 @@ export default buildConfig({
     ProductsPage,
     ForDoctorsPage,
     ForHospitalsPage,
+    SiteFooter,
   ],
   editor: lexicalEditor({}),
   plugins,
