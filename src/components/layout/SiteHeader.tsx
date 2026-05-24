@@ -25,7 +25,7 @@ export function SiteHeader({ logoUrl, logoAlt }: SiteHeaderProps = {}) {
       >
         Skip to content
       </a>
-      <div className="container-page flex h-16 items-center justify-between gap-6">
+      <div className="flex h-16 items-center justify-between gap-6 px-4 sm:px-6 lg:px-10">
         <Link
           href="/"
           aria-label={`${siteMeta.legalName} home`}

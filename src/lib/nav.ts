@@ -16,6 +16,7 @@ const HEADER_NAV = [
   { label: "Pricing", href: "/pricing" },
   { label: "Customers", href: "/case-studies" },
   { label: "Security", href: "/security" },
+  { label: "About", href: "/about" },
 ] as const;
 
 export function headerNavItems(): ReadonlyArray<{ label: string; href: string }> {
