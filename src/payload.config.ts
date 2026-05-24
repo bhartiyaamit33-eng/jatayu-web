@@ -10,6 +10,7 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
 import { Products } from "./collections/Products";
+import { TeamMembers } from "./collections/TeamMembers";
 import { Specialties } from "./collections/Specialties";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Testimonials } from "./collections/Testimonials";
@@ -33,6 +34,7 @@ import { ProductsPage } from "./globals/ProductsPage";
 import { ForDoctorsPage } from "./globals/ForDoctorsPage";
 import { ForHospitalsPage } from "./globals/ForHospitalsPage";
 import { SiteFooter } from "./globals/SiteFooter";
+import { AboutPage } from "./globals/AboutPage";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -74,6 +76,7 @@ export default buildConfig({
     Media,
     Posts,
     Products,
+    TeamMembers,
     Specialties,
     CaseStudies,
     Testimonials,
@@ -98,6 +101,7 @@ export default buildConfig({
     ForDoctorsPage,
     ForHospitalsPage,
     SiteFooter,
+    AboutPage,
   ],
   editor: lexicalEditor({}),
   plugins,
