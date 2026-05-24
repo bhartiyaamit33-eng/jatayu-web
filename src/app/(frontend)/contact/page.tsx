@@ -27,7 +27,7 @@ export default function ContactPage() {
         conciseAnswer="Share hospital context, EMR stack, compliance questions, and timeline. We respond from verified company inboxes and can coordinate self-hosted Cal.com once deployed."
       />
 
-      <section className="container-page pb-[var(--section-y)]">
+      <section className="container-page pb-[var(--section-y)] space-y-12">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
           {/* LEFT — direct lines */}
           <div className="rounded-2xl border border-indigo/10 bg-white p-8 shadow-card">
@@ -57,13 +57,13 @@ export default function ContactPage() {
               </li>
               <li>
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo">
-                  Phone (founder deck)
+                  Phone
                 </p>
                 <a
                   className="mt-1 inline-flex font-semibold text-navy hover:text-indigo"
-                  href="tel:+917506060955"
+                  href={`tel:${siteMeta.phone.replace(/\s/g, "")}`}
                 >
-                  +91 75060 60955
+                  {siteMeta.phone}
                 </a>
               </li>
             </ul>
@@ -112,6 +112,39 @@ export default function ContactPage() {
               on Cloud Run per stack guidance; avoid embedding SaaS calendars here.
             </p>
           </div>
+        </div>
+
+        {/* Our locations — one card per office */}
+        <div>
+          <h2 className="font-display text-2xl font-bold text-navy md:text-3xl">
+            Our locations
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate">
+            Walk-ins by appointment only. Reach out via the lines above and we will
+            confirm the right office for your meeting.
+          </p>
+          <ul className="mt-8 grid gap-6 md:grid-cols-2">
+            {siteMeta.offices.map((office) => (
+              <li
+                key={office.city}
+                className="rounded-2xl border border-indigo/10 bg-white p-6 shadow-card"
+              >
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo">
+                  {office.label}
+                </p>
+                <h3 className="mt-2 font-display text-lg font-bold text-navy">
+                  {office.city}
+                </h3>
+                <address className="mt-3 not-italic text-sm leading-relaxed text-slate">
+                  {office.lines.map((line, idx) => (
+                    <span key={idx} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </address>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </>
