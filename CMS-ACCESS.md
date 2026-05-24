@@ -106,7 +106,53 @@ The full runbook lives at [`infra/README.md`](./infra/README.md). Short version:
 | `npm run db:down` | Stop local Postgres |
 | `npm run db:logs` | Tail Postgres logs |
 | `npm run seed` | Push `src/content/*` into Payload (idempotent) |
+| `npm run sync-prod-schema` | Push the code's schema into the DB pointed at by `DATABASE_URI` (additive — new tables / columns only). Run this **before deploying** any change that adds a collection, global, or field. See [Schema-sync workflow](#schema-sync-workflow). |
 | `npm run generate:types` | Regenerate `src/payload-types.ts` *(known issue: Payload's CLI fails on Next 16 — see "Known issues" below)* |
+
+## Schema-sync workflow
+
+Production runs with `push: false` (Payload config), because the Next.js
+standalone runtime image does not include drizzle-kit — `push: true` would
+silently no-op there and ship a broken deploy. This is what happened on
+2026-05-24 when `/admin`, `/product`, `/for-doctors`, and
+`/for-hospitals-and-hmis` all returned 500 after a deploy added a new
+collection: the code expected `products`, `for_doctors_page`,
+`for_hospitals_page`, `products_page` tables, but they were never created.
+
+### When schema changes (new collection / global / field)
+
+```bash
+# 1. Make the change in src/collections or src/globals.
+# 2. Sync against prod BEFORE merging / deploying:
+DATABASE_URI='postgres://<user>:<password>@jatayu-prod-pg.postgres.database.azure.com:5432/jatayu_cms?sslmode=require' \
+  npm run sync-prod-schema
+
+# 3. Now deploy normally. The schema is already in place when the new
+#    revision rolls out, so first-request init works cleanly.
+```
+
+The DB password lives in the Azure Key Vault — pull it with:
+
+```bash
+az keyvault secret show --vault-name jatayu-prod-kv-fbd5 \
+  --name database-uri --query value -o tsv
+```
+
+The script is **strictly additive**: it will create new tables and add new
+columns, but never drop or rename. For destructive changes, write the SQL
+by hand and apply it deliberately (with a backup first).
+
+### Real-time CMS → website reflection
+
+Editor saves in `/admin` → Payload's `afterChange` hook calls
+`revalidateTag("cms", "default")` → the in-memory page cache for that tag
+is invalidated → the next request to the public page reads fresh data.
+Effectively immediate (one cache-miss latency, typically &lt; 100 ms).
+
+This is wired into every collection and global via
+`src/lib/cms-hooks.ts`. New collections/globals should follow the existing
+pattern (`hooks: { afterChange: [revalidateCmsTag] }`) so edits propagate
+without a redeploy.
 
 ## Trial signups end-to-end
 

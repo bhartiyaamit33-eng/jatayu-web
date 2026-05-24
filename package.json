@@ -13,7 +13,8 @@
     "seed": "curl -sS -X POST -H \"x-seed-secret: $(grep ^PAYLOAD_SECRET .env.local | cut -d= -f2)\" http://localhost:3000/api/seed | node -e 'let d=\"\";process.stdin.on(\"data\",c=>d+=c).on(\"end\",()=>{const j=JSON.parse(d);console.log(j.ok?\"OK \"+j.count+\" ops\":\"FAIL: \"+j.error);(j.log||[]).forEach(l=>console.log(\"  \"+l));process.exit(j.ok?0:1)})'",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down",
-    "db:logs": "docker compose logs -f postgres"
+    "db:logs": "docker compose logs -f postgres",
+    "sync-prod-schema": "bash scripts/sync-prod-schema.sh"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.84.1",
