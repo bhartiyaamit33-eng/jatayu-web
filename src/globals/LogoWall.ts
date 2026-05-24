@@ -1,9 +1,11 @@
 import type { GlobalConfig } from "payload";
+import { revalidateCmsTag } from "@/lib/cms-hooks";
 
 export const LogoWall: GlobalConfig = {
   slug: "logo-wall",
   label: "Logo Wall",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateCmsTag] },
   fields: [
     {
       name: "logos",

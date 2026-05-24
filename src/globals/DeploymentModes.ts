@@ -1,9 +1,11 @@
 import type { GlobalConfig } from "payload";
+import { revalidateCmsTag } from "@/lib/cms-hooks";
 
 export const DeploymentModes: GlobalConfig = {
   slug: "deployment-modes",
   label: "Deployment Modes",
   access: { read: () => true },
+  hooks: { afterChange: [revalidateCmsTag] },
   fields: [
     {
       name: "modes",
