@@ -877,3 +877,150 @@ export const getSiteFooter = unstable_cache(
   ["global", "site-footer"],
   { tags: [TAG, "site-footer"] },
 );
+
+// ============================================================================
+// /about — AboutPage global + TeamMembers collection
+// ============================================================================
+
+/** Shape consumed by /about/page.tsx. */
+export type TeamMemberSummary = {
+  id: string | number;
+  name: string;
+  role: string;
+  description: string;
+  photoUrl: string | null;
+  photoAlt: string;
+  order: number;
+  featuredOnHome: boolean;
+};
+
+const aboutPageDefaults = {
+  eyebrow: "Our story",
+  title: "Built where rigorous medicine meets Indian engineering",
+  conciseAnswer:
+    "Jatayu Healthcare Technologies is an IIT Bombay incubated voice-first medical AI company co-founded by Dr. Aparna Oruganty Das (Director and CEO) and Sridhar Murthy, focused on reducing documentation drag without compromising clinician accountability.",
+  introParagraphs: [
+    "VoiceDocAI emerged from repeated observations in Indian public and private hospitals: extraordinary clinical throughput constrained by documentation latency and brittle digitisation pathways.",
+  ] as string[],
+  teamSectionHeading: "The team",
+  teamSectionSubhead:
+    "The people building VoiceDocAI. Add or edit them in Admin → Collections → Team Members.",
+  showFounderQuote: true,
+  seo: {
+    title: "About",
+    description:
+      "Jatayu Healthcare Technologies. VoiceDocAI founders, IIT Bombay incubation story, and vision for Indian clinical documentation.",
+  },
+};
+
+/**
+ * Bundled fallback team. Keeps /about rendering before editors populate the
+ * Team Members collection. Photos are null in the fallback (the card falls
+ * back to a soft gradient block).
+ */
+const teamMembersFallback: TeamMemberSummary[] = [
+  {
+    id: "fallback-aparna",
+    name: "Dr. Aparna Oruganty Das",
+    role: "Director & CEO",
+    description:
+      "Practising clinician and co-founder. Drives clinical seriousness, validation methodology, and physician-in-the-loop guardrails across VoiceDocAI.",
+    photoUrl: null,
+    photoAlt: "Dr. Aparna Oruganty Das",
+    order: 10,
+    featuredOnHome: true,
+  },
+  {
+    id: "fallback-sridhar",
+    name: "Sridhar Murthy",
+    role: "Co-founder",
+    description:
+      "Engineering co-founder. Leads the multilingual speech stack, deployment architecture, and integration partnerships with HMIS / EHR vendors.",
+    photoUrl: null,
+    photoAlt: "Sridhar Murthy",
+    order: 20,
+    featuredOnHome: true,
+  },
+];
+
+/** Normalise a raw Payload team-member doc into TeamMemberSummary. */
+function normaliseTeamMember(doc: Record<string, unknown>): TeamMemberSummary {
+  return {
+    id: doc.id as string | number,
+    name: (doc.name as string) ?? "",
+    role: (doc.role as string) ?? "",
+    description: (doc.description as string) ?? "",
+    photoUrl: mediaUrl(doc.photo),
+    photoAlt: mediaAlt(doc.photo, (doc.name as string) ?? ""),
+    order: (doc.order as number) ?? 100,
+    featuredOnHome: (doc.featuredOnHome as boolean | undefined) ?? false,
+  };
+}
+
+// ---------- TeamMembers collection ----------
+
+export const getTeamMembers = unstable_cache(
+  async (): Promise<TeamMemberSummary[]> => {
+    try {
+      const p = await payload();
+      const res = await p.find({
+        collection: "team-members",
+        sort: "order",
+        limit: 50,
+        depth: 1, // resolve the photo upload
+      });
+      if (res.docs.length === 0) return teamMembersFallback;
+      return res.docs.map((d) => normaliseTeamMember(d as Record<string, unknown>));
+    } catch (err) {
+      warnCmsRead("getTeamMembers", err);
+      return teamMembersFallback;
+    }
+  },
+  ["coll", "team-members"],
+  { tags: [TAG, "team-members"] },
+);
+
+// ---------- /about (AboutPage global) ----------
+
+export const getAboutPage = unstable_cache(
+  async () => {
+    try {
+      const p = await payload();
+      const row = (await p.findGlobal({ slug: "about-page", depth: 0 })) as
+        | Record<string, unknown>
+        | null
+        | undefined;
+      if (!row) return aboutPageDefaults;
+
+      const intros = (row.introParagraphs as Array<{ text: string }> | undefined) ?? [];
+      const seo = (row.seo as Record<string, string> | undefined) ?? {};
+
+      return {
+        eyebrow: (row.eyebrow as string) ?? aboutPageDefaults.eyebrow,
+        title: (row.title as string) ?? aboutPageDefaults.title,
+        conciseAnswer:
+          (row.conciseAnswer as string) ?? aboutPageDefaults.conciseAnswer,
+        introParagraphs:
+          intros.length > 0
+            ? intros.map((p) => p.text).filter(Boolean)
+            : aboutPageDefaults.introParagraphs,
+        teamSectionHeading:
+          (row.teamSectionHeading as string) ?? aboutPageDefaults.teamSectionHeading,
+        teamSectionSubhead:
+          (row.teamSectionSubhead as string) ?? aboutPageDefaults.teamSectionSubhead,
+        showFounderQuote:
+          (row.showFounderQuote as boolean | undefined) ??
+          aboutPageDefaults.showFounderQuote,
+        seo: {
+          title: seo.title ?? aboutPageDefaults.seo.title,
+          description: seo.description ?? aboutPageDefaults.seo.description,
+        },
+      };
+    } catch (err) {
+      warnCmsRead("getAboutPage", err);
+      return aboutPageDefaults;
+    }
+  },
+  ["global", "about-page"],
+  { tags: [TAG, "about-page"] },
+);
