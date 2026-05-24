@@ -20,7 +20,11 @@ export const CMS_TAG = "cms";
 
 export const revalidateCmsTag = () => {
   try {
-    revalidateTag(CMS_TAG);
+    // Next 16 made the cache-life `profile` arg mandatory on revalidateTag.
+    // We don't want to override how long CMS-tagged reads stay cached after
+    // the purge, so pass the "default" profile — equivalent to the Next 15
+    // single-argument behaviour we used to rely on.
+    revalidateTag(CMS_TAG, "default");
   } catch (err) {
     // Hooks can fire from contexts that aren't a Next request (e.g. a
     // payload migrate run from the CLI). revalidateTag throws there.
