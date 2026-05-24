@@ -110,10 +110,16 @@ export default buildConfig({
         process.env.DATABASE_URI ??
         "postgres://jatayu:jatayu_dev_password@localhost:5432/jatayu_cms",
     },
-    // Push schema on connect so fresh Azure deployments auto-provision tables.
-    // For a hardened production cutover, set this to false and run
-    // `payload migrate` as a one-off job.
-    push: true,
+    // Schema-sync policy:
+    //   - In local dev (NODE_ENV !== "production") push the schema on connect
+    //     so new fields/collections "just work" while iterating.
+    //   - In production keep push OFF. The Next.js standalone runtime image
+    //     does not include drizzle-kit, so `push: true` silently no-ops there
+    //     instead of doing what it says — which has bitten us before. With
+    //     push:false the prod container queries whatever schema is in place,
+    //     and we sync schema deliberately via `npm run sync-prod-schema`
+    //     before any deploy that introduces schema changes.
+    push: process.env.NODE_ENV !== "production",
   }),
   cors: [process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"].filter(
     Boolean,
