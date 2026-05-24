@@ -3,7 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --page-max: 1100px;
+  /* Widened from 1100px (Nov 2025) so sections breathe on 1920px monitors
+     without leaving large dead margins on each side. 1440px is the modern
+     marketing-site default — comfortable line lengths, still works on 13" laptops. */
+  --page-max: 1440px;
   --section-y: 6rem;
 }
 

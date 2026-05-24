@@ -26,12 +26,6 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/Button";
 
-// File ships in `public/` so we can always serve it; the env var override is
-// kept for swapping in a CDN URL later, but it MUST be defined at build time
-// to be picked up (NEXT_PUBLIC_* are baked into the bundle).
-const heroVideoSrc =
-  process.env.NEXT_PUBLIC_HERO_VIDEO_URL ?? "/voicedocai-hero-30s.mp4";
-
 export async function HomeSections() {
   const [
     siteMeta,
@@ -122,80 +116,83 @@ export async function HomeSections() {
       <JsonLd data={faqLd} />
       <JsonLd data={softwareLd} />
 
-      {/* ---------- HERO ---------- */}
+      {/* ---------- HERO ----------
+       *
+       * Two-column layout (Nov 2025 redesign):
+       *   - LEFT  → badge, headline, subheadline, CTAs, trust line.
+       *   - RIGHT → animated waveform + clinical-note console (HeroVisual).
+       *
+       * The old centered single column left huge empty bands on either side of
+       * 1440px+ monitors. The product film was also removed from this section.
+       */}
       <section className="relative overflow-hidden border-b border-indigo/10 bg-grad-hero pb-16 pt-24 md:pb-20 md:pt-28">
+        {/* Decorative gradient blobs (purely visual, not in the document outline). */}
         <div className="pointer-events-none absolute -left-24 top-0 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(52,86,164,0.12)_0%,transparent_70%)] motion-reduce:hidden" aria-hidden />
         <div className="pointer-events-none absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(124,68,129,0.1)_0%,transparent_70%)] motion-reduce:hidden" aria-hidden />
 
-        <div className="container-page flex flex-col items-center text-center">
-          <div className="mb-5 flex items-center gap-3">
-            <Logo
-              size={48}
-              decorative
-              src={siteMeta.logoUrl}
-              alt={siteMeta.logoAlt}
-              className="rounded-full bg-white p-1 shadow-sm"
-            />
-            <span className="font-display text-sm font-semibold text-indigo">Jatayu Healthcare</span>
+        <div className="container-page grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
+          {/* LEFT — copy block */}
+          <div className="text-center lg:text-left">
+            <div className="mb-5 flex items-center justify-center gap-3 lg:justify-start">
+              <Logo
+                size={48}
+                decorative
+                src={siteMeta.logoUrl}
+                alt={siteMeta.logoAlt}
+                className="rounded-full bg-white p-1 shadow-sm"
+              />
+              <span className="font-display text-sm font-semibold text-indigo">
+                Jatayu Healthcare
+              </span>
+            </div>
+
+            <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo/15 bg-white px-4 py-1.5 text-xs font-medium text-navy shadow-sm">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
+              {homeHero.badge}
+            </p>
+
+            <h1 className="font-display text-4xl font-extrabold tracking-tight text-navy md:text-5xl xl:text-[3.75rem] text-balance">
+              {(() => {
+                // Headline is split on the first ". " so the second sentence
+                // can render with the brand gradient — keeps editors free to
+                // write naturally in the CMS without inline HTML.
+                const parts = homeHero.headline.split(". ");
+                if (parts.length < 2) return homeHero.headline;
+                const [first, ...rest] = parts;
+                return (
+                  <>
+                    {first}.
+                    <br />
+                    <span className="bg-grad-accent bg-clip-text text-transparent">
+                      {rest.join(". ").trim()}
+                    </span>
+                  </>
+                );
+              })()}
+            </h1>
+
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate lg:max-w-none">
+              {homeHero.subheadline}
+            </p>
+
+            <div className="mt-10 flex flex-wrap justify-center gap-3.5 lg:justify-start">
+              <Button as="link" href={homeHero.primaryCta.href} variant="primary" size="lg">
+                {homeHero.primaryCta.label}
+              </Button>
+              <Button as="link" href={homeHero.secondaryCta.href} variant="secondary" size="lg">
+                {homeHero.secondaryCta.label}
+              </Button>
+            </div>
+
+            <p className="mt-7 max-w-xl text-sm font-medium text-navy/80 lg:max-w-none">
+              {homeHero.trustLine}
+            </p>
           </div>
-          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo/15 bg-white px-4 py-1.5 text-xs font-medium text-navy shadow-sm">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden />
-            {homeHero.badge}
-          </p>
 
-          <h1 className="max-w-[820px] font-display text-4xl font-extrabold tracking-tight text-navy md:text-5xl xl:text-[4rem] text-balance">
-            {(() => {
-              const parts = homeHero.headline.split(". ");
-              if (parts.length < 2) return homeHero.headline;
-              const [first, ...rest] = parts;
-              return (
-                <>
-                  {first}.
-                  <br />
-                  <span className="bg-grad-accent bg-clip-text text-transparent">
-                    {rest.join(". ").trim()}
-                  </span>
-                </>
-              );
-            })()}
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate">{homeHero.subheadline}</p>
-
-          <div className="mt-10 flex flex-wrap justify-center gap-3.5">
-            <Button as="link" href={homeHero.primaryCta.href} variant="primary" size="lg">
-              {homeHero.primaryCta.label}
-            </Button>
-            <Button as="link" href={homeHero.secondaryCta.href} variant="secondary" size="lg">
-              {homeHero.secondaryCta.label}
-            </Button>
+          {/* RIGHT — animated console (waveform + clinical note) */}
+          <div className="relative">
+            <HeroVisual />
           </div>
-
-          <p className="mt-7 max-w-xl text-sm font-medium text-navy/80">{homeHero.trustLine}</p>
-
-          <figure className="mt-12 w-full max-w-[900px] overflow-hidden rounded-2xl border border-indigo/10 bg-navy/95 shadow-elevated">
-            {heroVideoSrc ? (
-              <video
-                className="aspect-video w-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                aria-label="VoiceDocAI product overview film"
-              >
-                <source src={heroVideoSrc} type="video/mp4" />
-              </video>
-            ) : (
-              <div className="flex aspect-video flex-col items-center justify-center gap-2 px-6 text-center">
-                <p className="font-display text-sm font-semibold text-white">Product overview film</p>
-                <p className="max-w-md text-xs leading-relaxed text-white/70">
-                  Add a CDN URL via NEXT_PUBLIC_HERO_VIDEO_URL. Muted by default. No in-browser microphone capture on this site.
-                </p>
-              </div>
-            )}
-          </figure>
-
-          <HeroVisual />
         </div>
       </section>
 
@@ -236,14 +233,28 @@ export async function HomeSections() {
         </div>
       </section>
 
-      {/* ---------- CONCISE ANSWER (AEO) ---------- */}
+      {/* ---------- CONCISE ANSWER (AEO) ----------
+       *
+       * Two-column magazine layout: eyebrow + headline on the left, body
+       * paragraph on the right. Replaces the narrow centered text block that
+       * used to leave big empty bands on either side at the new 1440 width.
+       */}
       <section className="bg-canvas py-[var(--section-y)]" aria-labelledby="answer-heading">
-        <div className="container-page max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">{homepageConcise.label}</p>
-          <h2 id="answer-heading" className="mt-3 font-display text-2xl font-extrabold tracking-tight text-navy md:text-3xl">
-            VoiceDocAI in plain language
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-navy/85">{homepageConcise.body}</p>
+        <div className="container-page grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-16">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">
+              {homepageConcise.label}
+            </p>
+            <h2
+              id="answer-heading"
+              className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl"
+            >
+              VoiceDocAI in plain language
+            </h2>
+          </div>
+          <p className="text-base leading-relaxed text-navy/85 lg:text-lg">
+            {homepageConcise.body}
+          </p>
         </div>
       </section>
 
@@ -474,22 +485,40 @@ export async function HomeSections() {
         </div>
       </section>
 
-      {/* ---------- FAQ ---------- */}
+      {/* ---------- FAQ ----------
+       *
+       * Two-column layout: sticky heading on the left, accordion on the right.
+       * The sticky heading keeps the section identity visible while the user
+       * scrolls through long answers.
+       */}
       <section className="bg-white py-[var(--section-y)]" aria-labelledby="faq-heading">
-        <div className="container-page max-w-3xl">
-          <div className="text-center">
+        <div className="container-page grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
+          <div className="lg:sticky lg:top-28">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">FAQ</p>
-            <h2 id="faq-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
+            <h2
+              id="faq-heading"
+              className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl"
+            >
               Answers procurement teams ask first
             </h2>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-slate">
+              Quick reference for buyers, integrators, and clinical reviewers.
+              Click any question to expand.
+            </p>
           </div>
-          <div className="mt-10 divide-y divide-indigo/10 rounded-2xl border border-indigo/10 bg-canvas">
+
+          <div className="divide-y divide-indigo/10 rounded-2xl border border-indigo/10 bg-canvas">
             {faqs.map((f) => (
               <details key={f.question} className="group px-5 py-4">
                 <summary className="cursor-pointer list-none font-display text-base font-semibold text-navy [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-4">
                     {f.question}
-                    <span className="text-magenta transition-transform group-open:rotate-45" aria-hidden>+</span>
+                    <span
+                      className="text-magenta transition-transform group-open:rotate-45"
+                      aria-hidden
+                    >
+                      +
+                    </span>
                   </span>
                 </summary>
                 <p className="mt-3 text-sm leading-relaxed text-navy/80">{f.answer}</p>

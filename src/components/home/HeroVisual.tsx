@@ -181,7 +181,10 @@ export function HeroVisual() {
   }, []);
 
   return (
-    <div className="relative z-[2] mt-12 w-full max-w-[1080px]">
+    // Lives in the right column of the hero grid now (Nov 2025 redesign).
+    // No top margin needed — column already aligns vertically with the text;
+    // width is fluid so the column controls sizing.
+    <div className="relative z-[2] w-full">
       {/* Soft pink glow behind the console */}
       <div
         aria-hidden
