@@ -515,29 +515,121 @@ const voiceDocAiFallback: ProductSummary = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Page-level fallback defaults.
+//
+// These are the same shapes the readers below return. They are used when:
+//   (a) the row exists in the CMS but has no copy yet, OR
+//   (b) the DB call itself errors (e.g. fresh deploy where `push: true`
+//       hasn't migrated the new globals/collection yet, or transient outage).
+//
+// Pulling them out as named constants means a try/catch in the reader can
+// drop straight back to them without duplicating long copy blocks.
+// ---------------------------------------------------------------------------
+
+const productsPageDefaults = {
+  eyebrow: "Our products",
+  title: "Voice-first tools your clinicians can verify",
+  conciseAnswer:
+    "Browse the Jatayu product line. Every product ships with clinician verification, multilingual capture tuned for Indian clinics, and deployment options that respect hospital governance.",
+  introParagraphs: [] as string[],
+  seo: {
+    title: "Products overview",
+    description:
+      "VoiceDocAI and the rest of the Jatayu product line: multilingual capture, structuring, clinician verification, and HMIS push.",
+  },
+};
+
+const forDoctorsPageDefaults = {
+  eyebrow: "Clinician path",
+  title: "Stay with patients, not the keyboard",
+  conciseAnswer:
+    "VoiceDocAI is built for practicing physicians and small clinics that need reliable multilingual capture, fast structured drafts, and a clear approval step before anything is filed. Especially useful when documentation is stealing your evenings.",
+  benefits: [
+    "Speak Hindi, Marathi, English, or any mix. Structured English output for the record.",
+    "Hands-free workflows suited to busy OPDs. Pocket-friendly deployments that respect resident hardware.",
+    "Templates across common specialties. The CMS-managed list grows with your hospital agreements.",
+    "You verify every note before filing. VoiceDocAI assists, you decide.",
+  ],
+  showPatientConsent: true,
+  primaryCta: { label: "Start 7-day trial", href: "/trial" } as CtaShape,
+  secondaryCta: { label: "Browse specialties", href: "/specialties" } as CtaShape,
+  seo: {
+    title: "For Doctors",
+    description:
+      "Hands-free, pocket-friendly VoiceDocAI for Indian clinicians. Multilingual conversations turned into structured English notes you approve.",
+  },
+};
+
+const forHospitalsPageDefaults = {
+  eyebrow: "Hospital IT & HMIS partners",
+  title: "One clinical voice layer across your stack",
+  conciseAnswer:
+    "VoiceDocAI helps EMR, EHR, and HMIS vendors embed multilingual speech-to-note capabilities with governance-friendly audit trails, deployment flexibility (including API and on-prem), and documentation tuned for procurement reviewers.",
+  integrationStory: {
+    heading: "Integration story",
+    steps: [
+      "Authenticated ingest of encounter audio or partner-provided streams.",
+      "Structured JSON + rendered clinical narrative aligned to templates.",
+      "Clinician review events recorded for audit; exported via API or secure file patterns.",
+      "Optional on-prem footprint — confirm reference architecture with engineering.",
+    ],
+  },
+  procurementPack: {
+    heading: "Procurement pack",
+    body: "Send hospitals directly to the Security & Compliance page for HIPAA-aligned language, DPDP Act 2023 posture, ISO 27001 status, encryption, residency, and audit-log commitments — after founder and counsel sign every claim.",
+    ctaLabel: "Open Security & Compliance",
+    ctaHref: "/security",
+  },
+  primaryCta: { label: "Book integration workshop", href: "/contact" } as CtaShape,
+  secondaryCta: { label: "Read case studies", href: "/case-studies" } as CtaShape,
+  seo: {
+    title: "For Hospitals & HMIS",
+    description:
+      "Integration models, latency SLAs, audit logs, data residency, and on-prem options for EMR/EHR/HMIS partners evaluating VoiceDocAI.",
+  },
+};
+
+/** Centralised warn-and-fall-through so each catch block reads identically. */
+function warnCmsRead(label: string, err: unknown) {
+  // Don't crash the page — the DB might not have migrated yet (fresh deploy),
+  // or there's a transient outage. Log and let the caller use defaults.
+  console.warn(`[cms] ${label} read failed, falling back to defaults:`, (err as Error).message);
+}
+
 // ---------- Products collection ----------
 
 export const getProducts = unstable_cache(
   async () => {
-    const p = await payload();
-    const res = await p.find({ collection: "products", sort: "order", limit: 50, depth: 0 });
-    if (res.docs.length === 0) return [voiceDocAiFallback];
-    return res.docs.map((d) => normaliseProduct(d as Record<string, unknown>));
+    try {
+      const p = await payload();
+      const res = await p.find({ collection: "products", sort: "order", limit: 50, depth: 0 });
+      if (res.docs.length === 0) return [voiceDocAiFallback];
+      return res.docs.map((d) => normaliseProduct(d as Record<string, unknown>));
+    } catch (err) {
+      warnCmsRead("getProducts", err);
+      return [voiceDocAiFallback];
+    }
   },
   ["coll", "products"],
   { tags: [TAG, "products"] },
 );
 
 export async function getProductBySlug(slug: string): Promise<ProductSummary | null> {
-  const p = await payload();
-  const res = await p.find({
-    collection: "products",
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 0,
-  });
-  if (res.docs[0]) return normaliseProduct(res.docs[0] as Record<string, unknown>);
-  // No DB row — fall back to the bundled product so dev/CI URLs keep working.
+  try {
+    const p = await payload();
+    const res = await p.find({
+      collection: "products",
+      where: { slug: { equals: slug } },
+      limit: 1,
+      depth: 0,
+    });
+    if (res.docs[0]) return normaliseProduct(res.docs[0] as Record<string, unknown>);
+  } catch (err) {
+    warnCmsRead("getProductBySlug", err);
+  }
+  // No DB row (or DB unreachable) — fall back to the bundled product so dev /
+  // fresh-deploy URLs keep working until an editor populates the collection.
   if (slug === voiceDocAiFallback.slug) return voiceDocAiFallback;
   return null;
 }
@@ -546,24 +638,29 @@ export async function getProductBySlug(slug: string): Promise<ProductSummary | n
 
 export const getProductsPage = unstable_cache(
   async () => {
-    const p = await payload();
-    const row = (await p.findGlobal({ slug: "products-page", depth: 0 })) as Record<string, unknown>;
-    const intros = (row.introParagraphs as Array<{ text: string }> | undefined) ?? [];
-    const seo = (row.seo as Record<string, string> | undefined) ?? {};
-    return {
-      eyebrow: (row.eyebrow as string) ?? "Our products",
-      title: (row.title as string) ?? "Voice-first tools your clinicians can verify",
-      conciseAnswer:
-        (row.conciseAnswer as string) ??
-        "Browse the Jatayu product line. Every product ships with clinician verification, multilingual capture tuned for Indian clinics, and deployment options that respect hospital governance.",
-      introParagraphs: intros.map((p) => p.text).filter(Boolean),
-      seo: {
-        title: seo.title ?? "Products overview",
-        description:
-          seo.description ??
-          "VoiceDocAI and the rest of the Jatayu product line: multilingual capture, structuring, clinician verification, and HMIS push.",
-      },
-    };
+    try {
+      const p = await payload();
+      const row = (await p.findGlobal({ slug: "products-page", depth: 0 })) as
+        | Record<string, unknown>
+        | null
+        | undefined;
+      if (!row) return productsPageDefaults;
+      const intros = (row.introParagraphs as Array<{ text: string }> | undefined) ?? [];
+      const seo = (row.seo as Record<string, string> | undefined) ?? {};
+      return {
+        eyebrow: (row.eyebrow as string) ?? productsPageDefaults.eyebrow,
+        title: (row.title as string) ?? productsPageDefaults.title,
+        conciseAnswer: (row.conciseAnswer as string) ?? productsPageDefaults.conciseAnswer,
+        introParagraphs: intros.map((p) => p.text).filter(Boolean),
+        seo: {
+          title: seo.title ?? productsPageDefaults.seo.title,
+          description: seo.description ?? productsPageDefaults.seo.description,
+        },
+      };
+    } catch (err) {
+      warnCmsRead("getProductsPage", err);
+      return productsPageDefaults;
+    }
   },
   ["global", "products-page"],
   { tags: [TAG, "products-page"] },
@@ -573,38 +670,38 @@ export const getProductsPage = unstable_cache(
 
 export const getForDoctorsPage = unstable_cache(
   async () => {
-    const p = await payload();
-    const row = (await p.findGlobal({ slug: "for-doctors-page", depth: 0 })) as Record<string, unknown>;
-    const benefits = (row.benefits as Array<{ text: string }> | undefined) ?? [];
-    const seo = (row.seo as Record<string, string> | undefined) ?? {};
-
-    // Fallback benefits — the original hard-coded copy from page.tsx.
-    const defaultBenefits = [
-      "Speak Hindi, Marathi, English, or any mix. Structured English output for the record.",
-      "Hands-free workflows suited to busy OPDs. Pocket-friendly deployments that respect resident hardware.",
-      "Templates across common specialties. The CMS-managed list grows with your hospital agreements.",
-      "You verify every note before filing. VoiceDocAI assists, you decide.",
-    ];
-
-    return {
-      eyebrow: (row.eyebrow as string) ?? "Clinician path",
-      title: (row.title as string) ?? "Stay with patients, not the keyboard",
-      conciseAnswer:
-        (row.conciseAnswer as string) ??
-        "VoiceDocAI is built for practicing physicians and small clinics that need reliable multilingual capture, fast structured drafts, and a clear approval step before anything is filed. Especially useful when documentation is stealing your evenings.",
-      benefits: benefits.length > 0 ? benefits.map((b) => b.text).filter(Boolean) : defaultBenefits,
-      showPatientConsent: (row.showPatientConsent as boolean | undefined) ?? true,
-      primaryCta:
-        (row.primaryCta as CtaShape) ?? { label: "Start 7-day trial", href: "/trial" },
-      secondaryCta:
-        (row.secondaryCta as CtaShape) ?? { label: "Browse specialties", href: "/specialties" },
-      seo: {
-        title: seo.title ?? "For Doctors",
-        description:
-          seo.description ??
-          "Hands-free, pocket-friendly VoiceDocAI for Indian clinicians. Multilingual conversations turned into structured English notes you approve.",
-      },
-    };
+    try {
+      const p = await payload();
+      const row = (await p.findGlobal({ slug: "for-doctors-page", depth: 0 })) as
+        | Record<string, unknown>
+        | null
+        | undefined;
+      if (!row) return forDoctorsPageDefaults;
+      const benefits = (row.benefits as Array<{ text: string }> | undefined) ?? [];
+      const seo = (row.seo as Record<string, string> | undefined) ?? {};
+      return {
+        eyebrow: (row.eyebrow as string) ?? forDoctorsPageDefaults.eyebrow,
+        title: (row.title as string) ?? forDoctorsPageDefaults.title,
+        conciseAnswer:
+          (row.conciseAnswer as string) ?? forDoctorsPageDefaults.conciseAnswer,
+        benefits:
+          benefits.length > 0
+            ? benefits.map((b) => b.text).filter(Boolean)
+            : forDoctorsPageDefaults.benefits,
+        showPatientConsent:
+          (row.showPatientConsent as boolean | undefined) ??
+          forDoctorsPageDefaults.showPatientConsent,
+        primaryCta: (row.primaryCta as CtaShape) ?? forDoctorsPageDefaults.primaryCta,
+        secondaryCta: (row.secondaryCta as CtaShape) ?? forDoctorsPageDefaults.secondaryCta,
+        seo: {
+          title: seo.title ?? forDoctorsPageDefaults.seo.title,
+          description: seo.description ?? forDoctorsPageDefaults.seo.description,
+        },
+      };
+    } catch (err) {
+      warnCmsRead("getForDoctorsPage", err);
+      return forDoctorsPageDefaults;
+    }
   },
   ["global", "for-doctors-page"],
   { tags: [TAG, "for-doctors-page"] },
@@ -614,50 +711,57 @@ export const getForDoctorsPage = unstable_cache(
 
 export const getForHospitalsPage = unstable_cache(
   async () => {
-    const p = await payload();
-    const row = (await p.findGlobal({ slug: "for-hospitals-page", depth: 0 })) as Record<string, unknown>;
-    const story = (row.integrationStory as Record<string, unknown> | undefined) ?? {};
-    const procurement = (row.procurementPack as Record<string, unknown> | undefined) ?? {};
-    const steps = (story.steps as Array<{ text: string }> | undefined) ?? [];
-    const seo = (row.seo as Record<string, string> | undefined) ?? {};
-
-    // Fallback story steps — original hard-coded copy from page.tsx.
-    const defaultSteps = [
-      "Authenticated ingest of encounter audio or partner-provided streams.",
-      "Structured JSON + rendered clinical narrative aligned to templates.",
-      "Clinician review events recorded for audit; exported via API or secure file patterns.",
-      "Optional on-prem footprint — confirm reference architecture with engineering.",
-    ];
-
-    return {
-      eyebrow: (row.eyebrow as string) ?? "Hospital IT & HMIS partners",
-      title: (row.title as string) ?? "One clinical voice layer across your stack",
-      conciseAnswer:
-        (row.conciseAnswer as string) ??
-        "VoiceDocAI helps EMR, EHR, and HMIS vendors embed multilingual speech-to-note capabilities with governance-friendly audit trails, deployment flexibility (including API and on-prem), and documentation tuned for procurement reviewers.",
-      integrationStory: {
-        heading: (story.heading as string) ?? "Integration story",
-        steps: steps.length > 0 ? steps.map((s) => s.text).filter(Boolean) : defaultSteps,
-      },
-      procurementPack: {
-        heading: (procurement.heading as string) ?? "Procurement pack",
-        body:
-          (procurement.body as string) ??
-          "Send hospitals directly to the Security & Compliance page for HIPAA-aligned language, DPDP Act 2023 posture, ISO 27001 status, encryption, residency, and audit-log commitments — after founder and counsel sign every claim.",
-        ctaLabel: (procurement.ctaLabel as string) ?? "Open Security & Compliance",
-        ctaHref: (procurement.ctaHref as string) ?? "/security",
-      },
-      primaryCta:
-        (row.primaryCta as CtaShape) ?? { label: "Book integration workshop", href: "/contact" },
-      secondaryCta:
-        (row.secondaryCta as CtaShape) ?? { label: "Read case studies", href: "/case-studies" },
-      seo: {
-        title: seo.title ?? "For Hospitals & HMIS",
-        description:
-          seo.description ??
-          "Integration models, latency SLAs, audit logs, data residency, and on-prem options for EMR/EHR/HMIS partners evaluating VoiceDocAI.",
-      },
-    };
+    try {
+      const p = await payload();
+      const row = (await p.findGlobal({ slug: "for-hospitals-page", depth: 0 })) as
+        | Record<string, unknown>
+        | null
+        | undefined;
+      if (!row) return forHospitalsPageDefaults;
+      const story = (row.integrationStory as Record<string, unknown> | undefined) ?? {};
+      const procurement =
+        (row.procurementPack as Record<string, unknown> | undefined) ?? {};
+      const steps = (story.steps as Array<{ text: string }> | undefined) ?? [];
+      const seo = (row.seo as Record<string, string> | undefined) ?? {};
+      return {
+        eyebrow: (row.eyebrow as string) ?? forHospitalsPageDefaults.eyebrow,
+        title: (row.title as string) ?? forHospitalsPageDefaults.title,
+        conciseAnswer:
+          (row.conciseAnswer as string) ?? forHospitalsPageDefaults.conciseAnswer,
+        integrationStory: {
+          heading:
+            (story.heading as string) ??
+            forHospitalsPageDefaults.integrationStory.heading,
+          steps:
+            steps.length > 0
+              ? steps.map((s) => s.text).filter(Boolean)
+              : forHospitalsPageDefaults.integrationStory.steps,
+        },
+        procurementPack: {
+          heading:
+            (procurement.heading as string) ??
+            forHospitalsPageDefaults.procurementPack.heading,
+          body:
+            (procurement.body as string) ?? forHospitalsPageDefaults.procurementPack.body,
+          ctaLabel:
+            (procurement.ctaLabel as string) ??
+            forHospitalsPageDefaults.procurementPack.ctaLabel,
+          ctaHref:
+            (procurement.ctaHref as string) ??
+            forHospitalsPageDefaults.procurementPack.ctaHref,
+        },
+        primaryCta: (row.primaryCta as CtaShape) ?? forHospitalsPageDefaults.primaryCta,
+        secondaryCta:
+          (row.secondaryCta as CtaShape) ?? forHospitalsPageDefaults.secondaryCta,
+        seo: {
+          title: seo.title ?? forHospitalsPageDefaults.seo.title,
+          description: seo.description ?? forHospitalsPageDefaults.seo.description,
+        },
+      };
+    } catch (err) {
+      warnCmsRead("getForHospitalsPage", err);
+      return forHospitalsPageDefaults;
+    }
   },
   ["global", "for-hospitals-page"],
   { tags: [TAG, "for-hospitals-page"] },
