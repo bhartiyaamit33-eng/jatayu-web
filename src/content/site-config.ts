@@ -70,6 +70,28 @@ export const siteMeta = {
     "Voice-first medical AI built for Indian doctors. From conversation to clinical note in under a minute, in 50+ languages.",
   salesEmail: "sales@jatayuhealth.com",
   founderEmail: "aparnaoruganty.das@jatayuhealth.com",
+  phone: "+91 75060 60955",
+  /** Company office addresses — surfaced on /contact and the footer. */
+  offices: [
+    {
+      city: "Mumbai",
+      lines: [
+        "6005A, 6th Floor, SINE",
+        "IIT Bombay, Powai",
+        "Mumbai – 400076",
+      ],
+      label: "Registered / R&D office",
+    },
+    {
+      city: "Thane",
+      lines: [
+        "B 703, Urbano, Sector 4",
+        "Palava City, Kalyan",
+        "Thane – 421204",
+      ],
+      label: "Corporate office",
+    },
+  ],
 };
 
 /** Primary navigation - toggling showInMainNav simulates CMS “show in nav” */
@@ -459,8 +481,8 @@ export const footerColumns = {
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Terms of Use", href: "/terms" },
+    { label: "Cancellation Policy", href: "/cancellation" },
     { label: "Sitemap", href: "/sitemap-page" },
     { label: "Security & Compliance", href: "/security" },
   ],

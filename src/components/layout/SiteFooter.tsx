@@ -78,7 +78,35 @@ export function SiteFooter({ logoUrl, logoAlt }: SiteFooterProps = {}) {
           </ul>
         </div>
       </div>
-      <div className="container-page mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/55 sm:flex-row sm:justify-between">
+      {/* Office addresses — two-card strip above the copyright bar. */}
+      <div className="container-page mt-12 grid gap-6 border-t border-white/10 pt-10 md:grid-cols-2">
+        <div>
+          <h2 className="font-display text-xs font-bold uppercase tracking-widest text-white">
+            Our locations
+          </h2>
+          <p className="mt-3 text-xs text-white/55">
+            Walk-ins by appointment only.
+          </p>
+        </div>
+        <ul className="grid gap-6 sm:grid-cols-2">
+          {siteMeta.offices.map((office) => (
+            <li key={office.city}>
+              <p className="font-display text-sm font-semibold text-white">
+                {office.city}
+              </p>
+              <address className="mt-1.5 not-italic text-xs leading-relaxed text-white/65">
+                {office.lines.map((line, idx) => (
+                  <span key={idx} className="block">
+                    {line}
+                  </span>
+                ))}
+              </address>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="container-page mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/55 sm:flex-row sm:justify-between">
         <span>
           © {year} {siteMeta.legalName}. All rights reserved.
         </span>
