@@ -459,8 +459,8 @@ export const footerColumns = {
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Terms of Use", href: "/terms" },
+    { label: "Cancellation Policy", href: "/cancellation" },
     { label: "Sitemap", href: "/sitemap-page" },
     { label: "Security & Compliance", href: "/security" },
   ],

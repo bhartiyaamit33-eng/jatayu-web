@@ -19,8 +19,8 @@ const extras = [
   { href: "/careers", label: "Careers" },
   { href: "/press", label: "Press / Awards" },
   { href: "/privacy", label: "Privacy Policy" },
-  { href: "/terms", label: "Terms" },
-  { href: "/cookies", label: "Cookie Policy" },
+  { href: "/terms", label: "Terms of Use" },
+  { href: "/cancellation", label: "Cancellation Policy" },
   { href: "/trial", label: "Trial signup" },
 ];
 
