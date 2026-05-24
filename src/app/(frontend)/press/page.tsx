@@ -18,7 +18,7 @@ export default function PressPage() {
         conciseAnswer="Centralise awards, logos, boilerplate, leadership bios, and download-approved imagery. Journalists should cite metrics only from the sourced facts page."
       />
       <section className="container-page pb-[var(--section-y)]">
-        <ul className="grid gap-4 md:grid-cols-2">
+        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {awards.map((a) => (
             <li
               key={a.name}

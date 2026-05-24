@@ -26,19 +26,24 @@ export default function FactsPage() {
     <>
       <JsonLd data={datasetLd} />
       <article className="border-b border-indigo/10 bg-white pb-[var(--section-y)] pt-28">
-        <div className="container-page max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">
-            GEO / AEO
-          </p>
-          <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-navy md:text-5xl">
-            Public facts with traceable sources
-          </h1>
-          <p className="mt-6 text-sm leading-relaxed text-slate">
-            Every metric below maps to a CMS{" "}
-            <span className="font-mono text-xs">sourceRef</span> key. Publish only after
-            founder sign-off; retire figures instead of leaving stale percentages live.
-          </p>
-          <ul className="mt-10 space-y-6">
+        <div className="container-page">
+          {/* Narrative header stays narrow for readability; the metric grid below
+              spans the full container so the page doesn't feel sparse on wide screens. */}
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">
+              GEO / AEO
+            </p>
+            <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-navy md:text-5xl">
+              Public facts with traceable sources
+            </h1>
+            <p className="mt-6 text-sm leading-relaxed text-slate">
+              Every metric below maps to a CMS{" "}
+              <span className="font-mono text-xs">sourceRef</span> key. Publish only after
+              founder sign-off; retire figures instead of leaving stale percentages live.
+            </p>
+          </div>
+
+          <ul className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {homeMetrics.map((m) => (
               <li
                 key={m.id}

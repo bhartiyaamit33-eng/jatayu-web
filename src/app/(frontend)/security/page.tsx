@@ -63,8 +63,9 @@ export default function SecurityPage() {
         title="Security and compliance, written for procurement"
         conciseAnswer="VoiceDocAI is HIPAA-aligned, DPDP Act 2023 ready, with India-resident data, AES-256 at rest, TLS 1.2 plus in transit, encounter-level audit logs, and on-premise deployment options. Detailed posture and the latest signed statements live on this page."
       />
-      <section className="container-page py-[var(--section-y)] space-y-10">
-        <div className="grid gap-6 lg:grid-cols-2">
+      <section className="container-page py-[var(--section-y)] space-y-12">
+        {/* Six pillar cards — 3 across on lg+ uses the wider container cleanly */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {pillars.map((p) => (
             <article
               key={p.title}
@@ -76,16 +77,19 @@ export default function SecurityPage() {
           ))}
         </div>
 
-        <div className="rounded-2xl border border-indigo/15 bg-pale-blue p-8 shadow-card">
-          <h2 className="font-display text-xl font-bold text-navy">
-            Need a one-pager for your CISO?
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-navy/85">
-            We can send you a single-page PDF summary suitable for procurement
-            forwarding. The page itself is also designed to print cleanly. Use the
-            button below or email us and we will reply with the latest signed copy.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-4">
+        {/* "CISO one-pager" — magazine layout: pitch on the left, actions on the right */}
+        <div className="grid items-center gap-8 rounded-2xl border border-indigo/15 bg-pale-blue p-8 shadow-card lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-12 lg:p-10">
+          <div>
+            <h2 className="font-display text-xl font-bold text-navy md:text-2xl">
+              Need a one-pager for your CISO?
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-navy/85">
+              We can send you a single-page PDF summary suitable for procurement
+              forwarding. The page itself is also designed to print cleanly. Use the
+              button below or email us and we will reply with the latest signed copy.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-4 lg:justify-end">
             <PrintButton />
             <Button as="link" href="/contact" variant="primary" size="md">
               Email me the PDF

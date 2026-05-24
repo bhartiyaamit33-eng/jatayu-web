@@ -24,7 +24,7 @@ export default async function CaseStudiesPage() {
         conciseAnswer="Each case study cites methodology, dates, departments, sample sizes, and accuracy metrics exactly as approved. Suitable for procurement forwarding and generative engine citations."
       />
       <section className="container-page py-[var(--section-y)]">
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {studies.map((c) => (
             <Link
               key={c.slug}
