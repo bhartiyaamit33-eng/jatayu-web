@@ -1,11 +1,20 @@
 import type { GlobalConfig } from "payload";
 import { revalidateCmsTag } from "@/lib/cms-hooks";
+import {
+  blockEditorPublishGlobal,
+  editorsUpdate,
+  publishedOnlyForPublic,
+} from "@/lib/access";
 
 export const AudienceSplit: GlobalConfig = {
   slug: "audience-split",
   label: "Audience Split (home)",
-  access: { read: () => true },
-  hooks: { afterChange: [revalidateCmsTag] },
+  versions: { drafts: true },
+  access: { read: publishedOnlyForPublic, update: editorsUpdate },
+  hooks: {
+    beforeChange: [blockEditorPublishGlobal],
+    afterChange: [revalidateCmsTag],
+  },
   fields: [
     {
       name: "doctor",

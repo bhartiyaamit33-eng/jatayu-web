@@ -1,5 +1,10 @@
 import type { GlobalConfig } from "payload";
 import { revalidateCmsTag } from "@/lib/cms-hooks";
+import {
+  blockEditorPublishGlobal,
+  editorsUpdate,
+  publishedOnlyForPublic,
+} from "@/lib/access";
 
 /**
  * AboutPage
@@ -20,8 +25,12 @@ export const AboutPage: GlobalConfig = {
   slug: "about-page",
   label: "Page — About",
 
-  access: { read: () => true },
-  hooks: { afterChange: [revalidateCmsTag] },
+  versions: { drafts: true },
+  access: { read: publishedOnlyForPublic, update: editorsUpdate },
+  hooks: {
+    beforeChange: [blockEditorPublishGlobal],
+    afterChange: [revalidateCmsTag],
+  },
 
   fields: [
     // ------------------------------------------------------------------

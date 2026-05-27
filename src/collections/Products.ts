@@ -1,5 +1,10 @@
 import type { CollectionConfig } from "payload";
 import { revalidateCmsTag } from "@/lib/cms-hooks";
+import {
+  blockEditorPublish,
+  editorsUpdate,
+  publishedOnlyForPublic,
+} from "@/lib/access";
 
 /**
  * Products
@@ -23,16 +28,29 @@ export const Products: CollectionConfig = {
 
   admin: {
     useAsTitle: "name",
-    defaultColumns: ["name", "slug", "tagline", "order"],
+    defaultColumns: ["name", "slug", "tagline", "order", "_status"],
     description:
       "Each row is one product. Add a new row to publish a new product page at /product/<slug>.",
   },
 
-  access: { read: () => true },
+  // Drafts let editors save changes without making them live. Only a super
+  // admin can publish (see blockEditorPublish hook below + the role check
+  // in src/lib/access.ts).
+  versions: { drafts: true },
 
-  // Whenever an editor saves or deletes a product, blow away the Next.js cache
-  // for any page that reads from this collection.
+  access: {
+    read: publishedOnlyForPublic,
+    create: editorsUpdate,
+    update: editorsUpdate,
+    delete: editorsUpdate,
+  },
+
   hooks: {
+    // Block non-super-admins from flipping `_status` to 'published'.
+    // They can still save the draft via the "Save Draft" button.
+    beforeChange: [blockEditorPublish],
+    // Editor saves → invalidate the Next.js cache so the next public
+    // request picks up the new published version once it lands.
     afterChange: [revalidateCmsTag],
     afterDelete: [revalidateCmsTag],
   },
