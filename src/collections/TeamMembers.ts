@@ -1,5 +1,10 @@
 import type { CollectionConfig } from "payload";
 import { revalidateCmsTag } from "@/lib/cms-hooks";
+import {
+  blockEditorPublish,
+  editorsUpdate,
+  publishedOnlyForPublic,
+} from "@/lib/access";
 
 /**
  * TeamMembers
@@ -22,15 +27,24 @@ export const TeamMembers: CollectionConfig = {
 
   admin: {
     useAsTitle: "name",
-    defaultColumns: ["name", "role", "order", "featuredOnHome"],
+    defaultColumns: ["name", "role", "order", "featuredOnHome", "_status"],
     description:
       "People on the Jatayu team. Surfaces on /about. Add a new row to publish a new card.",
   },
 
-  access: { read: () => true },
+  versions: { drafts: true },
 
-  // Editor saves a member → revalidate the cms tag → /about re-fetches.
+  access: {
+    read: publishedOnlyForPublic,
+    create: editorsUpdate,
+    update: editorsUpdate,
+    delete: editorsUpdate,
+  },
+
   hooks: {
+    // Block non-super-admins from publishing; they can still save drafts.
+    beforeChange: [blockEditorPublish],
+    // Editor saves → revalidate the cms tag → /about re-fetches.
     afterChange: [revalidateCmsTag],
     afterDelete: [revalidateCmsTag],
   },

@@ -1,5 +1,11 @@
 import type { CollectionConfig } from "payload";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { revalidateCmsTag } from "@/lib/cms-hooks";
+import {
+  blockEditorPublish,
+  editorsUpdate,
+  publishedOnlyForPublic,
+} from "@/lib/access";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
@@ -9,10 +15,15 @@ export const Posts: CollectionConfig = {
   },
   versions: { drafts: true },
   access: {
-    read: ({ req }) =>
-      req.user
-        ? true
-        : { _status: { equals: "published" } },
+    read: publishedOnlyForPublic,
+    create: editorsUpdate,
+    update: editorsUpdate,
+    delete: editorsUpdate,
+  },
+  hooks: {
+    beforeChange: [blockEditorPublish],
+    afterChange: [revalidateCmsTag],
+    afterDelete: [revalidateCmsTag],
   },
   fields: [
     { name: "title", type: "text", required: true },

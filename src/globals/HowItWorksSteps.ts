@@ -1,11 +1,20 @@
 import type { GlobalConfig } from "payload";
 import { revalidateCmsTag } from "@/lib/cms-hooks";
+import {
+  blockEditorPublishGlobal,
+  editorsUpdate,
+  publishedOnlyForPublic,
+} from "@/lib/access";
 
 export const HowItWorksSteps: GlobalConfig = {
   slug: "how-it-works-steps",
   label: "How It Works Steps",
-  access: { read: () => true },
-  hooks: { afterChange: [revalidateCmsTag] },
+  versions: { drafts: true },
+  access: { read: publishedOnlyForPublic, update: editorsUpdate },
+  hooks: {
+    beforeChange: [blockEditorPublishGlobal],
+    afterChange: [revalidateCmsTag],
+  },
   fields: [
     {
       name: "flowDiagram",

@@ -1,17 +1,28 @@
 import type { CollectionConfig } from "payload";
+import { revalidateCmsTag } from "@/lib/cms-hooks";
+import {
+  blockEditorPublish,
+  editorsUpdate,
+  publishedOnlyForPublic,
+} from "@/lib/access";
 
 export const CaseStudies: CollectionConfig = {
   slug: "case-studies",
   admin: {
     useAsTitle: "institution",
-    defaultColumns: ["institution", "slug", "spotlight", "publishedAt"],
+    defaultColumns: ["institution", "slug", "spotlight", "publishedAt", "_status"],
   },
   versions: { drafts: true },
   access: {
-    read: ({ req }) =>
-      req.user
-        ? true
-        : { _status: { equals: "published" } },
+    read: publishedOnlyForPublic,
+    create: editorsUpdate,
+    update: editorsUpdate,
+    delete: editorsUpdate,
+  },
+  hooks: {
+    beforeChange: [blockEditorPublish],
+    afterChange: [revalidateCmsTag],
+    afterDelete: [revalidateCmsTag],
   },
   fields: [
     { name: "institution", type: "text", required: true },
