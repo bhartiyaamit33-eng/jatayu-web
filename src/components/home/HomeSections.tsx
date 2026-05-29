@@ -427,11 +427,13 @@ export async function HomeSections() {
             ) : (
               <div className="aspect-[4/5] w-full rounded-2xl bg-gradient-to-br from-indigo/15 via-purple/10 to-magenta/15 ring-1 ring-indigo/10" aria-hidden />
             )}
-            <p className="mt-3 text-xs text-slate">
-              {founderNote.portraitUrl
-                ? "Portrait via CMS · Founder Note global"
-                : "Founder portrait slot · upload from CMS → Globals → Founder Note → portrait."}
-            </p>
+            {/* Caption rendered only when a portrait is uploaded — otherwise
+                the placeholder gradient stands on its own. */}
+            {founderNote.portraitUrl ? (
+              <p className="mt-3 text-xs text-slate">
+                {founderNote.name} · {founderNote.role}
+              </p>
+            ) : null}
           </div>
           <div className="order-1 lg:order-2">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Founder note</p>

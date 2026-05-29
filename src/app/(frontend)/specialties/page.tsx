@@ -21,7 +21,7 @@ export default async function SpecialtiesIndexPage() {
       <PageIntro
         eyebrow="Clinical breadth"
         title="Specialty templates spanning 20+ medical disciplines"
-        conciseAnswer="Each specialty page deep-links to anonymised sample outputs, matching case studies, and tagged blog posts. The grid below is managed entirely in /admin."
+        conciseAnswer="Each specialty page links to anonymised sample outputs, matching customer stories, and tagged articles. Browse the grid to find templates tuned to your discipline."
       />
       <section className="container-page py-[var(--section-y)]">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

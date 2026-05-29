@@ -81,10 +81,6 @@ export default async function BlogPostPage({ params }: Props) {
           </p>
           <div className="mt-10 max-w-none space-y-4">
             <p className="text-lg leading-relaxed text-navy">{post.excerpt}</p>
-            <p className="text-sm leading-relaxed text-slate">
-              Edit the full body in /admin under Posts. The Lexical rich-text editor
-              supports inline images, callouts, embeds, and reorderable blocks.
-            </p>
           </div>
           <Link
             href="/blog"

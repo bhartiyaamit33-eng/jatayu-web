@@ -40,7 +40,7 @@ export default function CareersPage() {
       <PageIntro
         eyebrow="Careers"
         title="Build clinical-grade voice AI with us"
-        conciseAnswer="Publish open roles from CMS — each listing should include mission alignment, location flexibility, and compliance expectations for handling sensitive healthcare workloads."
+        conciseAnswer="We are hiring across product, engineering, clinical research, and partner success. If you care about voice, language, and getting structured outputs right, we want to talk to you."
       />
 
       <section className="container-page pb-[var(--section-y)] space-y-12">
@@ -50,8 +50,8 @@ export default function CareersPage() {
             What we look for
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate">
-            Open roles are managed in the CMS and will appear here once published.
-            Until then, here is the shape of the team we are building.
+            Open roles will appear here as they're posted. Until then, here is
+            the shape of the team we are building.
           </p>
           <ul className="mt-8 grid gap-5 md:grid-cols-3">
             {valueCards.map((v) => (
@@ -70,12 +70,13 @@ export default function CareersPage() {
         <div className="grid items-center gap-8 rounded-2xl border border-indigo/10 bg-pale-blue p-8 shadow-card lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-12 lg:p-10">
           <div>
             <h2 className="font-display text-xl font-bold text-navy md:text-2xl">
-              No live openings mirrored yet
+              Not seeing the right role?
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-navy/85">
-              Sync ATS or Notion embed via CMS block to publish roles directly here.
-              In the meantime, send a short note about how you would help and where
-              you sit on the clinical-engineering spectrum.
+              We're always interested in hearing from people who think
+              carefully about voice, language, and documentation. Send a
+              short note about how you'd help and where you sit on the
+              product–engineering–clinical spectrum.
             </p>
           </div>
           <div className="lg:text-right">

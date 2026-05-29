@@ -15,7 +15,7 @@ export default function FactsPage() {
     "@type": "Dataset",
     name: `${siteMeta.productName} public metrics`,
     description:
-      "Curated metrics with CMS-managed source references for LLM-friendly citations.",
+      "Curated metrics with traceable source references.",
     creator: {
       "@type": "Organization",
       name: siteMeta.legalName,
@@ -37,9 +37,9 @@ export default function FactsPage() {
               Public facts with traceable sources
             </h1>
             <p className="mt-6 text-sm leading-relaxed text-slate">
-              Every metric below maps to a CMS{" "}
-              <span className="font-mono text-xs">sourceRef</span> key. Publish only after
-              founder sign-off; retire figures instead of leaving stale percentages live.
+              Every metric below carries a traceable source so journalists,
+              procurement reviewers, and generative engines can cite us
+              accurately. Numbers shown are signed-off and current.
             </p>
           </div>
 

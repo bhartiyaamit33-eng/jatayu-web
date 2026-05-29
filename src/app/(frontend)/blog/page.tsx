@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Blog",
     description:
-      "Long-form guidance for clinicians and hospital IT teams adopting VoiceDocAI. Categories, tags, and RSS managed in /admin.",
+      "Long-form guidance for teams adopting VoiceDocAI — clinical workflows, qualitative research, integration patterns, and customer stories.",
     alternates: { canonical: `${siteMeta.domain}/blog` },
   };
 }
@@ -21,7 +21,7 @@ export default async function BlogIndexPage() {
       <PageIntro
         eyebrow="Insights"
         title="Practical writing for documentation and insight teams"
-        conciseAnswer="Blog posts combine rich layouts (pull quotes, inline imagery, embeds) with taxonomy managed in /admin. The RSS feed lives at /blog/rss.xml."
+        conciseAnswer="Field-tested writing for clinicians, research teams, and integration partners. Subscribe to the RSS feed for new posts."
       />
       <section className="container-page py-[var(--section-y)]">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
