@@ -43,15 +43,14 @@ export default async function SpecialtyPage({ params }: Props) {
       <PageIntro
         eyebrow="Specialty"
         title={`VoiceDocAI for ${spec.title}`}
-        conciseAnswer={`Template-driven drafts for ${spec.title.toLowerCase()} encounters. Pair this page in /admin with sample anonymised notes, related customer stories, and tagged articles for SEO and AEO.`}
+        conciseAnswer={`Template-driven drafts for ${spec.title.toLowerCase()} encounters. Multilingual capture, structured output, and clinician-in-the-loop review before anything is filed.`}
       />
       <section className="container-page py-[var(--section-y)] space-y-10">
         <div className="max-w-3xl space-y-4 text-base leading-relaxed text-navy/85">
           <p>{spec.blurb}</p>
           <p className="text-sm text-slate">
-            Replace this scaffold with rich blocks from /admin: two-column layouts,
-            calls to action, downloadable PDF samples, and embedded HowTo schema where
-            appropriate.
+            See related customer stories below, or browse tagged articles in the
+            blog for clinical workflow guidance.
           </p>
         </div>
         <div className="flex flex-wrap gap-4">

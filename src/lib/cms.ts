@@ -904,7 +904,7 @@ const aboutPageDefaults = {
   ] as string[],
   teamSectionHeading: "The team",
   teamSectionSubhead:
-    "The people building VoiceDocAI. Add or edit them in Admin → Collections → Team Members.",
+    "The clinicians, engineers, and operators building VoiceDocAI.",
   showFounderQuote: true,
   seo: {
     title: "About",

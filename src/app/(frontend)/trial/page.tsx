@@ -53,12 +53,14 @@ export default async function TrialPage() {
             ))}
           </ol>
           <p className="mt-6 text-xs text-slate">
-            Sales team is notified at {siteMeta.salesEmail} the moment you submit.
-            Manage all signups in{" "}
-            <a href="/admin" className="font-semibold text-indigo hover:underline">
-              /admin
-            </a>
-            .
+            A member of our team will reach out from{" "}
+            <a
+              href={`mailto:${siteMeta.salesEmail}`}
+              className="font-semibold text-indigo hover:underline"
+            >
+              {siteMeta.salesEmail}
+            </a>{" "}
+            shortly after you submit.
           </p>
         </aside>
       </section>

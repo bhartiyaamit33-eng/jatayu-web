@@ -334,7 +334,7 @@ export const complianceBand = [
   },
   {
     title: "ISO 27001",
-    body: "Certification status is founder-confirmed and published, with no aspirational language.",
+    body: "Certification work is in progress; status and certificate number publish here the day they're issued. No aspirational language in the meantime.",
     href: "/security",
   },
   {
@@ -403,17 +403,17 @@ export const homeFaqs: FAQItem[] = [
   {
     question: "Is audio stored?",
     answer:
-      "Retention and processing posture must match your hospital agreement and applicable law. Use the Security & Compliance page for the definitive statement after legal review-never guess on procurement calls.",
+      "Retention and processing follow the customer agreement and the laws of the deployment region. The Security & Compliance page carries the definitive, counsel-reviewed statement.",
   },
   {
     question: "Can hospitals integrate via API?",
     answer:
-      "Yes-HMIS and EHR partners can integrate using documented APIs and deployment models including on-premise where required; integration timelines depend on your environment and governance.",
+      "Yes — HMIS, EHR, and analytics partners integrate using documented APIs and can deploy on-premise where residency or governance requires it. Integration timelines depend on the customer environment.",
   },
   {
     question: "How long is the free trial?",
     answer:
-      "The public site promotes a 7-day trial-confirm what the trial unlocks (web account, desktop client, or license key) before advertising specifics.",
+      "Seven days from the moment your trial account is provisioned. Trial accounts include browser-based capture and structuring; desktop and on-prem options are arranged with the team during onboarding.",
   },
 ];
 
@@ -426,27 +426,27 @@ export const caseStudiesIndex: CaseStudySummary[] = [
   },
   {
     slug: "mgm",
-    title: "MGM",
-    institution: "MGM",
-    excerpt: "Deployment narrative pending. Load the final copy from CMS.",
+    title: "MGM Medical College & Hospital",
+    institution: "MGM Medical College & Hospital",
+    excerpt: "Multi-specialty deployment with validation letter on file.",
   },
   {
     slug: "ilbs-delhi",
     title: "ILBS Delhi",
     institution: "ILBS Delhi",
-    excerpt: "Deployment narrative pending. Load the final copy from CMS.",
+    excerpt: "Multilingual deployment with 95–96% accuracy across 25 cases.",
   },
   {
     slug: "dy-patil-navi-mumbai",
-    title: "DY Patil Navi Mumbai",
-    institution: "DY Patil Navi Mumbai",
-    excerpt: "Deployment narrative pending. Load the final copy from CMS.",
+    title: "DY Patil Hospital, Navi Mumbai",
+    institution: "DY Patil Hospital, Navi Mumbai",
+    excerpt: "Multi-specialty rollout across the campus.",
   },
   {
     slug: "souter-street-dispensary",
     title: "Souter Street Dispensary",
     institution: "BMC / Mumbai",
-    excerpt: "Early municipal pilot preceding expanded hospital rollout.",
+    excerpt: "~95% accuracy with ~60% documentation time saved.",
   },
 ];
 

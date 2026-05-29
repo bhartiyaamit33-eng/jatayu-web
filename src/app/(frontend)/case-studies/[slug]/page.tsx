@@ -48,7 +48,7 @@ export default async function CaseStudyDetailPage({ params }: Props) {
         conciseAnswer={
           isKem
             ? "The December 2025 KEM Hospital deployment evaluated VoiceDocAI across 95 cases and 18 clinicians in noisy clinical zones (around 70 to 90 dB), reporting substantial documentation time reduction and strong multilingual structuring performance."
-            : "Populate this narrative in /admin with verified timelines, quotes under release, and sourcing suitable for procurement sharing."
+            : "Full case study coming soon. Reach out for the verified timeline, signed quotes, and supporting documentation."
         }
       />
       <section className="container-page py-[var(--section-y)] space-y-8">
