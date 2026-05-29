@@ -390,6 +390,7 @@ export function HeroVisual() {
               {activeConversation.messages.map((msg, i) => {
                 const progress = messageProgress[i] ?? 0;
                 const visibleText = msg.text.slice(0, progress);
+                const remainingText = msg.text.slice(progress);
                 const isTyping = progress > 0 && progress < msg.text.length;
                 const isStarted = progress > 0;
                 const isPatient = msg.speaker === "patient";
@@ -425,17 +426,21 @@ export function HeroVisual() {
                           : "rounded-tr-sm bg-navy text-white shadow-sm")
                       }
                     >
-                      {visibleText || " "}
+                      {visibleText}
                       {isTyping ? (
                         <span
                           className={
-                            "ml-0.5 inline-block h-[1em] w-0.5 translate-y-[2px] align-middle " +
+                            "mx-0.5 inline-block h-[1em] w-0.5 translate-y-[2px] align-middle " +
                             (isPatient ? "bg-magenta" : "bg-white")
                           }
                           style={{ animation: "blink 1s step-end infinite" }}
                           aria-hidden
                         />
                       ) : null}
+                      {/* Reserve final size up front so the bubble never resizes mid-type */}
+                      <span aria-hidden className="opacity-0">
+                        {remainingText || (progress === 0 ? msg.text : " ")}
+                      </span>
                     </div>
                   </li>
                 );
