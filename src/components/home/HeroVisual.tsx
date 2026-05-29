@@ -461,38 +461,45 @@ export function HeroVisual() {
             </p>
 
             <div className="flex flex-1 flex-col gap-3.5 rounded-[14px] border border-indigo/10 bg-white p-5 shadow-[0_4px_16px_rgba(11,26,54,0.04)]">
-              {COMBINED_NOTE.map((f, i) => (
-                <div
-                  key={f.label}
-                  className="transition-all duration-500 ease-clinical"
-                  style={{
-                    opacity: notesVisible[i] ? 1 : 0,
-                    transform: notesVisible[i]
-                      ? "translateY(0)"
-                      : "translateY(8px)",
-                  }}
-                >
-                  <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.1em] text-magenta">
-                    {f.label}
-                  </p>
-                  {notesVisible[i] ? (
-                    <p className="text-[13.5px] leading-relaxed text-ink">
-                      {f.text}
-                    </p>
-                  ) : (
-                    <div className="flex flex-col gap-1.5">
-                      <div
-                        className="h-2 w-[90%] rounded bg-[linear-gradient(90deg,rgba(36,63,134,0.08)_25%,rgba(155,47,145,0.10)_50%,rgba(36,63,134,0.08)_75%)] bg-[length:200%_100%]"
-                        style={{ animation: "shimmer 1.4s ease-in-out infinite" }}
-                      />
-                      <div
-                        className="h-2 w-[60%] rounded bg-[linear-gradient(90deg,rgba(36,63,134,0.08)_25%,rgba(155,47,145,0.10)_50%,rgba(36,63,134,0.08)_75%)] bg-[length:200%_100%]"
-                        style={{ animation: "shimmer 1.4s ease-in-out infinite" }}
-                      />
+              {COMBINED_NOTE.map((f, i) => {
+                const shown = notesVisible[i];
+                return (
+                  <div key={f.label} className="relative">
+                    {/* Real content stays in the layout at all times so the note
+                        box keeps a fixed height instead of growing as fields fill. */}
+                    <div
+                      className="transition-all duration-500 ease-clinical"
+                      style={{
+                        opacity: shown ? 1 : 0,
+                        transform: shown ? "translateY(0)" : "translateY(8px)",
+                      }}
+                    >
+                      <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.1em] text-magenta">
+                        {f.label}
+                      </p>
+                      <p className="text-[13.5px] leading-relaxed text-ink">
+                        {f.text}
+                      </p>
                     </div>
-                  )}
-                </div>
-              ))}
+                    {/* Skeleton shimmer overlaid until this field is generated. */}
+                    {!shown ? (
+                      <div
+                        className="pointer-events-none absolute inset-0 flex flex-col gap-1.5 pt-[18px]"
+                        aria-hidden
+                      >
+                        <div
+                          className="h-2 w-[90%] rounded bg-[linear-gradient(90deg,rgba(36,63,134,0.08)_25%,rgba(155,47,145,0.10)_50%,rgba(36,63,134,0.08)_75%)] bg-[length:200%_100%]"
+                          style={{ animation: "shimmer 1.4s ease-in-out infinite" }}
+                        />
+                        <div
+                          className="h-2 w-[60%] rounded bg-[linear-gradient(90deg,rgba(36,63,134,0.08)_25%,rgba(155,47,145,0.10)_50%,rgba(36,63,134,0.08)_75%)] bg-[length:200%_100%]"
+                          style={{ animation: "shimmer 1.4s ease-in-out infinite" }}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
 
               <div className="mt-1 flex items-center gap-2.5">
                 <span
