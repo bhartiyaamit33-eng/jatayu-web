@@ -292,7 +292,7 @@ export async function HomeSections() {
           <div className="max-w-xl">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Specialties</p>
             <h2 id="specialties-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              Templates tuned for Indian practice
+              Specialty templates already in production
             </h2>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -343,7 +343,7 @@ export async function HomeSections() {
       <section className="bg-gradient-to-b from-white to-pale-blue py-[var(--section-y)]" aria-labelledby="testimonials-heading">
         <div className="container-page">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Evidence from pilots</p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Evidence from real deployments</p>
             <h2 id="testimonials-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
               Clinician feedback we can stand behind
             </h2>

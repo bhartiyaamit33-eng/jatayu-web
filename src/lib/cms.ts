@@ -490,12 +490,12 @@ const voiceDocAiFallback: ProductSummary = {
   slug: "voicedocai",
   name: "VoiceDocAI",
   eyebrow: "Flagship product",
-  tagline: "Voice-first documentation your clinicians can verify",
+  tagline: "From conversation to structured report — verified before filing",
   conciseAnswer:
-    "VoiceDocAI drafts structured English clinical documents from real multilingual encounters: consultation notes, discharge summaries, prescriptions, radiology narratives, and OT notes. Physicians review and approve instead of retyping.",
+    "VoiceDocAI captures multilingual, multi-speaker conversations and drafts structured reports — clinical notes, qualitative research transcripts, interview summaries — for a human reviewer to approve. Noise-robust, accent-aware, and tuned for real-world environments.",
   introParagraphs: [
-    "Built at IIT Bombay with Indian noise profiles and accents in mind, VoiceDocAI stays hands-free in pocket-friendly deployments for OPDs, wards, and procedure areas. We do not run a live microphone demo on this marketing site.",
-    "HMIS and EHR partners integrate via documented APIs. Hospitals can evaluate on-prem deployment where residency and governance require it.",
+    "Engineered for high-noise, mixed-language conversations across clinics, OPDs, wards, research fieldwork, and procedure areas. We do not run a live microphone demo on this marketing site.",
+    "Integrations available via documented APIs. Customers can deploy on-prem where residency and governance require it.",
   ],
   deploymentModes: [
     { title: "Web", body: "Browser app for clinics and outpatient flows." },
@@ -530,14 +530,14 @@ const voiceDocAiFallback: ProductSummary = {
 
 const productsPageDefaults = {
   eyebrow: "Our products",
-  title: "Voice-first tools your clinicians can verify",
+  title: "AI-powered voice solutions for structured documentation",
   conciseAnswer:
-    "Browse the Jatayu product line. Every product ships with clinician verification, multilingual capture tuned for Indian clinics, and deployment options that respect hospital governance.",
+    "Browse the Jatayu product line. Every product ships with human verification, multilingual multi-speaker capture, and deployment options that respect customer governance.",
   introParagraphs: [] as string[],
   seo: {
     title: "Products overview",
     description:
-      "VoiceDocAI and the rest of the Jatayu product line: multilingual capture, structuring, clinician verification, and HMIS push.",
+      "VoiceDocAI and the rest of the Jatayu product line: multilingual capture, structuring, human verification, and partner integration.",
   },
 };
 
@@ -545,20 +545,20 @@ const forDoctorsPageDefaults = {
   eyebrow: "Clinician path",
   title: "Stay with patients, not the keyboard",
   conciseAnswer:
-    "VoiceDocAI is built for practicing physicians and small clinics that need reliable multilingual capture, fast structured drafts, and a clear approval step before anything is filed. Especially useful when documentation is stealing your evenings.",
+    "VoiceDocAI is built for practising physicians and clinics that need reliable multilingual capture, fast structured drafts, and a clear clinician approval step before anything is filed.",
   benefits: [
-    "Speak Hindi, Marathi, English, or any mix. Structured English output for the record.",
-    "Hands-free workflows suited to busy OPDs. Pocket-friendly deployments that respect resident hardware.",
-    "Templates across common specialties. The CMS-managed list grows with your hospital agreements.",
-    "You verify every note before filing. VoiceDocAI assists, you decide.",
+    "Speak any combination of languages — structured English output for the record.",
+    "Hands-free workflows suited to busy OPDs. Pocket-friendly hardware footprint.",
+    "Templates across 20+ specialties. The catalogue grows with each customer.",
+    "You verify every note before filing. VoiceDocAI assists; you decide.",
   ],
   showPatientConsent: true,
   primaryCta: { label: "Start 7-day trial", href: "/trial" } as CtaShape,
   secondaryCta: { label: "Browse specialties", href: "/specialties" } as CtaShape,
   seo: {
-    title: "For Doctors",
+    title: "Medical use case",
     description:
-      "Hands-free, pocket-friendly VoiceDocAI for Indian clinicians. Multilingual conversations turned into structured English notes you approve.",
+      "Hands-free, multilingual VoiceDocAI for clinicians. Real-world conversations turned into structured notes you approve.",
   },
 };
 
@@ -794,7 +794,7 @@ export type SiteFooterContent = {
 
 const siteFooterDefaults: SiteFooterContent = {
   tagline:
-    "VoiceDocAI: voice-first clinical documentation for Indian healthcare. Hands-free, pocket-friendly, built for verification before filing.",
+    "VoiceDocAI by Jatayu Healthcare: AI-powered voice solutions for structured documentation and insights. Multilingual. Multi-speaker. Built for verification before filing.",
   productLinks: footerColumnsFallback.product.map((l) => ({
     label: l.label,
     href: l.href,
@@ -816,7 +816,7 @@ const siteFooterDefaults: SiteFooterContent = {
     },
     { platform: "instagram", href: "https://www.instagram.com/jatayuhealth/" },
   ],
-  bottomStrapline: "Made for Indian clinicians and hospital IT teams.",
+  bottomStrapline: "Built for clinicians, researchers, and analysts worldwide.",
 };
 
 /** Cheap runtime guard — only accept platforms the SocialIcon component knows. */
@@ -896,11 +896,11 @@ export type TeamMemberSummary = {
 
 const aboutPageDefaults = {
   eyebrow: "Our story",
-  title: "Built where rigorous medicine meets Indian engineering",
+  title: "Engineering rigour for any voice that needs to be heard, anywhere",
   conciseAnswer:
-    "Jatayu Healthcare Technologies is an IIT Bombay incubated voice-first medical AI company co-founded by Dr. Aparna Oruganty Das (Director and CEO) and Sridhar Murthy, focused on reducing documentation drag without compromising clinician accountability.",
+    "Jatayu Healthcare Technologies builds AI-powered voice solutions for structured documentation and insights. Co-founded by Dr. Aparna Oruganty Das (Director & CEO) and Sridhar Murthy, the team partners with clinicians, researchers, and analysts to remove documentation drag without compromising human oversight.",
   introParagraphs: [
-    "VoiceDocAI emerged from repeated observations in Indian public and private hospitals: extraordinary clinical throughput constrained by documentation latency and brittle digitisation pathways.",
+    "VoiceDocAI emerged from repeated observations across busy clinics and qualitative research fieldwork: extraordinary throughput throttled by documentation latency and brittle transcription pathways. We are now in production across multiple verticals and expanding to new markets.",
   ] as string[],
   teamSectionHeading: "The team",
   teamSectionSubhead:
@@ -909,7 +909,7 @@ const aboutPageDefaults = {
   seo: {
     title: "About",
     description:
-      "Jatayu Healthcare Technologies. VoiceDocAI founders, IIT Bombay incubation story, and vision for Indian clinical documentation.",
+      "Jatayu Healthcare Technologies. VoiceDocAI founders, incubation story, and how the team partners with customers across clinical documentation, qualitative research, and beyond.",
   },
 };
 
@@ -1023,4 +1023,251 @@ export const getAboutPage = unstable_cache(
   },
   ["global", "about-page"],
   { tags: [TAG, "about-page"] },
+);
+
+// ============================================================================
+// /use-cases — UseCasesPage global + UseCases collection
+// ============================================================================
+
+export type UseCaseSection = {
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  bullets: string[];
+};
+
+export type UseCaseSummary = {
+  id: string | number;
+  slug: string;
+  name: string;
+  eyebrow: string;
+  tagline: string;
+  shortPitch: string;
+  iconUrl: string | null;
+  iconAlt: string;
+  introParagraphs: string[];
+  sections: UseCaseSection[];
+  primaryCta: CtaShape;
+  secondaryCta: CtaShape;
+  order: number;
+  featuredOnHome: boolean;
+  seo: { title?: string; description?: string };
+};
+
+const useCasesPageDefaults = {
+  eyebrow: "Use cases",
+  title: "Built for any conversation worth documenting",
+  conciseAnswer:
+    "VoiceDocAI captures multi-speaker conversations, identifies speakers, generates summaries, and produces ready-to-use reports. Tuned for multilingual, high-noise environments. Pick the workflow that matches your domain.",
+  introParagraphs: [] as string[],
+  seo: {
+    title: "Use cases",
+    description:
+      "Domains where VoiceDocAI is in production today: clinical documentation, market research, and any workflow that turns voice into structured reports.",
+  },
+};
+
+// Bundled fallback use cases. These render before any editor populates the
+// collection. The Medical row consolidates everything that used to live on
+// /for-doctors and /for-hospitals-and-hmis; the Market Research row reflects
+// the company's second commercial vertical.
+const useCasesFallback: UseCaseSummary[] = [
+  {
+    id: "fallback-medical",
+    slug: "medical",
+    name: "Medical & Healthcare",
+    eyebrow: "Use case",
+    tagline: "Voice-first documentation clinicians can verify",
+    shortPitch:
+      "VoiceDocAI drafts structured clinical documentation from real multilingual encounters: consultation notes, discharge summaries, prescriptions, radiology narratives, and OT notes. Clinicians review and approve instead of retyping.",
+    iconUrl: null,
+    iconAlt: "Medical use case",
+    introParagraphs: [
+      "Trusted by leading institutions including KEM Hospital (Mumbai), Basavatarakam Indo-American Cancer Centre (Hyderabad), ILBS Delhi, INHS Asvini, and Ohum Healthcare.",
+      "Hands-free, pocket-friendly, and accent-aware. Multilingual capture stays robust in OPDs, wards, and procedure areas. Integration via documented APIs for HMIS / EHR partners; on-prem deployment available where data residency requires it.",
+    ],
+    sections: [
+      {
+        eyebrow: "For clinicians",
+        heading: "Stay with patients, not the keyboard",
+        body: "Designed for practising physicians and clinics that need reliable multilingual capture, fast structured drafts, and a clinician-in-the-loop approval step before anything is filed.",
+        bullets: [
+          "Speak any combination of languages — structured output for the record.",
+          "Hands-free workflows suited to busy OPDs. Pocket-friendly hardware footprint.",
+          "Templates across 20+ specialties — the catalogue grows with each customer.",
+          "You verify every note before filing. VoiceDocAI assists; clinicians decide.",
+        ],
+      },
+      {
+        eyebrow: "For hospitals & HMIS partners",
+        heading: "One clinical voice layer across your stack",
+        body: "EMR, EHR, and HMIS vendors embed multilingual speech-to-note capabilities with governance-friendly audit trails, deployment flexibility (including API and on-prem), and documentation tuned for procurement reviewers.",
+        bullets: [
+          "Authenticated ingest of encounter audio or partner-provided streams.",
+          "Structured JSON + rendered clinical narrative aligned to templates.",
+          "Clinician review events recorded for audit; exported via API or secure file patterns.",
+          "Optional on-prem footprint — confirm reference architecture with engineering.",
+        ],
+      },
+      {
+        eyebrow: "Procurement",
+        heading: "Security & compliance posture",
+        body: "HIPAA-aligned, DPDP-ready, data residency controls available per region. Visit the Security & Compliance page for the procurement appendix.",
+        bullets: [],
+      },
+    ],
+    primaryCta: { label: "Start 7-day trial", href: "/trial" },
+    secondaryCta: { label: "Browse specialties", href: "/specialties" },
+    order: 10,
+    featuredOnHome: true,
+    seo: {
+      title: "Medical use case",
+      description:
+        "VoiceDocAI for clinics, hospitals, and HMIS partners. Multilingual capture, structured clinical documentation, clinician-in-the-loop review, and procurement-ready deployment.",
+    },
+  },
+  {
+    id: "fallback-market-research",
+    slug: "market-research",
+    name: "Market Research",
+    eyebrow: "Use case",
+    tagline: "AI-powered qualitative research intelligence",
+    shortPitch:
+      "Multilingual depth interviews, focus groups, ethnographies. VoiceDocAI transcribes, identifies themes and sentiments, and generates structured insight reports — eliminating manual transcription and translation cycles.",
+    iconUrl: null,
+    iconAlt: "Market research use case",
+    introParagraphs: [
+      "Used by qualitative research teams (including Priya Lobo Consults and Ormax Media) to compress the cycle from fieldwork to insight from weeks to days.",
+    ],
+    sections: [
+      {
+        eyebrow: "End-to-end pipeline",
+        heading: "From raw conversation to structured insight",
+        body: "Six stages, every one of them auditable: data capture, speech processing, contextual analysis, insight generation, quality assurance, and translation / transliteration.",
+        bullets: [
+          "Data capture — record multilingual conversations (in-person, virtual, hybrid).",
+          "Speech processing — speaker-diarised, noise-robust transcription.",
+          "Contextual analysis — NLP-driven themes, sentiments, and quoted context.",
+          "Insight generation — structured patterns ready for the deck.",
+          "Quality assurance — human-in-the-loop verification on every output.",
+          "Translation & transliteration — local terminology preserved across markets.",
+        ],
+      },
+      {
+        eyebrow: "Why teams switch",
+        heading: "Manual transcription is the bottleneck — not the analysis",
+        body: "Traditional transcription and translation eat 60–70 % of the timeline. VoiceDocAI moves those steps to AI with reviewer oversight, freeing the team to focus on interpretation and storytelling.",
+        bullets: [
+          ">99 % thematic accuracy on real fieldwork (validated on Priya Lobo Consults data).",
+          "Mixed-language conversations handled natively — no per-segment switching.",
+          "Speaker-attributed quotes flow straight into report templates.",
+          "Cuts insight turnaround time and frees analysts for higher-value work.",
+        ],
+      },
+    ],
+    primaryCta: { label: "Start 7-day trial", href: "/trial" },
+    secondaryCta: { label: "Talk to our team", href: "/contact" },
+    order: 20,
+    featuredOnHome: true,
+    seo: {
+      title: "Market research use case",
+      description:
+        "AI-powered qualitative research intelligence. Multilingual transcription, theme analysis, sentiment, and structured insight reports — with human-in-the-loop verification.",
+    },
+  },
+];
+
+function normaliseUseCase(doc: Record<string, unknown>): UseCaseSummary {
+  const intros = (doc.introParagraphs as Array<{ text: string }> | undefined) ?? [];
+  const sections = (doc.sections as Array<Record<string, unknown>> | undefined) ?? [];
+  const seo = (doc.seo as Record<string, string> | undefined) ?? {};
+  return {
+    id: doc.id as string | number,
+    slug: doc.slug as string,
+    name: doc.name as string,
+    eyebrow: (doc.eyebrow as string) ?? "",
+    tagline: (doc.tagline as string) ?? "",
+    shortPitch: (doc.shortPitch as string) ?? "",
+    iconUrl: mediaUrl(doc.icon),
+    iconAlt: mediaAlt(doc.icon, (doc.name as string) ?? ""),
+    introParagraphs: intros.map((p) => p.text).filter(Boolean),
+    sections: sections.map((s) => {
+      const bullets = (s.bullets as Array<{ text: string }> | undefined) ?? [];
+      return {
+        eyebrow: (s.eyebrow as string | undefined) || undefined,
+        heading: (s.heading as string) ?? "",
+        body: (s.body as string | undefined) || undefined,
+        bullets: bullets.map((b) => b.text).filter(Boolean),
+      };
+    }),
+    primaryCta: (doc.primaryCta as CtaShape) ?? { label: "Start 7-day trial", href: "/trial" },
+    secondaryCta: (doc.secondaryCta as CtaShape) ?? { label: "Talk to our team", href: "/contact" },
+    order: (doc.order as number) ?? 100,
+    featuredOnHome: (doc.featuredOnHome as boolean | undefined) ?? false,
+    seo: { title: seo.title, description: seo.description },
+  };
+}
+
+export const getUseCases = unstable_cache(
+  async (): Promise<UseCaseSummary[]> => {
+    try {
+      const p = await payload();
+      const res = await p.find({ collection: "use-cases", sort: "order", limit: 50, depth: 1 });
+      if (res.docs.length === 0) return useCasesFallback;
+      return res.docs.map((d) => normaliseUseCase(d as Record<string, unknown>));
+    } catch (err) {
+      warnCmsRead("getUseCases", err);
+      return useCasesFallback;
+    }
+  },
+  ["coll", "use-cases"],
+  { tags: [TAG, "use-cases"] },
+);
+
+export async function getUseCaseBySlug(slug: string): Promise<UseCaseSummary | null> {
+  try {
+    const p = await payload();
+    const res = await p.find({
+      collection: "use-cases",
+      where: { slug: { equals: slug } },
+      limit: 1,
+      depth: 1,
+    });
+    if (res.docs[0]) return normaliseUseCase(res.docs[0] as Record<string, unknown>);
+  } catch (err) {
+    warnCmsRead("getUseCaseBySlug", err);
+  }
+  return useCasesFallback.find((u) => u.slug === slug) ?? null;
+}
+
+export const getUseCasesPage = unstable_cache(
+  async () => {
+    try {
+      const p = await payload();
+      const row = (await p.findGlobal({ slug: "use-cases-page", depth: 0 })) as
+        | Record<string, unknown>
+        | null
+        | undefined;
+      if (!row) return useCasesPageDefaults;
+      const intros = (row.introParagraphs as Array<{ text: string }> | undefined) ?? [];
+      const seo = (row.seo as Record<string, string> | undefined) ?? {};
+      return {
+        eyebrow: (row.eyebrow as string) ?? useCasesPageDefaults.eyebrow,
+        title: (row.title as string) ?? useCasesPageDefaults.title,
+        conciseAnswer:
+          (row.conciseAnswer as string) ?? useCasesPageDefaults.conciseAnswer,
+        introParagraphs:
+          intros.length > 0 ? intros.map((p) => p.text).filter(Boolean) : useCasesPageDefaults.introParagraphs,
+        seo: {
+          title: seo.title ?? useCasesPageDefaults.seo.title,
+          description: seo.description ?? useCasesPageDefaults.seo.description,
+        },
+      };
+    } catch (err) {
+      warnCmsRead("getUseCasesPage", err);
+      return useCasesPageDefaults;
+    }
+  },
+  ["global", "use-cases-page"],
+  { tags: [TAG, "use-cases-page"] },
 );

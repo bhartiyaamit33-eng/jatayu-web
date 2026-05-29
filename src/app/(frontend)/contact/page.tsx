@@ -7,7 +7,7 @@ import { siteMeta } from "@/content/site-config";
 export const metadata: Metadata = {
   title: "Contact / Book a conversation",
   description:
-    "Reach Jatayu Healthcare for VoiceDocAI pilots, HMIS integrations, or procurement workshops. No third-party schedulers required.",
+    "Reach Jatayu Healthcare for VoiceDocAI deployments, integrations, or procurement workshops. No third-party schedulers required.",
   alternates: { canonical: `${siteMeta.domain}/contact` },
 };
 
@@ -88,7 +88,7 @@ export default function ContactPage() {
                   aria-hidden
                 />
                 <span>
-                  Briefing on hospital context, EMR stack, compliance posture, and pilot timeline.
+                  Briefing on environment, integration stack, compliance posture, and rollout timeline.
                 </span>
               </li>
               <li className="flex items-start gap-3">

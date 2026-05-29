@@ -47,7 +47,7 @@ export const AboutPage: GlobalConfig = {
       name: "title",
       type: "text",
       required: true,
-      defaultValue: "Built where rigorous medicine meets Indian engineering",
+      defaultValue: "Engineering rigour for any voice that needs to be heard, anywhere",
       admin: { description: "Page H1." },
     },
     {

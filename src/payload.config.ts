@@ -11,6 +11,7 @@ import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
 import { Products } from "./collections/Products";
 import { TeamMembers } from "./collections/TeamMembers";
+import { UseCases } from "./collections/UseCases";
 import { Specialties } from "./collections/Specialties";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Testimonials } from "./collections/Testimonials";
@@ -35,6 +36,7 @@ import { ForDoctorsPage } from "./globals/ForDoctorsPage";
 import { ForHospitalsPage } from "./globals/ForHospitalsPage";
 import { SiteFooter } from "./globals/SiteFooter";
 import { AboutPage } from "./globals/AboutPage";
+import { UseCasesPage } from "./globals/UseCasesPage";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -76,6 +78,7 @@ export default buildConfig({
     Media,
     Posts,
     Products,
+    UseCases,
     TeamMembers,
     Specialties,
     CaseStudies,
@@ -102,6 +105,7 @@ export default buildConfig({
     ForHospitalsPage,
     SiteFooter,
     AboutPage,
+    UseCasesPage,
   ],
   editor: lexicalEditor({}),
   plugins,

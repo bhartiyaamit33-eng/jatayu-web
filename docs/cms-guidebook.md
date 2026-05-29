@@ -14,8 +14,8 @@ A complete reference for editing the Jatayu Healthcare website — what every pa
 6. [Public pages — page-by-page tour](#6-public-pages--page-by-page-tour)
     - 6.1  [Home](#61-home)
     - 6.2  [Product index](#62-product--index)
-    - 6.3  [For Doctors](#63-for-doctors)
-    - 6.4  [For Hospitals & HMIS](#64-for-hospitals--hmis)
+    - 6.3  [Use Cases (index)](#63-use-cases-index)
+    - 6.4  [Use Case detail — Medical / Market Research / …](#64-use-case-detail)
     - 6.5  [About](#65-about)
     - 6.6  [Contact](#66-contact)
     - 6.7  [Pricing](#67-pricing)
@@ -568,8 +568,10 @@ When asking for a CMS-able field, include:
 | `/`                                 | **Globals → Home Hero** (+ many others — see [§6.1](#61-home)) |
 | `/product`                          | **Globals → Page — Products (index)** + **Collections → Products** |
 | `/product/<slug>`                   | **Collections → Products** (one row)           |
-| `/for-doctors`                      | **Globals → Page — For Doctors**              |
-| `/for-hospitals-and-hmis`           | **Globals → Page — For Hospitals & HMIS**     |
+| `/use-cases`                        | **Globals → Page — Use Cases (index)** + **Collections → Use Cases** |
+| `/use-cases/<slug>`                 | **Collections → Use Cases** (one row)         |
+| `/for-doctors` (legacy)             | 308 redirect → /use-cases/medical             |
+| `/for-hospitals-and-hmis` (legacy)  | 308 redirect → /use-cases/medical             |
 | `/about`                            | **Globals → Page — About** + **Collections → Team Members** |
 | `/about/facts`                      | *coded — sourced from Home Metrics global*    |
 | `/contact`                          | **Globals → Site Meta** (emails, phone, offices) |

@@ -23,8 +23,8 @@ const pillars = [
     body: "We say HIPAA-aligned, not HIPAA-certified, because there is no HIPAA certification body. Our controls map to the HIPAA Security Rule and we sign equivalent business associate agreements where US law applies.",
   },
   {
-    title: "DPDP Act 2023, India first",
-    body: "We process patient and clinician data in India by default. Our Data Processing Agreement reflects DPDP Act 2023 obligations and our role as a processor on behalf of the hospital.",
+    title: "DPDP Act 2023 ready, regional residency available",
+    body: "Default processing posture reflects DPDP Act 2023 obligations and our role as a processor on behalf of the customer. Customers in the Middle East, Europe, and other markets can request region-specific residency as part of onboarding.",
   },
   {
     title: "ISO 27001 in progress",
@@ -32,7 +32,7 @@ const pillars = [
   },
   {
     title: "Encryption and residency",
-    body: "TLS 1.2 and above in transit. AES-256 at rest. Data resident in India. Hospitals on on-prem deployments retain full custody.",
+    body: "TLS 1.2 and above in transit. AES-256 at rest. Regional data residency available per customer. Customers on on-prem deployments retain full custody.",
   },
   {
     title: "Audit logs and RBAC",
@@ -61,7 +61,7 @@ export default function SecurityPage() {
       <PageIntro
         eyebrow="Trust center"
         title="Security and compliance, written for procurement"
-        conciseAnswer="VoiceDocAI is HIPAA-aligned, DPDP Act 2023 ready, with India-resident data, AES-256 at rest, TLS 1.2 plus in transit, encounter-level audit logs, and on-premise deployment options. Detailed posture and the latest signed statements live on this page."
+        conciseAnswer="VoiceDocAI is HIPAA-aligned, DPDP Act 2023 ready in our home market, with regional data residency controls available, AES-256 at rest, TLS 1.2 plus in transit, encounter-level audit logs, and on-premise deployment options. Detailed posture and the latest signed statements live on this page."
       />
       <section className="container-page py-[var(--section-y)] space-y-12">
         {/* Six pillar cards — 3 across on lg+ uses the wider container cleanly */}

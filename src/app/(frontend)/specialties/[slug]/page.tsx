@@ -43,7 +43,7 @@ export default async function SpecialtyPage({ params }: Props) {
       <PageIntro
         eyebrow="Specialty"
         title={`VoiceDocAI for ${spec.title}`}
-        conciseAnswer={`Template-driven drafts for ${spec.title.toLowerCase()} encounters. Pair this page in /admin with sample anonymised notes, related pilots, and tagged articles for SEO and AEO.`}
+        conciseAnswer={`Template-driven drafts for ${spec.title.toLowerCase()} encounters. Pair this page in /admin with sample anonymised notes, related customer stories, and tagged articles for SEO and AEO.`}
       />
       <section className="container-page py-[var(--section-y)] space-y-10">
         <div className="max-w-3xl space-y-4 text-base leading-relaxed text-navy/85">
