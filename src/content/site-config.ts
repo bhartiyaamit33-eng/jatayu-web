@@ -63,11 +63,11 @@ export const siteMeta = {
   legalName: "Jatayu Healthcare Technologies Pvt. Ltd.",
   productName: "VoiceDocAI",
   domain: "https://jatayuhealth.com",
-  defaultTitle: "VoiceDocAI by Jatayu Healthcare · Voice-first clinical documentation",
+  defaultTitle: "VoiceDocAI by Jatayu Healthcare · Talk More, Type Less",
   defaultDescription:
-    "Voice-first medical AI built for Indian doctors. From conversation to structured English clinical note in under a minute, in 50+ languages. IIT Bombay incubated.",
+    "AI-powered voice solutions for structured documentation and insights. Multilingual, multi-speaker, noise-robust — built for clinical, qualitative research, and any conversation worth documenting.",
   positioningLine:
-    "Voice-first medical AI built for Indian doctors. From conversation to clinical note in under a minute, in 50+ languages.",
+    "Talk more, type less. VoiceDocAI turns multilingual multi-speaker conversations into structured documentation — clinical notes, research transcripts, and the reports your team actually needs.",
   salesEmail: "sales@jatayuhealth.com",
   founderEmail: "aparnaoruganty.das@jatayuhealth.com",
   phone: "+91 75060 60955",
@@ -98,14 +98,8 @@ export const siteMeta = {
 export const navigationMain: NavItem[] = [
   { label: "Home", href: "/", showInMainNav: true, order: 0 },
   { label: "Product", href: "/product", showInMainNav: true, order: 10 },
-  { label: "For Doctors", href: "/for-doctors", showInMainNav: true, order: 20 },
-  {
-    label: "For HMS & HMIS",
-    href: "/for-hospitals-and-hmis",
-    showInMainNav: true,
-    order: 30,
-  },
-  { label: "Specialties", href: "/specialties", showInMainNav: true, order: 40 },
+  { label: "Use Cases", href: "/use-cases", showInMainNav: true, order: 20 },
+  { label: "Specialties", href: "/specialties", showInMainNav: false, order: 40 },
   {
     label: "Case Studies",
     href: "/case-studies",
@@ -125,29 +119,29 @@ export const navigationMain: NavItem[] = [
 ].sort((a, b) => a.order - b.order);
 
 export const homeHero = {
-  badge: "Pocket-friendly. Hands-free. Built at IIT Bombay.",
-  headline: "From the conversation, to the clinical note. In under a minute.",
+  badge: "Multilingual. Multi-speaker. Noise-robust.",
+  headline: "Talk more, type less. From conversation to structured report.",
   subheadline:
-    "Hindi, Marathi, English, or all three at once. VoiceDocAI drafts the structured note. You verify and file it.",
+    "VoiceDocAI captures multi-speaker conversations, identifies speakers, and generates ready-to-use reports. Tuned for multilingual, high-noise environments.",
   trustLine:
-    "Pilots at KEM Hospital, MGM, ILBS Delhi, and DY Patil Navi Mumbai. Reviewed by clinicians, not autopilots.",
+    "Trusted by KEM Hospital, ILBS Delhi, INHS Asvini, Basavatarakam Indo-American Cancer Centre, Priya Lobo Consults, Ohum Healthcare, and more.",
   primaryCta: { label: "Start 7-day free trial", href: "/trial" },
   secondaryCta: { label: "Book a 20-minute walkthrough", href: "/contact" },
 };
 
 export const audienceSplit = {
   doctor: {
-    title: "I am a doctor",
-    body: "Time saved per day, multilingual clinics, pocket-friendly workflows.",
-    cta: "Show me what is relevant",
-    href: "/for-doctors",
+    title: "Clinical documentation",
+    body: "Consultation notes, discharge summaries, prescriptions, radiology and OT narratives — multilingual capture with clinician-in-the-loop review.",
+    cta: "See the Medical use case",
+    href: "/use-cases/medical",
   },
   hospital: {
-    title: "I am a hospital or HMIS partner",
-    body: "APIs, India-resident data, SLAs, on-prem options, audit logs.",
-    chip: "Data resident in India",
-    cta: "Take me to integrations",
-    href: "/for-hospitals-and-hmis",
+    title: "Qualitative research",
+    body: "Depth interviews, focus groups, ethnographies. Speaker-diarised transcripts, theme analysis, and structured insight reports.",
+    chip: ">99% thematic accuracy",
+    cta: "See the Market Research use case",
+    href: "/use-cases/market-research",
   },
 };
 
@@ -163,7 +157,7 @@ export const patientConsentBlock = {
 
 /** 40-60 word concise answer for AEO (editable per page in CMS) */
 export const homeConciseAnswer =
-  "VoiceDocAI is an Indian, IIT Bombay incubated voice assistant for medicine. It captures multilingual clinic conversations, reduces background noise, and drafts structured English notes (consultation notes, discharge summaries, OT notes, radiology reports, and prescriptions) for clinician review before filing or HMIS push.";
+  "VoiceDocAI is an AI-powered voice solution for structured documentation and insights. It captures multi-speaker, multilingual conversations, filters background noise, and drafts structured reports — clinical notes, qualitative research transcripts, interview summaries — with a human reviewer always in the loop.";
 
 /** Plain-language label paired with the concise answer block (was "In one minute:") */
 export const homeConciseAnswerLabel = "What it is";
@@ -172,14 +166,20 @@ export const homeMetrics: MetricItem[] = [
   {
     id: "doc-time",
     value: "~80%",
-    label: "Documentation time saved (KEM pilot)",
-    sourceRef: "kem-pilot-report-dec-2025",
+    label: "Documentation time saved",
+    sourceRef: "customer-deployment-dec-2025",
   },
   {
     id: "accuracy",
-    value: "~95%",
-    label: "Accuracy on pilot cases",
-    sourceRef: "kem-pilot-report-dec-2025",
+    value: "95%+",
+    label: "Accuracy on real-world conversations",
+    sourceRef: "customer-deployment-dec-2025",
+  },
+  {
+    id: "thematic",
+    value: ">99%",
+    label: "AI thematic accuracy (research)",
+    sourceRef: "qualitative-research-validation-dec-2025",
   },
   {
     id: "languages",
@@ -190,14 +190,8 @@ export const homeMetrics: MetricItem[] = [
   {
     id: "specialties",
     value: "20+",
-    label: "Medical specialties",
+    label: "Medical specialties covered",
     sourceRef: "product-capabilities-cms",
-  },
-  {
-    id: "doctors",
-    value: "~100",
-    label: "Doctors in active pilots",
-    sourceRef: "founder-confirmed-count-cms",
   },
 ];
 
@@ -247,66 +241,60 @@ export const howItWorksSteps = [
   },
 ];
 
+/**
+ * 20+ medical specialties (as confirmed by the founder). The CMS overrides
+ * this list once seeded; the seeded entries here ship as defaults so /specialties
+ * has real content out of the box.
+ */
 export const specialtiesFeatured: SpecialtySummary[] = [
-  {
-    slug: "radiology",
-    title: "Radiology",
-    blurb: "Structured imaging narratives and reporting workflows.",
-  },
-  {
-    slug: "gastroenterology",
-    title: "Gastroenterology",
-    blurb: "Procedure-forward notes and consultation documentation.",
-  },
-  {
-    slug: "dermatology",
-    title: "Dermatology",
-    blurb: "Lesion descriptors and treatment plans in structured English.",
-  },
-  {
-    slug: "paediatrics",
-    title: "Paediatrics",
-    blurb: "Guardian-inclusive encounters with age-appropriate structure.",
-  },
-  {
-    slug: "orthopaedics",
-    title: "Orthopaedics",
-    blurb: "Injury mechanics, exam findings, and operative planning fields.",
-  },
-  {
-    slug: "ot-surgery",
-    title: "OT / Surgery",
-    blurb: "Operative notes tuned to institutional formats.",
-  },
-  {
-    slug: "discharge-summaries",
-    title: "Discharge summaries",
-    blurb: "Admission-to-discharge continuity in one verified document.",
-  },
-  {
-    slug: "general-medicine",
-    title: "General Medicine",
-    blurb: "High-volume OPD documentation with fast review loops.",
-  },
+  { slug: "radiology", title: "Radiology", blurb: "Structured imaging narratives and reporting workflows." },
+  { slug: "cardiology", title: "Cardiology", blurb: "ECG and echo findings, risk stratification, and follow-up plans." },
+  { slug: "oncology", title: "Oncology", blurb: "Tumour-board discussions, chemo regimens, and surveillance notes." },
+  { slug: "gastroenterology", title: "Gastroenterology", blurb: "Procedure-forward notes and consultation documentation." },
+  { slug: "pulmonology", title: "Pulmonology", blurb: "Respiratory exam, imaging correlation, and treatment plans." },
+  { slug: "nephrology", title: "Nephrology", blurb: "Dialysis charts, lab interpretation, and CKD staging notes." },
+  { slug: "endocrinology", title: "Endocrinology", blurb: "Diabetes, thyroid, and hormone-axis follow-ups." },
+  { slug: "neurology", title: "Neurology", blurb: "Neurological exam findings, imaging review, and seizure logs." },
+  { slug: "psychiatry", title: "Psychiatry", blurb: "Structured mental-state exam and longitudinal therapy notes." },
+  { slug: "dermatology", title: "Dermatology", blurb: "Lesion descriptors and treatment plans in structured form." },
+  { slug: "ent", title: "ENT", blurb: "Otoscopy, endoscopy, and audiometry findings." },
+  { slug: "ophthalmology", title: "Ophthalmology", blurb: "Refraction, fundus, and surgical planning notes." },
+  { slug: "paediatrics", title: "Paediatrics", blurb: "Guardian-inclusive encounters with age-appropriate structure." },
+  { slug: "obstetrics-gynaecology", title: "Obstetrics & Gynaecology", blurb: "Antenatal visits, ultrasound notes, and operative summaries." },
+  { slug: "orthopaedics", title: "Orthopaedics", blurb: "Injury mechanics, exam findings, and operative planning fields." },
+  { slug: "general-medicine", title: "General Medicine", blurb: "High-volume OPD documentation with fast review loops." },
+  { slug: "general-surgery", title: "General Surgery", blurb: "Pre-op assessments and consent documentation." },
+  { slug: "emergency-medicine", title: "Emergency Medicine", blurb: "Time-stamped triage, intervention, and disposition notes." },
+  { slug: "intensive-care", title: "Intensive Care", blurb: "Daily ICU progress notes, sedation logs, and family briefings." },
+  { slug: "anaesthesiology", title: "Anaesthesiology", blurb: "Pre-op evaluation, intra-op events, and recovery notes." },
+  { slug: "ot-surgery", title: "OT / Surgery notes", blurb: "Operative notes tuned to institutional formats." },
+  { slug: "discharge-summaries", title: "Discharge summaries", blurb: "Admission-to-discharge continuity in one verified document." },
+  { slug: "family-medicine", title: "Family Medicine", blurb: "Continuity-of-care notes across the household." },
 ];
 
 export const caseStudySpotlight = {
   slug: "kem-hospital",
   institution: "KEM Hospital",
-  headline: "Multi-department pilot across real-world noise and volume",
+  headline: "Multi-department deployment across real-world noise and volume",
   pullQuote:
     "Significant reduction in documentation time, improved workflow efficiency, and accurate conversion of multilingual conversations into structured English records.",
   metricsLine:
-    "95 cases, 18 clinicians, 5 departments, 70 to 90 dB ambient noise. See the published pilot summary for methodology.",
-  linkLabel: "Read the full pilot report",
+    "95 cases, 18 clinicians, 5 departments, 70 to 90 dB ambient noise. See the published evaluation summary for methodology.",
+  linkLabel: "Read the full evaluation report",
 };
 
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "Across the pilot, clinicians reported faster turnaround from encounter to filed note, with multilingual Hindi-Marathi-English conversations consolidated into English records suitable for HMIS workflows.",
-    attribution: "VoiceDocAI pilot evaluation",
-    role: "Seth G.S. Medical College and KEM Hospital, aggregate clinician feedback (Dec 2025)",
+      "We found the solution highly relevant for the Radiology Department considering our current workload and reporting volume. The software uses AI-based voice-to-text technology with automatic summarization, making report generation significantly faster and easier for doctors.",
+    attribution: "Dr. Hemangini Thakkar",
+    role: "Prof. & Head, Dept. of Radiology, K.E.M. Hospital",
+  },
+  {
+    quote:
+      "What started as an experiment has truly become a cornerstone of our journey. In the market research field, we were tethered to traditional, manual transcription and translation — processes that were notoriously time-consuming and labour-intensive. Switching to Jatayu has been a game-changer.",
+    attribution: "Chithra Parthasarathi",
+    role: "Associate Research Director, Priya Lobo Consults",
   },
 ];
 
@@ -341,7 +329,7 @@ export const complianceBand = [
   },
   {
     title: "DPDP Act 2023",
-    body: "Indian privacy obligations reviewed with counsel. Status detailed on Security.",
+    body: "Privacy obligations reviewed with counsel for our home market; regional reviews underway for new geographies.",
     href: "/security",
   },
   {
@@ -351,7 +339,7 @@ export const complianceBand = [
   },
   {
     title: "Encryption and residency",
-    body: "TLS in transit, AES-256 at rest, and India-resident data by default.",
+    body: "TLS in transit, AES-256 at rest. Regional data residency controls available per customer.",
     href: "/security",
   },
 ];
@@ -360,7 +348,7 @@ export const founderNote = {
   name: "Dr. Aparna Oruganty Das",
   role: "Director & CEO, Jatayu Healthcare Technologies",
   quote:
-    "We built VoiceDocAI so Indian physicians can stay present with patients. Hands-free, pocket-friendly, and rigorous about clinical verification.",
+    "We built VoiceDocAI so people stay present with the conversation. Hands-free, multilingual, multi-speaker, and rigorous about human verification — whether it's a clinical encounter or a depth interview.",
   aboutHref: "/about",
 };
 
@@ -386,7 +374,7 @@ export const awards: AwardItem[] = [
   },
   {
     name: "V2DD Leadership team, Koita Foundation",
-    detail: "Driving Voice AI adoption frameworks for Indian healthcare.",
+    detail: "Driving Voice AI adoption frameworks across healthcare.",
     imagePath: "awards/v2dd-koita-foundation.png",
   },
   {
@@ -396,7 +384,7 @@ export const awards: AwardItem[] = [
   },
   {
     name: "Medicircle feature on Dr. Aparna Das",
-    detail: "Magazine feature on Jatayu's AI for Indian clinics.",
+    detail: "Magazine feature on Jatayu's AI in clinical practice.",
     imagePath: "awards/medicircle-feature.png",
   },
 ];
@@ -405,12 +393,12 @@ export const homeFaqs: FAQItem[] = [
   {
     question: "What is VoiceDocAI?",
     answer:
-      "VoiceDocAI captures doctor-patient conversations and drafts structured English clinical documentation (consult notes, discharge summaries, prescriptions, radiology narratives, and OT notes) for clinician review before filing or HMIS integration.",
+      "VoiceDocAI is an AI-powered voice solution for structured documentation and insights. It captures multi-speaker, multilingual conversations, identifies speakers, filters noise, and drafts ready-to-use reports — clinical notes, qualitative research transcripts, interview summaries — with a human reviewer always in the loop.",
   },
   {
     question: "Which languages does VoiceDocAI support?",
     answer:
-      "VoiceDocAI is built for Indian multilingual practice (including Hindi, Marathi, English, and mixed conversations) with broader language coverage managed per deployment; publish the exact supported list only after founder confirmation.",
+      "VoiceDocAI supports 50+ languages with native mixed-language handling (no per-segment switching). Production deployments include Hindi, Marathi, English, Arabic, and French; the exact catalogue per customer is confirmed during onboarding.",
   },
   {
     question: "Is audio stored?",
@@ -432,9 +420,9 @@ export const homeFaqs: FAQItem[] = [
 export const caseStudiesIndex: CaseStudySummary[] = [
   {
     slug: "kem-hospital",
-    title: "KEM Hospital pilot",
+    title: "KEM Hospital deployment",
     institution: "Seth G.S. Medical College & KEM Hospital",
-    excerpt: "Multi-specialty pilot with measurable documentation time reduction.",
+    excerpt: "Multi-specialty deployment with measurable documentation time reduction.",
   },
   {
     slug: "mgm",
@@ -465,8 +453,7 @@ export const caseStudiesIndex: CaseStudySummary[] = [
 export const footerColumns = {
   product: [
     { label: "VoiceDocAI overview", href: "/product" },
-    { label: "For Doctors", href: "/for-doctors" },
-    { label: "For Hospitals & HMIS", href: "/for-hospitals-and-hmis" },
+    { label: "Use cases", href: "/use-cases" },
     { label: "Specialties", href: "/specialties" },
     { label: "Case Studies", href: "/case-studies" },
     { label: "Pricing", href: "/pricing" },

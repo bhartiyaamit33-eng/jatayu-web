@@ -25,17 +25,17 @@ type Section = {
 };
 
 const HOSPITAL_PARTNERS: Section = {
-  eyebrow: "Hospital partners",
-  title: "Pilots and deployments across India",
-  description: "Validated in real OPDs, wards, ICUs, and radiology departments. Logos shown with written consent on file.",
+  eyebrow: "Hospital customers",
+  title: "Trusted in real OPDs, wards, and radiology departments",
+  description: "Live in multi-specialty hospitals, cancer centres, ICUs, and dispensaries. Logos shown with written consent on file.",
   category: "hospital",
   partners: [
-    { name: "Seth G.S. Medical College & KEM Hospital", detail: "Mumbai · 5-department pilot" },
-    { name: "MGM Medical College & Hospital", detail: "Kamothe, Navi Mumbai · Validation letter" },
+    { name: "Seth G.S. Medical College & KEM Hospital", detail: "Mumbai · Multi-department deployment" },
+    { name: "MGM Medical College & Hospital", detail: "Kamothe · Validation letter on file" },
     { name: "ILBS", detail: "Delhi · 95 to 96% accuracy on 25 cases" },
-    { name: "DY Patil Hospital", detail: "Navi Mumbai · Multi-specialty pilot" },
+    { name: "DY Patil Hospital", detail: "Navi Mumbai · Multi-specialty rollout" },
     { name: "Basavatarakam Indo-American Cancer Centre", detail: "Hyderabad · Cancer-care reports" },
-    { name: "Souter Street Dispensary, BMC", detail: "Mumbai · ~95% accuracy, 60% time saved" },
+    { name: "Souter Street Dispensary, BMC", detail: "~95% accuracy, ~60% time saved" },
   ],
 };
 

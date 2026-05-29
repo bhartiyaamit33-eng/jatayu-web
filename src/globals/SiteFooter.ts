@@ -40,7 +40,7 @@ export const SiteFooter: GlobalConfig = {
       type: "textarea",
       required: true,
       defaultValue:
-        "VoiceDocAI: voice-first clinical documentation for Indian healthcare. Hands-free, pocket-friendly, built for verification before filing.",
+        "VoiceDocAI by Jatayu Healthcare: AI-powered voice solutions for structured documentation and insights. Multilingual. Multi-speaker. Built for verification before filing.",
       admin: {
         description:
           "Short product description shown beneath the logo. Keep to ~2 sentences.",
@@ -124,7 +124,7 @@ export const SiteFooter: GlobalConfig = {
       name: "bottomStrapline",
       type: "text",
       required: true,
-      defaultValue: "Made for Indian clinicians and hospital IT teams.",
+      defaultValue: "Built for clinicians, researchers, and analysts worldwide.",
       admin: {
         description:
           "Short line shown on the right of the copyright row. Keep it brief.",

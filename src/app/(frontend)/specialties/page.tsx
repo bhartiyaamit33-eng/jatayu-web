@@ -20,7 +20,7 @@ export default async function SpecialtiesIndexPage() {
     <>
       <PageIntro
         eyebrow="Clinical breadth"
-        title="Specialty templates mapped to Indian caseloads"
+        title="Specialty templates spanning 20+ medical disciplines"
         conciseAnswer="Each specialty page deep-links to anonymised sample outputs, matching case studies, and tagged blog posts. The grid below is managed entirely in /admin."
       />
       <section className="container-page py-[var(--section-y)]">

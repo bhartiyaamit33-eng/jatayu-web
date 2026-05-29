@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Case Studies",
     description:
-      "Hospital pilots and deployments featuring VoiceDocAI, starting with the KEM Hospital evaluation and municipal dispensary rollout.",
+      "Customer stories featuring VoiceDocAI — clinical deployments at KEM Hospital and beyond, and qualitative-research wins across consulting partners.",
     alternates: { canonical: `${siteMeta.domain}/case-studies` },
   };
 }

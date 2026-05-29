@@ -20,7 +20,7 @@ export default async function BlogIndexPage() {
     <>
       <PageIntro
         eyebrow="Insights"
-        title="Practical writing for Indian healthcare teams"
+        title="Practical writing for documentation and insight teams"
         conciseAnswer="Blog posts combine rich layouts (pull quotes, inline imagery, embeds) with taxonomy managed in /admin. The RSS feed lives at /blog/rss.xml."
       />
       <section className="container-page py-[var(--section-y)]">

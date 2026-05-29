@@ -25,8 +25,8 @@ const valueCards = [
     body: "We optimise for clinician verification, not autopilot. Every feature is tested with the doctor in the loop.",
   },
   {
-    title: "Indian engineering",
-    body: "Noise profiles, accents, multilingual capture, and pocket-friendly hardware constraints are first-class concerns.",
+    title: "Real-world engineering",
+    body: "Noise profiles, accents, multilingual capture, and field-realistic hardware constraints are first-class concerns.",
   },
   {
     title: "Quiet rigour",
