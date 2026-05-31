@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "jatayu-company-website-service"
+location: "asia-south1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "jatayu-cms"
+      cloudSql:
+        instanceId: "jatayu-company-website-instance"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]

@@ -19,6 +19,7 @@
     "docs:guidebook-docx": "pandoc docs/cms-guidebook.md -o docs/Jatayu-CMS-Guidebook.docx --resource-path=docs --toc --toc-depth=3 --metadata title=\"Jatayu CMS Guidebook\" --metadata author=\"Jatayu Healthcare Technologies\" --metadata date=\"May 2026\""
   },
   "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
     "@payloadcms/db-postgres": "^3.84.1",
     "@payloadcms/next": "^3.84.1",
     "@payloadcms/richtext-lexical": "^3.84.1",
