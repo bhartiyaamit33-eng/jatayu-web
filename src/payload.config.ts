@@ -5,6 +5,7 @@ import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { azureStorage } from "@payloadcms/storage-azure";
+import { gcsStorage } from "@payloadcms/storage-gcs";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
@@ -41,15 +42,49 @@ import { UseCasesPage } from "./globals/UseCasesPage";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-// In production, persist media uploads to Azure Blob Storage. Locally and in
-// CI builds (where AZURE_STORAGE_CONNECTION_STRING is unset) Payload falls
-// back to disk via the Media collection's `staticDir`.
+// Media-upload storage backend, selected by which env vars are present:
+//
+//   1. Google Cloud Storage  — when GCS_BUCKET is set. This is the target
+//      backend for the Google Cloud (Cloud Run) deployment. Cloud Run's
+//      filesystem is ephemeral, so disk-backed uploads are NOT an option
+//      there — GCS must be configured before going live on GCP.
+//   2. Azure Blob Storage    — when the Azure vars are set (legacy/transition
+//      path while the app still runs on Azure Container Apps).
+//   3. Local disk            — neither configured (local dev / CI builds).
+//      Falls back to the Media collection's `staticDir`.
+//
+// Credentials on Cloud Run come from the service account via Application
+// Default Credentials (ADC), so no key file is needed in production. For
+// local testing against a real bucket, point GCS_KEY_FILENAME at a service
+// account JSON key, or run `gcloud auth application-default login`.
+const gcsBucket = process.env.GCS_BUCKET;
+
 const azureConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const azureContainer = process.env.AZURE_STORAGE_CONTAINER_NAME ?? "media";
 const azureAccountUrl = process.env.AZURE_STORAGE_ACCOUNT_BASEURL;
 
-const plugins =
-  process.env.NODE_ENV === "production" && azureConnectionString && azureAccountUrl
+const plugins = gcsBucket
+  ? [
+      gcsStorage({
+        enabled: true,
+        collections: { media: true },
+        bucket: gcsBucket,
+        options: {
+          // projectId / keyFilename are optional: on Cloud Run, ADC supplies
+          // both from the attached service account. Only set them for local
+          // dev against a real bucket.
+          ...(process.env.GCS_PROJECT_ID
+            ? { projectId: process.env.GCS_PROJECT_ID }
+            : {}),
+          ...(process.env.GCS_KEY_FILENAME
+            ? { keyFilename: process.env.GCS_KEY_FILENAME }
+            : {}),
+        },
+      }),
+    ]
+  : process.env.NODE_ENV === "production" &&
+      azureConnectionString &&
+      azureAccountUrl
     ? [
         azureStorage({
           enabled: true,

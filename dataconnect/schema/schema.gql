@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # # Example schema for simple movie review app
 
 # # User table is keyed by Firebase Auth UID.
@@ -50,3 +51,326 @@
 #   reviewText: String
 #   reviewDate: Date! @default(expr: "request.time")
 # }
+=======
+# =============================================================================
+# Jatayu — Firebase Data Connect schema
+# =============================================================================
+#
+# Generated from the Payload collections in src/collections/*.ts.
+# Each Payload collection becomes a Data Connect @table type.
+#
+# ⚠️ READ THIS BEFORE DEPLOYING — schema ownership conflict
+# -----------------------------------------------------------------------------
+# These @table types make Data Connect CREATE AND OWN the tables. Payload's
+# Postgres adapter ALSO creates and owns its own tables (with different,
+# auto-generated names like `posts`, `posts_rels`, `_posts_v`, etc.).
+#
+#   • DO NOT point Data Connect at the same database Payload uses
+#     (jatayu_cms). The two schema managers will collide.
+#   • Deploy this ONLY against a SEPARATE, EMPTY database/service.
+#   • Tables created here start EMPTY — this does not migrate Payload's data.
+#
+# Modeling decisions:
+#   • Payload `group` fields  -> flattened to prefixed columns (CTAs, seo, …)
+#   • Payload `array` fields   -> separate child @table with a parent relation
+#   • Payload `upload` fields  -> relation to the Media type
+#   • Payload `richText`       -> JSON stored as String
+#   • `status` mirrors Payload's draft `_status` (draft | published)
+#   • createdAt/updatedAt mirror Payload's timestamps
+#
+# The 17 Payload GLOBALS (SiteMeta, HomeHero, SiteFooter, …) are config
+# singletons and are NOT included here. Ask if you want each modeled as a
+# single-row @table.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Users  (Payload auth collection — keyed by Firebase Auth UID)
+# -----------------------------------------------------------------------------
+type User @table {
+  id: String! @default(expr: "auth.uid")
+  email: String! @col(dataType: "varchar(255)")
+  fullName: String!
+  # super_admin | editor
+  role: String! @default(value: "editor")
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# Media  (Payload upload collection)
+# -----------------------------------------------------------------------------
+type Media @table {
+  alt: String!
+  caption: String
+  # Core upload metadata Payload stores
+  url: String
+  filename: String
+  mimeType: String
+  filesize: Int
+  width: Int
+  height: Int
+  # Generated image sizes (thumb / card / hero), flattened
+  thumbUrl: String
+  cardUrl: String
+  heroUrl: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# Posts  (blog / news, draft-enabled)
+# -----------------------------------------------------------------------------
+type Post @table {
+  title: String!
+  slug: String! @unique
+  excerpt: String!
+  category: String!
+  readTimeMinutes: Int!
+  publishedAt: Date!
+  # richText (Lexical) serialized as JSON
+  body: String
+  heroImage: Media
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# Products  (one row per product, draft-enabled)
+# -----------------------------------------------------------------------------
+type Product @table {
+  name: String!
+  slug: String! @unique
+  eyebrow: String!
+  tagline: String!
+  conciseAnswer: String!
+  showPatientConsent: Boolean! @default(value: true)
+  # primaryCta group
+  primaryCtaLabel: String! @default(value: "Start 7-day trial")
+  primaryCtaHref: String! @default(value: "/trial")
+  # secondaryCta group
+  secondaryCtaLabel: String! @default(value: "Talk to our team")
+  secondaryCtaHref: String! @default(value: "/contact")
+  # ordering + SEO group
+  order: Int! @default(value: 100)
+  featuredOnHome: Boolean! @default(value: false)
+  seoTitle: String
+  seoDescription: String
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+# Product.introParagraphs[]
+type ProductIntroParagraph @table {
+  product: Product!
+  text: String!
+  position: Int
+}
+
+# Product.deploymentModes[]
+type ProductDeploymentMode @table {
+  product: Product!
+  title: String!
+  body: String!
+  position: Int
+}
+
+
+# -----------------------------------------------------------------------------
+# UseCases  (one row per vertical, draft-enabled)
+# -----------------------------------------------------------------------------
+type UseCase @table(name: "UseCases") {
+  name: String!
+  slug: String! @unique
+  eyebrow: String!
+  tagline: String!
+  shortPitch: String!
+  icon: Media
+  primaryCtaLabel: String! @default(value: "Start 7-day trial")
+  primaryCtaHref: String! @default(value: "/trial")
+  secondaryCtaLabel: String! @default(value: "Talk to our team")
+  secondaryCtaHref: String! @default(value: "/contact")
+  order: Int! @default(value: 100)
+  featuredOnHome: Boolean! @default(value: false)
+  seoTitle: String
+  seoDescription: String
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+# UseCase.introParagraphs[]
+type UseCaseIntroParagraph @table {
+  useCase: UseCase!
+  text: String!
+  position: Int
+}
+
+# UseCase.sections[]
+type UseCaseSection @table {
+  useCase: UseCase!
+  eyebrow: String
+  heading: String!
+  body: String
+  position: Int
+}
+
+# UseCaseSection.bullets[]
+type UseCaseSectionBullet @table {
+  section: UseCaseSection!
+  text: String!
+  position: Int
+}
+
+
+# -----------------------------------------------------------------------------
+# TeamMembers  (draft-enabled)
+# -----------------------------------------------------------------------------
+type TeamMember @table(name: "TeamMembers") {
+  name: String!
+  role: String!
+  description: String!
+  photo: Media
+  order: Int! @default(value: 100)
+  featuredOnHome: Boolean! @default(value: false)
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# Specialties  (draft-enabled)
+# -----------------------------------------------------------------------------
+type Specialty @table(name: "Specialties") {
+  title: String!
+  slug: String! @unique
+  blurb: String!
+  icon: Media
+  featuredOnHome: Boolean! @default(value: false)
+  order: Int! @default(value: 100)
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# CaseStudies  (draft-enabled)
+# -----------------------------------------------------------------------------
+type CaseStudy @table(name: "CaseStudies") {
+  institution: String!
+  slug: String! @unique
+  pullQuote: String!
+  metricsLine: String!
+  linkLabel: String! @default(value: "Read the case study")
+  spotlight: Boolean! @default(value: false)
+  coverImage: Media
+  # charts group (each an uploaded image)
+  chartsTimeSaved: Media
+  chartsSpecialtyDistribution: Media
+  chartsLanguageDistribution: Media
+  chartsDoctorRatings: Media
+  chartsValidationLetter: Media
+  publishedAt: Date
+  order: Int! @default(value: 100)
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# Testimonials  (draft-enabled)
+# -----------------------------------------------------------------------------
+type Testimonial @table(name: "Testimonials") {
+  quote: String!
+  attribution: String!
+  role: String
+  consentOnFile: Boolean! @default(value: false)
+  order: Int! @default(value: 100)
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# Awards  (draft-enabled)
+# -----------------------------------------------------------------------------
+type Award @table(name: "Awards") {
+  name: String!
+  detail: String
+  image: Media
+  sourceUrl: String
+  order: Int! @default(value: 100)
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# HomeFaqs  (draft-enabled)
+# -----------------------------------------------------------------------------
+type HomeFaq @table(name: "HomeFaqs") {
+  question: String!
+  answer: String!
+  order: Int! @default(value: 100)
+  status: String! @default(value: "draft")
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+
+# -----------------------------------------------------------------------------
+# TrialEmails  (7-day drip campaign)
+# -----------------------------------------------------------------------------
+type TrialEmail @table(name: "TrialEmails") {
+  key: String! @unique
+  sendOnDay: Int!
+  subject: String!
+  preheader: String!
+  # cta group
+  ctaLabel: String!
+  ctaUrl: String!
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+# TrialEmail.body[]
+type TrialEmailParagraph @table {
+  trialEmail: TrialEmail!
+  text: String!
+  position: Int
+}
+
+
+# -----------------------------------------------------------------------------
+# Leads  (trial signups from /trial)
+# -----------------------------------------------------------------------------
+type Lead @table {
+  fullName: String!
+  workEmail: String! @index
+  phone: String!
+  # doctor | hospital_admin | ehr_partner | other
+  role: String!
+  specialty: String
+  hospitalOrCompany: String!
+  country: String!
+  # new | contacted | qualified | converted | not_a_fit
+  status: String! @default(value: "new")
+  notes: String
+  source: String! @default(value: "trial-form")
+  # consent group (captured at submission)
+  consentTermsAcceptedAt: Date
+  consentIp: String
+  consentUserAgent: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+>>>>>>> 8e297923aa328862e27056497134d778090031d7
