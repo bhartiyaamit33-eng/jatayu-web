@@ -1,33 +1,398 @@
-# # Example mutations for a simple movie app
+# =============================================================================
+# Jatayu — Data Connect mutations
+# =============================================================================
+# Named write operations for the tables in ../schema/schema.gql.
+# Each mutation becomes a type-safe function in the generated SDK.
+#
+# Data Connect auto-generates these write fields per @table type:
+#   <type>_insert / <type>_update / <type>_upsert / <type>_delete
+#   (field prefix = camelCase GraphQL type name, e.g. post_insert,
+#    caseStudy_insert, useCaseSection_insert)
+#
+# @auth levels:
+#   PUBLIC — anyone (used ONLY for the public lead capture form)
+#   USER   — any signed-in Firebase Auth user (editors create/update content)
+# =============================================================================
 
-# # Create a movie based on user input
-# mutation CreateMovie($title: String!, $genre: String!, $imageUrl: String!)
-# @auth(level: USER_EMAIL_VERIFIED) {
-#   movie_insert(data: { title: $title, genre: $genre, imageUrl: $imageUrl })
-# }
 
-# # Upsert (update or insert) a user's username based on their auth.uid
-# mutation UpsertUser($username: String!) @auth(level: USER) {
-#   # The "auth.uid" server value ensures that users can only register their own user.
-#   user_upsert(data: { id_expr: "auth.uid", username: $username })
-# }
+# ----------------------------- Leads (public capture) ------------------------
+# Mirrors the public /api/trial route — anyone can create a lead.
+mutation CreateLead(
+  $fullName: String!
+  $workEmail: String!
+  $phone: String!
+  $role: String!
+  $hospitalOrCompany: String!
+  $country: String!
+  $specialty: String
+  $consentTermsAcceptedAt: Date
+  $consentIp: String
+  $consentUserAgent: String
+) @auth(level: PUBLIC) {
+  lead_insert(
+    data: {
+      fullName: $fullName
+      workEmail: $workEmail
+      phone: $phone
+      role: $role
+      hospitalOrCompany: $hospitalOrCompany
+      country: $country
+      specialty: $specialty
+      status: "new"
+      source: "trial-form"
+      consentTermsAcceptedAt: $consentTermsAcceptedAt
+      consentIp: $consentIp
+      consentUserAgent: $consentUserAgent
+    }
+  )
+}
 
-# # Add a review for a movie
-# mutation AddReview($movieId: UUID!, $rating: Int!, $reviewText: String!)
-# @auth(level: USER) {
-#   review_upsert(
-#     data: {
-#       userId_expr: "auth.uid"
-#       movieId: $movieId
-#       rating: $rating
-#       reviewText: $reviewText
-#       # reviewDate defaults to today in the schema. No need to set it manually.
-#     }
-#   )
-# }
+mutation UpdateLeadStatus($id: UUID!, $status: String!, $notes: String) @auth(level: USER) {
+  lead_update(id: $id, data: { status: $status, notes: $notes })
+}
 
-# # Logged in user can delete their review for a movie
-# mutation DeleteReview($movieId: UUID!) @auth(level: USER) {
-#   # The "auth.uid" server value ensures that users can only delete their own reviews.
-#   review_delete(key: { userId_expr: "auth.uid", movieId: $movieId })
-# }
+mutation DeleteLead($id: UUID!) @auth(level: USER) {
+  lead_delete(id: $id)
+}
+
+
+# ----------------------------- Media -----------------------------------------
+mutation CreateMedia(
+  $alt: String!
+  $caption: String
+  $url: String
+  $filename: String
+  $mimeType: String
+  $filesize: Int
+  $width: Int
+  $height: Int
+  $thumbUrl: String
+  $cardUrl: String
+  $heroUrl: String
+) @auth(level: USER) {
+  media_insert(
+    data: {
+      alt: $alt
+      caption: $caption
+      url: $url
+      filename: $filename
+      mimeType: $mimeType
+      filesize: $filesize
+      width: $width
+      height: $height
+      thumbUrl: $thumbUrl
+      cardUrl: $cardUrl
+      heroUrl: $heroUrl
+    }
+  )
+}
+
+mutation DeleteMedia($id: UUID!) @auth(level: USER) {
+  media_delete(id: $id)
+}
+
+
+# ----------------------------- Posts -----------------------------------------
+mutation CreatePost(
+  $title: String!
+  $slug: String!
+  $excerpt: String!
+  $category: String!
+  $readTimeMinutes: Int!
+  $publishedAt: Date!
+  $body: String
+  $heroImageId: UUID
+  $status: String
+) @auth(level: USER) {
+  post_insert(
+    data: {
+      title: $title
+      slug: $slug
+      excerpt: $excerpt
+      category: $category
+      readTimeMinutes: $readTimeMinutes
+      publishedAt: $publishedAt
+      body: $body
+      heroImageId: $heroImageId
+      status: $status
+    }
+  )
+}
+
+mutation UpdatePost(
+  $id: UUID!
+  $title: String
+  $excerpt: String
+  $category: String
+  $readTimeMinutes: Int
+  $publishedAt: Date
+  $body: String
+  $heroImageId: UUID
+  $status: String
+) @auth(level: USER) {
+  post_update(
+    id: $id
+    data: {
+      title: $title
+      excerpt: $excerpt
+      category: $category
+      readTimeMinutes: $readTimeMinutes
+      publishedAt: $publishedAt
+      body: $body
+      heroImageId: $heroImageId
+      status: $status
+    }
+  )
+}
+
+mutation DeletePost($id: UUID!) @auth(level: USER) {
+  post_delete(id: $id)
+}
+
+
+# ----------------------------- Products --------------------------------------
+mutation CreateProduct(
+  $name: String!
+  $slug: String!
+  $eyebrow: String!
+  $tagline: String!
+  $conciseAnswer: String!
+  $order: Int
+  $status: String
+) @auth(level: USER) {
+  product_insert(
+    data: {
+      name: $name
+      slug: $slug
+      eyebrow: $eyebrow
+      tagline: $tagline
+      conciseAnswer: $conciseAnswer
+      order: $order
+      status: $status
+    }
+  )
+}
+
+mutation UpdateProduct(
+  $id: UUID!
+  $name: String
+  $tagline: String
+  $conciseAnswer: String
+  $order: Int
+  $status: String
+) @auth(level: USER) {
+  product_update(
+    id: $id
+    data: { name: $name, tagline: $tagline, conciseAnswer: $conciseAnswer, order: $order, status: $status }
+  )
+}
+
+mutation DeleteProduct($id: UUID!) @auth(level: USER) {
+  product_delete(id: $id)
+}
+
+mutation AddProductIntroParagraph($productId: UUID!, $text: String!, $position: Int) @auth(level: USER) {
+  productIntroParagraph_insert(data: { productId: $productId, text: $text, position: $position })
+}
+
+mutation AddProductDeploymentMode($productId: UUID!, $title: String!, $body: String!, $position: Int) @auth(level: USER) {
+  productDeploymentMode_insert(data: { productId: $productId, title: $title, body: $body, position: $position })
+}
+
+
+# ----------------------------- Use cases -------------------------------------
+mutation CreateUseCase(
+  $name: String!
+  $slug: String!
+  $eyebrow: String!
+  $tagline: String!
+  $shortPitch: String!
+  $iconId: UUID
+  $order: Int
+  $status: String
+) @auth(level: USER) {
+  useCase_insert(
+    data: {
+      name: $name
+      slug: $slug
+      eyebrow: $eyebrow
+      tagline: $tagline
+      shortPitch: $shortPitch
+      iconId: $iconId
+      order: $order
+      status: $status
+    }
+  )
+}
+
+mutation UpdateUseCase($id: UUID!, $tagline: String, $shortPitch: String, $order: Int, $status: String) @auth(level: USER) {
+  useCase_update(id: $id, data: { tagline: $tagline, shortPitch: $shortPitch, order: $order, status: $status })
+}
+
+mutation DeleteUseCase($id: UUID!) @auth(level: USER) {
+  useCase_delete(id: $id)
+}
+
+mutation AddUseCaseIntroParagraph($useCaseId: UUID!, $text: String!, $position: Int) @auth(level: USER) {
+  useCaseIntroParagraph_insert(data: { useCaseId: $useCaseId, text: $text, position: $position })
+}
+
+mutation AddUseCaseSection(
+  $useCaseId: UUID!
+  $eyebrow: String
+  $heading: String!
+  $body: String
+  $position: Int
+) @auth(level: USER) {
+  useCaseSection_insert(data: { useCaseId: $useCaseId, eyebrow: $eyebrow, heading: $heading, body: $body, position: $position })
+}
+
+mutation AddUseCaseSectionBullet($sectionId: UUID!, $text: String!, $position: Int) @auth(level: USER) {
+  useCaseSectionBullet_insert(data: { sectionId: $sectionId, text: $text, position: $position })
+}
+
+
+# ----------------------------- Team members ----------------------------------
+mutation CreateTeamMember(
+  $name: String!
+  $role: String!
+  $description: String!
+  $photoId: UUID
+  $order: Int
+  $featuredOnHome: Boolean
+  $status: String
+) @auth(level: USER) {
+  teamMember_insert(
+    data: {
+      name: $name
+      role: $role
+      description: $description
+      photoId: $photoId
+      order: $order
+      featuredOnHome: $featuredOnHome
+      status: $status
+    }
+  )
+}
+
+mutation UpdateTeamMember($id: UUID!, $role: String, $description: String, $order: Int, $status: String) @auth(level: USER) {
+  teamMember_update(id: $id, data: { role: $role, description: $description, order: $order, status: $status })
+}
+
+mutation DeleteTeamMember($id: UUID!) @auth(level: USER) {
+  teamMember_delete(id: $id)
+}
+
+
+# ----------------------------- Specialties -----------------------------------
+mutation CreateSpecialty(
+  $title: String!
+  $slug: String!
+  $blurb: String!
+  $iconId: UUID
+  $featuredOnHome: Boolean
+  $order: Int
+  $status: String
+) @auth(level: USER) {
+  specialty_insert(
+    data: { title: $title, slug: $slug, blurb: $blurb, iconId: $iconId, featuredOnHome: $featuredOnHome, order: $order, status: $status }
+  )
+}
+
+mutation DeleteSpecialty($id: UUID!) @auth(level: USER) {
+  specialty_delete(id: $id)
+}
+
+
+# ----------------------------- Case studies ----------------------------------
+mutation CreateCaseStudy(
+  $institution: String!
+  $slug: String!
+  $pullQuote: String!
+  $metricsLine: String!
+  $coverImageId: UUID
+  $spotlight: Boolean
+  $publishedAt: Date
+  $order: Int
+  $status: String
+) @auth(level: USER) {
+  caseStudy_insert(
+    data: {
+      institution: $institution
+      slug: $slug
+      pullQuote: $pullQuote
+      metricsLine: $metricsLine
+      coverImageId: $coverImageId
+      spotlight: $spotlight
+      publishedAt: $publishedAt
+      order: $order
+      status: $status
+    }
+  )
+}
+
+mutation DeleteCaseStudy($id: UUID!) @auth(level: USER) {
+  caseStudy_delete(id: $id)
+}
+
+
+# ----------------------------- Testimonials ----------------------------------
+mutation CreateTestimonial(
+  $quote: String!
+  $attribution: String!
+  $role: String
+  $consentOnFile: Boolean
+  $order: Int
+  $status: String
+) @auth(level: USER) {
+  testimonial_insert(
+    data: { quote: $quote, attribution: $attribution, role: $role, consentOnFile: $consentOnFile, order: $order, status: $status }
+  )
+}
+
+mutation DeleteTestimonial($id: UUID!) @auth(level: USER) {
+  testimonial_delete(id: $id)
+}
+
+
+# ----------------------------- Awards ----------------------------------------
+mutation CreateAward($name: String!, $detail: String, $imageId: UUID, $sourceUrl: String, $order: Int, $status: String) @auth(level: USER) {
+  award_insert(data: { name: $name, detail: $detail, imageId: $imageId, sourceUrl: $sourceUrl, order: $order, status: $status })
+}
+
+mutation DeleteAward($id: UUID!) @auth(level: USER) {
+  award_delete(id: $id)
+}
+
+
+# ----------------------------- Home FAQs -------------------------------------
+mutation CreateHomeFaq($question: String!, $answer: String!, $order: Int, $status: String) @auth(level: USER) {
+  homeFaq_insert(data: { question: $question, answer: $answer, order: $order, status: $status })
+}
+
+mutation DeleteHomeFaq($id: UUID!) @auth(level: USER) {
+  homeFaq_delete(id: $id)
+}
+
+
+# ----------------------------- Trial emails ----------------------------------
+mutation CreateTrialEmail(
+  $key: String!
+  $sendOnDay: Int!
+  $subject: String!
+  $preheader: String!
+  $ctaLabel: String!
+  $ctaUrl: String!
+) @auth(level: USER) {
+  trialEmail_insert(
+    data: { key: $key, sendOnDay: $sendOnDay, subject: $subject, preheader: $preheader, ctaLabel: $ctaLabel, ctaUrl: $ctaUrl }
+  )
+}
+
+mutation AddTrialEmailParagraph($trialEmailId: UUID!, $text: String!, $position: Int) @auth(level: USER) {
+  trialEmailParagraph_insert(data: { trialEmailId: $trialEmailId, text: $text, position: $position })
+}
+
+mutation DeleteTrialEmail($id: UUID!) @auth(level: USER) {
+  trialEmail_delete(id: $id)
+}

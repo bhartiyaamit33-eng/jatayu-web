@@ -1,78 +1,315 @@
-# # Example queries for a simple movie app.
+# =============================================================================
+# Jatayu — Data Connect queries
+# =============================================================================
+# Named read operations for the tables defined in ../schema/schema.gql.
+# Each query becomes a type-safe function in the generated SDK.
+#
+# @auth levels:
+#   PUBLIC      — anyone (used for published, public-facing content)
+#   USER        — any signed-in Firebase Auth user (admin/editor reads)
+#   NO_ACCESS   — callable only from admin SDK / server
+#
+# NOTE: field names follow the GraphQL type name, not the @table(name:) value.
+#   e.g. type UseCase  -> query field `useCases`, type CaseStudy -> `caseStudies`.
+# =============================================================================
 
-# # @auth() directives control who can call each operation.
-# # Anyone should be able to list all movies, so the auth level is set to PUBLIC
-# query ListMovies @auth(level: PUBLIC) {
-#   movies {
-#     id
-#     title
-#     imageUrl
-#     genre
-#   }
-# }
 
-# # List all users, only admins should be able to list all users, so we use NO_ACCESS
-# query ListUsers @auth(level: NO_ACCESS) {
-#   users {
-#     id
-#     username
-#   }
-# }
+# ----------------------------- Posts ----------------------------------------
+query ListPublishedPosts @auth(level: PUBLIC) {
+  posts(where: { status: { eq: "published" } }, orderBy: { publishedAt: DESC }) {
+    id
+    title
+    slug
+    excerpt
+    category
+    readTimeMinutes
+    publishedAt
+    heroImage {
+      id
+      url
+      alt
+    }
+  }
+}
 
-# # Logged in users can list all their reviews and movie titles associated with the review
-# # Since the query uses the uid of the current authenticated user, we set auth level to USER
-# query ListUserReviews @auth(level: USER) {
-#   user(key: { id_expr: "auth.uid" }) {
-#     id
-#     username
-#     # <field>_on_<foreign_key_field> makes it easy to grab info from another table
-#     # Here, we use it to grab all the reviews written by the user.
-#     reviews: reviews_on_user {
-#       rating
-#       reviewDate
-#       reviewText
-#       movie {
-#         id
-#         title
-#       }
-#     }
-#   }
-# }
+query PostBySlug($slug: String!) @auth(level: PUBLIC) {
+  posts(where: { slug: { eq: $slug }, status: { eq: "published" } }, limit: 1) {
+    id
+    title
+    slug
+    excerpt
+    category
+    readTimeMinutes
+    publishedAt
+    body
+    heroImage {
+      url
+      alt
+    }
+  }
+}
 
-# # Get movie by id
-# query GetMovieById($id: UUID!) @auth(level: PUBLIC) {
-#   movie(id: $id) {
-#     id
-#     title
-#     imageUrl
-#     genre
-#     metadata: movieMetadata_on_movie {
-#       rating
-#       releaseYear
-#       description
-#     }
-#     reviews: reviews_on_movie {
-#       reviewText
-#       reviewDate
-#       rating
-#       user {
-#         id
-#         username
-#       }
-#     }
-#   }
-# }
 
-# # Search for movies, actors, and reviews
-# query SearchMovie($titleInput: String, $genre: String) @auth(level: PUBLIC) {
-#   movies(
-#     where: {
-#       _and: [{ genre: { eq: $genre } }, { title: { contains: $titleInput } }]
-#     }
-#   ) {
-#     id
-#     title
-#     genre
-#     imageUrl
-#   }
-# }
+# ----------------------------- Products --------------------------------------
+query ListPublishedProducts @auth(level: PUBLIC) {
+  products(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    name
+    slug
+    eyebrow
+    tagline
+    conciseAnswer
+    order
+    featuredOnHome
+  }
+}
+
+query ProductBySlug($slug: String!) @auth(level: PUBLIC) {
+  products(where: { slug: { eq: $slug }, status: { eq: "published" } }, limit: 1) {
+    id
+    name
+    slug
+    eyebrow
+    tagline
+    conciseAnswer
+    showPatientConsent
+    primaryCtaLabel
+    primaryCtaHref
+    secondaryCtaLabel
+    secondaryCtaHref
+    seoTitle
+    seoDescription
+  }
+}
+
+query ProductIntroParagraphs($productId: UUID!) @auth(level: PUBLIC) {
+  productIntroParagraphs(where: { productId: { eq: $productId } }, orderBy: { position: ASC }) {
+    id
+    text
+    position
+  }
+}
+
+query ProductDeploymentModes($productId: UUID!) @auth(level: PUBLIC) {
+  productDeploymentModes(where: { productId: { eq: $productId } }, orderBy: { position: ASC }) {
+    id
+    title
+    body
+    position
+  }
+}
+
+
+# ----------------------------- Use cases -------------------------------------
+query ListPublishedUseCases @auth(level: PUBLIC) {
+  useCases(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    name
+    slug
+    eyebrow
+    tagline
+    shortPitch
+    order
+    featuredOnHome
+    icon {
+      url
+      alt
+    }
+  }
+}
+
+query UseCaseBySlug($slug: String!) @auth(level: PUBLIC) {
+  useCases(where: { slug: { eq: $slug }, status: { eq: "published" } }, limit: 1) {
+    id
+    name
+    slug
+    eyebrow
+    tagline
+    shortPitch
+    primaryCtaLabel
+    primaryCtaHref
+    secondaryCtaLabel
+    secondaryCtaHref
+    seoTitle
+    seoDescription
+  }
+}
+
+query UseCaseSections($useCaseId: UUID!) @auth(level: PUBLIC) {
+  useCaseSections(where: { useCaseId: { eq: $useCaseId } }, orderBy: { position: ASC }) {
+    id
+    eyebrow
+    heading
+    body
+    position
+  }
+}
+
+query UseCaseSectionBullets($sectionId: UUID!) @auth(level: PUBLIC) {
+  useCaseSectionBullets(where: { sectionId: { eq: $sectionId } }, orderBy: { position: ASC }) {
+    id
+    text
+    position
+  }
+}
+
+
+# ----------------------------- Team members ----------------------------------
+query ListTeamMembers @auth(level: PUBLIC) {
+  teamMembers(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    name
+    role
+    description
+    featuredOnHome
+    photo {
+      url
+      alt
+    }
+  }
+}
+
+
+# ----------------------------- Specialties -----------------------------------
+query ListSpecialties @auth(level: PUBLIC) {
+  specialties(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    title
+    slug
+    blurb
+    featuredOnHome
+    icon {
+      url
+      alt
+    }
+  }
+}
+
+
+# ----------------------------- Case studies ----------------------------------
+query ListCaseStudies @auth(level: PUBLIC) {
+  caseStudies(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    institution
+    slug
+    pullQuote
+    metricsLine
+    linkLabel
+    spotlight
+    publishedAt
+    coverImage {
+      url
+      alt
+    }
+  }
+}
+
+query CaseStudyBySlug($slug: String!) @auth(level: PUBLIC) {
+  caseStudies(where: { slug: { eq: $slug }, status: { eq: "published" } }, limit: 1) {
+    id
+    institution
+    slug
+    pullQuote
+    metricsLine
+    linkLabel
+    spotlight
+    publishedAt
+    coverImage { url alt }
+    chartsTimeSaved { url alt }
+    chartsSpecialtyDistribution { url alt }
+    chartsLanguageDistribution { url alt }
+    chartsDoctorRatings { url alt }
+    chartsValidationLetter { url alt }
+  }
+}
+
+
+# ----------------------------- Testimonials ----------------------------------
+query ListTestimonials @auth(level: PUBLIC) {
+  testimonials(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    quote
+    attribution
+    role
+    order
+  }
+}
+
+
+# ----------------------------- Awards ----------------------------------------
+query ListAwards @auth(level: PUBLIC) {
+  awards(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    name
+    detail
+    sourceUrl
+    image {
+      url
+      alt
+    }
+  }
+}
+
+
+# ----------------------------- Home FAQs -------------------------------------
+query ListHomeFaqs @auth(level: PUBLIC) {
+  homeFaqs(where: { status: { eq: "published" } }, orderBy: { order: ASC }) {
+    id
+    question
+    answer
+    order
+  }
+}
+
+
+# ----------------------------- Trial emails ----------------------------------
+query ListTrialEmails @auth(level: USER) {
+  trialEmails(orderBy: { sendOnDay: ASC }) {
+    id
+    key
+    sendOnDay
+    subject
+    preheader
+    ctaLabel
+    ctaUrl
+  }
+}
+
+query TrialEmailParagraphs($trialEmailId: UUID!) @auth(level: USER) {
+  trialEmailParagraphs(where: { trialEmailId: { eq: $trialEmailId } }, orderBy: { position: ASC }) {
+    id
+    text
+    position
+  }
+}
+
+
+# ----------------------------- Leads (admin only) ----------------------------
+query ListLeads @auth(level: USER) {
+  leads(orderBy: { createdAt: DESC }) {
+    id
+    fullName
+    workEmail
+    phone
+    role
+    specialty
+    hospitalOrCompany
+    country
+    status
+    notes
+    source
+    createdAt
+  }
+}
+
+query LeadsByStatus($status: String!) @auth(level: USER) {
+  leads(where: { status: { eq: $status } }, orderBy: { createdAt: DESC }) {
+    id
+    fullName
+    workEmail
+    hospitalOrCompany
+    country
+    status
+    createdAt
+  }
+}
