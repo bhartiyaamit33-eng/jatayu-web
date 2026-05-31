@@ -4,3 +4,4 @@ export const connectorConfig = {
   service: 'jatayu-company-website-service',
   location: 'asia-south1'
 };
+
