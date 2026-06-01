@@ -287,11 +287,22 @@ export async function POST(req: Request) {
     });
     log.push("global homepage-concise-answer");
 
-    await payload.updateGlobal({
-      slug: "home-sections",
-      data: homeSectionLabels,
-    });
-    log.push("global home-sections");
+    // home-sections is a newer global. In production (push:false) its table
+    // may not exist until `sync-prod-schema` runs, so treat a failure here as
+    // a skip rather than letting it abort the rest of the seed.
+    try {
+      await payload.updateGlobal({
+        slug: "home-sections",
+        data: homeSectionLabels,
+      });
+      log.push("global home-sections");
+    } catch (err) {
+      log.push(
+        `global home-sections SKIPPED (table missing? run sync-prod-schema): ${
+          err instanceof Error ? err.message : String(err)
+        }`,
+      );
+    }
 
     // ---------- Collections ----------
     await upsert(
