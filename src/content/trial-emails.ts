@@ -21,7 +21,7 @@
  *   {{calendarUrl}}      Cal.com self-hosted scheduling URL when configured
  *   {{unsubscribeUrl}}   one-click unsubscribe (legally required)
  *
- * Tone: doctor-to-doctor, India-proud, tech-confident, clinically precise.
+ * Tone: peer-to-peer, globally minded, tech-confident, precise.
  * No em-dashes. No "AI-powered". No "revolutionize" / "disrupt".
  */
 
@@ -59,11 +59,11 @@ export const trialDripEmails: TrialEmail[] = [
     sendOnDay: 1,
     subject: "One small habit that makes VoiceDocAI feel automatic",
     preheader:
-      "How clinicians in our pilots got fluent on day two.",
+      "How clinicians in our deployments got fluent on day two.",
     body: [
       "Hi {{firstName}},",
       "Most clinicians who stick with VoiceDocAI do one thing on day two: they speak the way they would to a colleague, not to a machine.",
-      "You do not need to slow down. You do not need to switch language mid-consultation. The model was trained on real Indian clinics in Hindi, Marathi, and English, including mixed conversations.",
+      "You do not need to slow down. You do not need to switch language mid-consultation. The model was trained on real, multilingual clinical conversations, including mixed-language consultations.",
       "If you want to try a structured 5-minute exercise, we put one together at {{quickStartUrl}}. It uses a sample patient narrative you can speak in your own voice.",
       "Warmly,",
       "Team Jatayu",
@@ -78,7 +78,7 @@ export const trialDripEmails: TrialEmail[] = [
       "Discharge summaries, OT notes, radiology narratives. Pick one to try this week.",
     body: [
       "Hi {{firstName}},",
-      "If you are looking for a high-leverage place to use VoiceDocAI this week, here is what showed up across the KEM Hospital pilot:",
+      "If you are looking for a high-leverage place to use VoiceDocAI this week, here is what showed up across the KEM Hospital deployment:",
       "Discharge summaries: longest narratives, biggest time savings.",
       "OT notes: structured fields take well to dictation, and reviewers approve faster.",
       "Radiology reports: structured impressions and recommendations land cleanly in HMIS.",
@@ -86,23 +86,23 @@ export const trialDripEmails: TrialEmail[] = [
       "Warmly,",
       "Team Jatayu",
     ],
-    cta: { label: "See the KEM pilot summary", url: "{{caseStudyUrl}}" },
+    cta: { label: "See the KEM deployment summary", url: "{{caseStudyUrl}}" },
   },
   {
     id: "day-5-evidence",
     sendOnDay: 5,
     subject: "How a 100-bed hospital evaluated VoiceDocAI",
     preheader:
-      "Real pilot, real numbers. Read it before you decide.",
+      "Real deployment, real numbers. Read it before you decide.",
     body: [
       "Hi {{firstName}},",
-      "If you are weighing whether VoiceDocAI fits your practice, the KEM Hospital pilot is the most useful artifact we can share. It documents what we measured, who participated, and where the system fell short.",
+      "If you are weighing whether VoiceDocAI fits your practice, the KEM Hospital deployment is the most useful artifact we can share. It documents what we measured, who participated, and where the system fell short.",
       "It is short and honest. We do not stretch the numbers.",
       "If your decision involves a hospital IT team, our Security and Compliance page is also linked at the end of the case study so you can forward it directly.",
       "Warmly,",
       "Team Jatayu",
     ],
-    cta: { label: "Read the KEM pilot", url: "{{caseStudyUrl}}" },
+    cta: { label: "Read the KEM deployment summary", url: "{{caseStudyUrl}}" },
   },
   {
     id: "day-6-trial-ending",

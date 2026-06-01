@@ -13,12 +13,10 @@ import {
   getHomepageConciseAnswer,
   getLogoWall,
   getSiteMeta,
-  getSpotlightCaseStudy,
   getTestimonials,
 } from "@/lib/cms";
 import { HeroVisual } from "@/components/home/HeroVisual";
 import { FlowDiagram } from "@/components/home/FlowDiagram";
-import { KemCharts } from "@/components/home/KemCharts";
 import { PARTNER_SECTIONS, PartnerSection } from "@/components/home/PartnerWalls";
 import { AudienceCards } from "@/components/home/AudienceCards";
 import { Reveal } from "@/components/home/Reveal";
@@ -35,7 +33,6 @@ export async function HomeSections() {
     homepageConcise,
     faqs,
     featuredSpecialties,
-    spotlightCase,
     testimonials,
     deploymentModes,
     complianceBand,
@@ -50,7 +47,6 @@ export async function HomeSections() {
     getHomepageConciseAnswer(),
     getFaqs(),
     getFeaturedSpecialties(),
-    getSpotlightCaseStudy(),
     getTestimonials(),
     getDeploymentModes(),
     getComplianceBand(),
@@ -276,7 +272,7 @@ export async function HomeSections() {
               From conversation to verified note
             </h2>
             <p className="mt-4 text-slate">
-              Conversation captured. Multilingual speech filtered for ward noise. Sections structured for HMIS handoff. Clinician verifies before filing.
+              Conversation captured. Multilingual speech filtered for real-world noise. Sections structured for the report you need. You verify before anything is filed.
             </p>
           </div>
 
@@ -290,9 +286,9 @@ export async function HomeSections() {
       <section className="bg-white py-[var(--section-y)]" aria-labelledby="specialties-heading">
         <div className="container-page">
           <div className="max-w-xl">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Specialties</p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Inside the Medical use case</p>
             <h2 id="specialties-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              Specialty templates already in production
+              20+ clinical specialties, ready to use
             </h2>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -314,38 +310,13 @@ export async function HomeSections() {
         </div>
       </section>
 
-      {/* ---------- CASE STUDY SPOTLIGHT ---------- */}
-      {spotlightCase ? (
-        <section className="border-y border-indigo/10 bg-canvas py-[var(--section-y)]">
-          <div className="container-page grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Case study spotlight</p>
-              <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-                {spotlightCase.institution}
-              </h2>
-              <blockquote className="mt-6 border-l-4 border-indigo/40 pl-5 text-lg leading-relaxed text-navy/85">
-                &ldquo;{spotlightCase.pullQuote}&rdquo;
-              </blockquote>
-              <p className="mt-4 text-sm text-slate">{spotlightCase.metricsLine}</p>
-              <div className="mt-6">
-                <Button as="link" href={`/case-studies/${spotlightCase.slug}`} variant="primary" size="md">
-                  {spotlightCase.linkLabel}
-                </Button>
-              </div>
-            </div>
-
-            <KemCharts />
-          </div>
-        </section>
-      ) : null}
-
       {/* ---------- TESTIMONIALS ---------- */}
       <section className="bg-gradient-to-b from-white to-pale-blue py-[var(--section-y)]" aria-labelledby="testimonials-heading">
         <div className="container-page">
           <div className="text-center">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Evidence from real deployments</p>
             <h2 id="testimonials-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              Clinician feedback we can stand behind
+              Feedback we can stand behind
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm text-navy/80">
               Named testimonials and video reels ship only with signed releases. Until then this section stays factual.

@@ -1,6 +1,6 @@
 /**
- * KEM pilot data visualisations rebuilt as inline SVG / CSS.
- * Source numbers (KEM pilot dec 2025):
+ * KEM Hospital deployment data visualisations rebuilt as inline SVG / CSS.
+ * Source numbers (KEM Hospital deployment, Dec 2025):
  *   Manual ~5 min vs VoiceDocAI ~1 min documentation time.
  *   Specialties: Dermatology 20, Paediatrics 5, Orthopaedics 24,
  *                Surgical Gastroenterology 23, Radiology 28 (= 100%).

@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { PageIntro } from "@/components/pages/PageIntro";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { KemCharts } from "@/components/home/KemCharts";
 import { getSiteMeta, getUseCaseBySlug, getUseCases } from "@/lib/cms";
 
 type RouteProps = { params: Promise<{ slug: string }> };
@@ -100,6 +101,23 @@ export default async function UseCaseDetailPage({ params }: RouteProps) {
                 )}
               </article>
             ))}
+          </div>
+        )}
+
+        {useCase.slug === "medical" && (
+          <div className="space-y-6">
+            <div className="max-w-2xl">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">
+                Evidence from a hospital deployment
+              </p>
+              <h2 className="mt-2 font-display text-2xl font-bold text-navy md:text-3xl">
+                Measured across a multi-department rollout
+              </h2>
+              <p className="mt-3 text-sm text-slate">
+                Documented across 95 encounters and 18 clinicians at KEM Hospital, in real ward and OPD noise (around 70 to 90 dB).
+              </p>
+            </div>
+            <KemCharts />
           </div>
         )}
 

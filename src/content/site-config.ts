@@ -124,7 +124,7 @@ export const homeHero = {
   subheadline:
     "VoiceDocAI captures multi-speaker conversations, identifies speakers, and generates ready-to-use reports. Tuned for multilingual, high-noise environments.",
   trustLine:
-    "Trusted by KEM Hospital, ILBS Delhi, INHS Asvini, Basavatarakam Indo-American Cancer Centre, Priya Lobo Consults, Ohum Healthcare, and more.",
+    "Trusted by KEM Hospital, ILBS Delhi, Priya Lobo Consults, and more, with rollouts underway across the Middle East and Europe.",
   primaryCta: { label: "Start 7-day free trial", href: "/trial" },
   secondaryCta: { label: "Book a 20-minute walkthrough", href: "/contact" },
 };
@@ -225,7 +225,7 @@ export const partnerRowImages = {
 export const howItWorksSteps = [
   {
     title: "Capture the conversation",
-    body: "Hands-free capture in noisy OPDs and wards. Multilingual speech, not templated scripts.",
+    body: "Hands-free capture in noisy, real-world settings. Natural multilingual speech, not templated scripts.",
   },
   {
     title: "Process and structure",
@@ -233,11 +233,11 @@ export const howItWorksSteps = [
   },
   {
     title: "Review and verify",
-    body: "You edit, approve, and sign off-clinical responsibility stays with the treating physician.",
+    body: "You edit, approve, and sign off. Responsibility stays with you, the expert in the room.",
   },
   {
     title: "Push or copy",
-    body: "Export, API push, or HMIS integration-avoid re-keying into legacy systems.",
+    body: "Export, API push, or system integration. No re-keying into downstream tools.",
   },
 ];
 
@@ -301,23 +301,23 @@ export const testimonials: Testimonial[] = [
 export const deploymentModes = [
   {
     title: "Web",
-    body: "Browser-based workflows for clinics that prefer zero install.",
+    body: "Browser-based workflows for teams that prefer zero install.",
   },
   {
     title: "Desktop",
-    body: "Standalone capture and structuring for busy OPD desktops.",
+    body: "Standalone capture and structuring for busy desktops.",
   },
   {
     title: "Mobile",
-    body: "On-call documentation from handheld devices where permitted.",
+    body: "On-the-go documentation from handheld devices where permitted.",
   },
   {
     title: "On-premise",
-    body: "Deployment models for hospitals that require private infrastructure.",
+    body: "Deployment models for organisations that require private infrastructure.",
   },
   {
     title: "API",
-    body: "HMIS and EHR partners integrate structured note generation directly.",
+    body: "Platform and system partners integrate structured report generation directly.",
   },
 ];
 

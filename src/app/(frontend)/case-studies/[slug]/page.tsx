@@ -62,7 +62,7 @@ export default async function CaseStudyDetailPage({ params }: Props) {
               Report-backed highlights
             </h2>
             <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-slate">
-              <li>Pilot window: 03 Dec 2025 to 19 Dec 2025 (per submitted report).</li>
+              <li>Deployment window: 03 Dec 2025 to 19 Dec 2025 (per submitted report).</li>
               <li>
                 Coverage: Dermatology, Paediatrics, Surgical Gastroenterology,
                 Orthopaedics, Radiology across OPD, ICU, and ward contexts.

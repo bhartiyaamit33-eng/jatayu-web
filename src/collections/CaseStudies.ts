@@ -35,7 +35,7 @@ export const CaseStudies: CollectionConfig = {
     {
       name: "charts",
       type: "group",
-      admin: { description: "Optional pilot charts (KEM-style: time saved, specialty distribution, language distribution)." },
+      admin: { description: "Optional deployment charts: time saved, specialty distribution, language distribution." },
       fields: [
         { name: "timeSaved", type: "upload", relationTo: "media", label: "Time-saved bar chart" },
         { name: "specialtyDistribution", type: "upload", relationTo: "media", label: "Specialty distribution pie" },
