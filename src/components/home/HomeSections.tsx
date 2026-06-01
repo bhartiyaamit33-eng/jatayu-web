@@ -167,7 +167,7 @@ export async function HomeSections() {
               })()}
             </h1>
 
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate lg:max-w-none">
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate lg:mx-0 lg:max-w-none">
               {homeHero.subheadline}
             </p>
 
@@ -180,7 +180,7 @@ export async function HomeSections() {
               </Button>
             </div>
 
-            <p className="mt-7 max-w-xl text-sm font-medium text-navy/80 lg:max-w-none">
+            <p className="mx-auto mt-7 max-w-xl text-sm font-medium text-navy/80 lg:mx-0 lg:max-w-none">
               {homeHero.trustLine}
             </p>
           </div>
