@@ -181,7 +181,7 @@ export function PartnerSection({ section, columns }: { section: Section; columns
       </Reveal>
       <div className={`mt-9 grid gap-4 text-left ${colClass}`}>
         {section.partners.map((p, i) => (
-          <Reveal key={p.name} delay={80 + i * 70}>
+          <Reveal key={p.name} delay={80 + i * 70} className="min-w-0">
             <PartnerCard partner={p} category={section.category} />
           </Reveal>
         ))}

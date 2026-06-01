@@ -132,7 +132,7 @@ export async function HomeSections() {
 
         <div className="container-page grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
           {/* LEFT — copy block */}
-          <div className="text-center lg:text-left">
+          <div className="min-w-0 text-center lg:text-left">
             <div className="mb-5 flex items-center justify-center gap-3 lg:justify-start">
               <Logo
                 size={48}
@@ -190,7 +190,7 @@ export async function HomeSections() {
           </div>
 
           {/* RIGHT — animated console (waveform + clinical note) */}
-          <div className="relative">
+          <div className="relative min-w-0">
             <HeroVisual />
           </div>
         </div>

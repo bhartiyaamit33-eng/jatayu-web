@@ -22,6 +22,10 @@ html {
 
 body {
   @apply bg-canvas text-navy font-sans antialiased;
+  /* Safety net: stray fixed-width children (charts, animated consoles) must
+     never create a horizontal scrollbar on phones. `clip` does not establish a
+     scroll container, so it leaves position: sticky on the header intact. */
+  overflow-x: clip;
 }
 
 @layer utilities {

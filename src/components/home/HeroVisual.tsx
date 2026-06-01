@@ -311,7 +311,7 @@ export function HeroVisual() {
         : activeConversation.listeningLabel;
 
   return (
-    <div className="relative z-[2] w-full">
+    <div className="relative z-[2] w-full min-w-0">
       {/* Soft pink glow behind the console */}
       <div
         aria-hidden
@@ -367,7 +367,7 @@ export function HeroVisual() {
         {/* Body — two columns */}
         <div className="grid min-h-[460px] md:grid-cols-2">
           {/* LEFT: live conversation */}
-          <div className="flex flex-col gap-4 border-b border-indigo/10 bg-gradient-to-b from-pale-blue/40 to-transparent p-7 md:border-b-0 md:border-r">
+          <div className="flex min-w-0 flex-col gap-4 border-b border-indigo/10 bg-gradient-to-b from-pale-blue/40 to-transparent p-5 sm:p-7 md:border-b-0 md:border-r">
             <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-indigo">
               <span
                 className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-md bg-gradient-to-br from-indigo/15 to-magenta/15 text-[10px]"
@@ -381,7 +381,7 @@ export function HeroVisual() {
             {/* Waveform — visual sound cue, kept from the previous design */}
             <div
               ref={waveformRef}
-              className="relative flex h-[64px] items-center justify-center gap-[4px] overflow-hidden rounded-[14px] border border-indigo/10 bg-white/55 px-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]"
+              className="relative flex h-[64px] w-full min-w-0 items-center justify-center gap-[4px] overflow-hidden rounded-[14px] border border-indigo/10 bg-white/55 px-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]"
               aria-hidden
             />
 
@@ -449,7 +449,7 @@ export function HeroVisual() {
           </div>
 
           {/* RIGHT: generated clinical note */}
-          <div className="flex flex-col gap-4 bg-gradient-to-b from-magenta/[0.04] to-transparent p-7">
+          <div className="flex min-w-0 flex-col gap-4 bg-gradient-to-b from-magenta/[0.04] to-transparent p-5 sm:p-7">
             <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-indigo">
               <span
                 className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-md bg-gradient-to-br from-indigo/15 to-magenta/15 text-[10px]"
