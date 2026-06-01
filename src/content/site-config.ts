@@ -162,6 +162,26 @@ export const homeConciseAnswer =
 /** Plain-language label paired with the concise answer block (was "In one minute:") */
 export const homeConciseAnswerLabel = "What it is";
 
+/**
+ * Editable homepage section headings (eyebrow / heading / sub-text). These were
+ * previously hardcoded in HomeSections.tsx; they are now backed by the
+ * `home-sections` CMS global. The values here are the seed defaults and the
+ * fallback used whenever the CMS field is empty or the global is unavailable.
+ */
+export const homeSectionLabels = {
+  conciseHeading: "VoiceDocAI in plain language",
+  howItWorksEyebrow: "How it works",
+  howItWorksHeading: "From conversation to verified note",
+  howItWorksIntro:
+    "Conversation captured. Multilingual speech filtered for real-world noise. Sections structured for the report you need. You verify before anything is filed.",
+  specialtiesEyebrow: "Inside the Medical use case",
+  specialtiesHeading: "20+ clinical specialties, ready to use",
+  testimonialsEyebrow: "Evidence from real deployments",
+  testimonialsHeading: "Feedback we can stand behind",
+  testimonialsSubtext:
+    "Named testimonials and video reels ship only with signed releases. Until then this section stays factual.",
+};
+
 export const homeMetrics: MetricItem[] = [
   {
     id: "doc-time",

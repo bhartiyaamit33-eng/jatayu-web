@@ -21,6 +21,7 @@ import {
   howItWorksSteps as stepsFallback,
   homeConciseAnswer as conciseAnswerFallback,
   homeConciseAnswerLabel as conciseLabelFallback,
+  homeSectionLabels as homeSectionLabelsFallback,
   homeFaqs as faqsFallback,
   specialtiesFeatured as specialtiesFallback,
   caseStudiesIndex as caseStudiesFallback,
@@ -235,6 +236,34 @@ export const getHomepageConciseAnswer = unstable_cache(
   },
   ["global", "homepage-concise-answer"],
   { tags: [TAG, "homepage-concise-answer"] },
+);
+
+export const getHomeSections = unstable_cache(
+  async () => {
+    const fb = homeSectionLabelsFallback;
+    try {
+      const p = await payload();
+      const row = (await p.findGlobal({ slug: "home-sections", depth: 0 })) as Record<string, unknown>;
+      return {
+        conciseHeading: (row.conciseHeading as string) ?? fb.conciseHeading,
+        howItWorksEyebrow: (row.howItWorksEyebrow as string) ?? fb.howItWorksEyebrow,
+        howItWorksHeading: (row.howItWorksHeading as string) ?? fb.howItWorksHeading,
+        howItWorksIntro: (row.howItWorksIntro as string) ?? fb.howItWorksIntro,
+        specialtiesEyebrow: (row.specialtiesEyebrow as string) ?? fb.specialtiesEyebrow,
+        specialtiesHeading: (row.specialtiesHeading as string) ?? fb.specialtiesHeading,
+        testimonialsEyebrow: (row.testimonialsEyebrow as string) ?? fb.testimonialsEyebrow,
+        testimonialsHeading: (row.testimonialsHeading as string) ?? fb.testimonialsHeading,
+        testimonialsSubtext: (row.testimonialsSubtext as string) ?? fb.testimonialsSubtext,
+      };
+    } catch {
+      // The global's table may not exist yet (production runs with push:false
+      // until `sync-prod-schema`). Fall back to static labels so the homepage
+      // renders identically rather than erroring on a missing table.
+      return { ...fb };
+    }
+  },
+  ["global", "home-sections"],
+  { tags: [TAG, "home-sections"] },
 );
 
 // ---------- collections ----------

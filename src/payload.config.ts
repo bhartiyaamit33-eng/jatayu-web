@@ -32,6 +32,7 @@ import { FounderNote } from "./globals/FounderNote";
 import { LogoWall } from "./globals/LogoWall";
 import { HowItWorksSteps } from "./globals/HowItWorksSteps";
 import { HomepageConciseAnswer } from "./globals/HomepageConciseAnswer";
+import { HomeSectionsContent } from "./globals/HomeSectionsContent";
 import { ProductsPage } from "./globals/ProductsPage";
 import { ForDoctorsPage } from "./globals/ForDoctorsPage";
 import { ForHospitalsPage } from "./globals/ForHospitalsPage";
@@ -135,6 +136,7 @@ export default buildConfig({
     LogoWall,
     HowItWorksSteps,
     HomepageConciseAnswer,
+    HomeSectionsContent,
     ProductsPage,
     ForDoctorsPage,
     ForHospitalsPage,

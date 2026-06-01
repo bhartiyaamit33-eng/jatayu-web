@@ -11,6 +11,7 @@ import {
   getHomeHero,
   getHomeMetrics,
   getHomepageConciseAnswer,
+  getHomeSections,
   getLogoWall,
   getSiteMeta,
   getTestimonials,
@@ -31,6 +32,7 @@ export async function HomeSections() {
     homeMetrics,
     audienceSplit,
     homepageConcise,
+    homeSections,
     faqs,
     featuredSpecialties,
     testimonials,
@@ -45,6 +47,7 @@ export async function HomeSections() {
     getHomeMetrics(),
     getAudienceSplit(),
     getHomepageConciseAnswer(),
+    getHomeSections(),
     getFaqs(),
     getFeaturedSpecialties(),
     getTestimonials(),
@@ -245,7 +248,7 @@ export async function HomeSections() {
               id="answer-heading"
               className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl"
             >
-              VoiceDocAI in plain language
+              {homeSections.conciseHeading}
             </h2>
           </div>
           <p className="text-base leading-relaxed text-navy/85 lg:text-lg">
@@ -267,12 +270,12 @@ export async function HomeSections() {
       <section className="border-t border-indigo/10 bg-canvas py-[var(--section-y)]" id="how-it-works">
         <div className="container-page">
           <div className="max-w-xl">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">How it works</p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">{homeSections.howItWorksEyebrow}</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              From conversation to verified note
+              {homeSections.howItWorksHeading}
             </h2>
             <p className="mt-4 text-slate">
-              Conversation captured. Multilingual speech filtered for real-world noise. Sections structured for the report you need. You verify before anything is filed.
+              {homeSections.howItWorksIntro}
             </p>
           </div>
 
@@ -286,9 +289,9 @@ export async function HomeSections() {
       <section className="bg-white py-[var(--section-y)]" aria-labelledby="specialties-heading">
         <div className="container-page">
           <div className="max-w-xl">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Inside the Medical use case</p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">{homeSections.specialtiesEyebrow}</p>
             <h2 id="specialties-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              20+ clinical specialties, ready to use
+              {homeSections.specialtiesHeading}
             </h2>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -314,12 +317,12 @@ export async function HomeSections() {
       <section className="bg-gradient-to-b from-white to-pale-blue py-[var(--section-y)]" aria-labelledby="testimonials-heading">
         <div className="container-page">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">Evidence from real deployments</p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-magenta">{homeSections.testimonialsEyebrow}</p>
             <h2 id="testimonials-heading" className="mt-3 font-display text-3xl font-extrabold tracking-tight text-navy md:text-4xl">
-              Feedback we can stand behind
+              {homeSections.testimonialsHeading}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm text-navy/80">
-              Named testimonials and video reels ship only with signed releases. Until then this section stays factual.
+              {homeSections.testimonialsSubtext}
             </p>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-2">

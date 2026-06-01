@@ -23,6 +23,7 @@ import {
   founderNote,
   homeConciseAnswer,
   homeConciseAnswerLabel,
+  homeSectionLabels,
   homeFaqs,
   homeHero,
   homeMetrics,
@@ -280,6 +281,12 @@ export async function POST(req: Request) {
       data: { label: homeConciseAnswerLabel, body: homeConciseAnswer },
     });
     log.push("global homepage-concise-answer");
+
+    await payload.updateGlobal({
+      slug: "home-sections",
+      data: homeSectionLabels,
+    });
+    log.push("global home-sections");
 
     // ---------- Collections ----------
     await upsert(
