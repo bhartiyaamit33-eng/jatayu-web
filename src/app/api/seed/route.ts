@@ -149,8 +149,13 @@ export async function POST(req: Request) {
   }
 
   const log: string[] = [];
+  const params = new URL(req.url).searchParams;
   // ?prune=1 also deletes seed-managed rows that are no longer in the source.
-  const prune = new URL(req.url).searchParams.get("prune") === "1";
+  const prune = params.get("prune") === "1";
+  // ?pruneTestimonials=1 scopes pruning to the testimonials collection only,
+  // so stale rows (e.g. an old "pilot" evaluation) can be removed without the
+  // blast radius of a full prune touching CMS-authored posts/awards/etc.
+  const pruneTestimonials = prune || params.get("pruneTestimonials") === "1";
 
   try {
     const payload = await getPayloadClient();
@@ -379,7 +384,7 @@ export async function POST(req: Request) {
         order: (i + 1) * 10,
       })),
       log,
-      prune,
+      pruneTestimonials,
     );
 
     await upsert(
