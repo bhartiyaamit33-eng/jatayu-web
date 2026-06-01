@@ -75,7 +75,7 @@ export function Button(props: Props) {
   if (props.as === "link") {
     const { children, href, ...rest } = props;
     return (
-      <Link href={href} className={cls} {...rest}>
+      <Link href={href ?? "#"} className={cls} {...rest}>
         {children}
       </Link>
     );
@@ -83,7 +83,7 @@ export function Button(props: Props) {
   if (props.as === "a") {
     const { children, href, ...rest } = props;
     return (
-      <a href={href} className={cls} {...rest}>
+      <a href={href ?? "#"} className={cls} {...rest}>
         {children}
       </a>
     );

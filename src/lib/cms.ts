@@ -63,14 +63,25 @@ export const getSiteMeta = unstable_cache(
 export const getHomeHero = unstable_cache(
   async () => {
     const p = await payload();
-    const row = await p.findGlobal({ slug: "home-hero", depth: 0 });
+    const row = (await p.findGlobal({ slug: "home-hero", depth: 0 })) as Record<string, unknown>;
+    // Group fields (primaryCta/secondaryCta) can come back as empty or partial
+    // objects when the global is unseeded, so we merge field-by-field instead of
+    // a shallow `?? fallback` (a truthy `{}` would otherwise leave href undefined).
+    const rowPrimary = (row.primaryCta as { label?: string; href?: string } | null) ?? {};
+    const rowSecondary = (row.secondaryCta as { label?: string; href?: string } | null) ?? {};
     return {
-      badge: (row as Record<string, unknown>).badge as string ?? heroFallback.badge,
-      headline: (row as Record<string, unknown>).headline as string ?? heroFallback.headline,
-      subheadline: (row as Record<string, unknown>).subheadline as string ?? heroFallback.subheadline,
-      trustLine: (row as Record<string, unknown>).trustLine as string ?? heroFallback.trustLine,
-      primaryCta: (row as Record<string, unknown>).primaryCta as typeof heroFallback.primaryCta ?? heroFallback.primaryCta,
-      secondaryCta: (row as Record<string, unknown>).secondaryCta as typeof heroFallback.secondaryCta ?? heroFallback.secondaryCta,
+      badge: (row.badge as string) ?? heroFallback.badge,
+      headline: (row.headline as string) ?? heroFallback.headline,
+      subheadline: (row.subheadline as string) ?? heroFallback.subheadline,
+      trustLine: (row.trustLine as string) ?? heroFallback.trustLine,
+      primaryCta: {
+        label: rowPrimary.label ?? heroFallback.primaryCta.label,
+        href: rowPrimary.href ?? heroFallback.primaryCta.href,
+      },
+      secondaryCta: {
+        label: rowSecondary.label ?? heroFallback.secondaryCta.label,
+        href: rowSecondary.href ?? heroFallback.secondaryCta.href,
+      },
     };
   },
   ["global", "home-hero"],
