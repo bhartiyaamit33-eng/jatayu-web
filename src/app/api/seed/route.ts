@@ -99,10 +99,13 @@ async function upsert<T extends Record<string, unknown>>(
   uniqueField: string,
   rows: T[],
   log: string[],
+  prune = false,
 ) {
+  const seededValues = new Set<string>();
   for (const row of rows) {
     const value = row[uniqueField];
     if (typeof value !== "string") continue;
+    seededValues.add(value);
     const existing = await payload.find({
       collection,
       where: { [uniqueField]: { equals: value } },
@@ -123,6 +126,19 @@ async function upsert<T extends Record<string, unknown>>(
       log.push(`created ${collection}: ${value}`);
     }
   }
+
+  // Opt-in pruning: delete rows whose unique key is no longer in the source
+  // seed set. This removes stale content left behind by older seeds (the seed
+  // is otherwise additive). Skipped by default so content authored directly in
+  // the CMS is never destroyed on a routine re-seed.
+  if (!prune) return;
+  const all = await payload.find({ collection, limit: 500, depth: 0 });
+  for (const doc of all.docs as Array<Record<string, unknown>>) {
+    const value = doc[uniqueField];
+    if (typeof value !== "string" || seededValues.has(value)) continue;
+    await payload.delete({ collection, id: doc.id as string | number });
+    log.push(`pruned ${collection}: ${value}`);
+  }
 }
 
 export async function POST(req: Request) {
@@ -132,6 +148,8 @@ export async function POST(req: Request) {
   }
 
   const log: string[] = [];
+  // ?prune=1 also deletes seed-managed rows that are no longer in the source.
+  const prune = new URL(req.url).searchParams.get("prune") === "1";
 
   try {
     const payload = await getPayloadClient();
@@ -274,6 +292,7 @@ export async function POST(req: Request) {
         order: (i + 1) * 10,
       })),
       log,
+      prune,
     );
 
     await upsert(
@@ -288,6 +307,7 @@ export async function POST(req: Request) {
         order: (i + 1) * 10,
       })),
       log,
+      prune,
     );
 
     await upsert(
@@ -337,6 +357,7 @@ export async function POST(req: Request) {
         };
       }),
       log,
+      prune,
     );
 
     await upsert(
@@ -351,6 +372,7 @@ export async function POST(req: Request) {
         order: (i + 1) * 10,
       })),
       log,
+      prune,
     );
 
     await upsert(
@@ -365,6 +387,7 @@ export async function POST(req: Request) {
         order: (i + 1) * 10,
       })),
       log,
+      prune,
     );
 
     await upsert(
@@ -380,6 +403,7 @@ export async function POST(req: Request) {
         cta: e.cta,
       })),
       log,
+      prune,
     );
 
     await upsert(
@@ -396,6 +420,7 @@ export async function POST(req: Request) {
         _status: "published",
       })),
       log,
+      prune,
     );
 
     // Bust the unstable_cache layer so the frontend re-reads fresh data.
@@ -403,7 +428,7 @@ export async function POST(req: Request) {
     revalidateTag("cms", "max");
     log.push("revalidated tag: cms");
 
-    return NextResponse.json({ ok: true, count: log.length, log });
+    return NextResponse.json({ ok: true, prune, count: log.length, log });
   } catch (err) {
     console.error("Seed failed", err);
     return NextResponse.json(
