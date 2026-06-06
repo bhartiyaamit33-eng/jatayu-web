@@ -44,7 +44,7 @@ function DoctorCard({ data }: { data: AudienceSplit["doctor"] }) {
   return (
     <Link
       ref={ref}
-      href={data.href}
+      href={data.href || "#"}
       onMouseMove={(e) => ref.current && applyTilt(ref.current, e, spotRef.current)}
       onMouseLeave={() => ref.current && resetTilt(ref.current, spotRef.current)}
       className="group relative overflow-hidden rounded-[20px] bg-gradient-to-br from-[#0e1e3d] via-[#1f356c] to-[#2a4a8d] p-9 text-white shadow-card transition-shadow duration-300 ease-clinical will-change-transform hover:shadow-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magenta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
@@ -94,7 +94,7 @@ function HospitalCard({ data }: { data: AudienceSplit["hospital"] }) {
   return (
     <Link
       ref={ref}
-      href={data.href}
+      href={data.href || "#"}
       onMouseMove={(e) => ref.current && applyTilt(ref.current, e, spotRef.current)}
       onMouseLeave={() => ref.current && resetTilt(ref.current, spotRef.current)}
       className="group relative overflow-hidden rounded-[20px] bg-gradient-to-br from-[#2a0e3d] via-[#5c1f6e] to-[#8b3a9e] p-9 text-white shadow-card transition-shadow duration-300 ease-clinical will-change-transform hover:shadow-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magenta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"

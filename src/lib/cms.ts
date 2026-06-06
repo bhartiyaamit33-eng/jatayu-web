@@ -105,9 +105,25 @@ export const getAudienceSplit = unstable_cache(
   async () => {
     const p = await payload();
     const row = await p.findGlobal({ slug: "audience-split", depth: 0 }) as Record<string, unknown>;
+    // Group fields (doctor/hospital) come back as empty/partial objects when the
+    // global is unseeded. A truthy `{}` would survive `?? fallback` and leave
+    // href undefined, which crashes <Link>. Merge field-by-field instead.
+    const rowDoctor = (row.doctor as Partial<typeof audienceFallback.doctor> | null) ?? {};
+    const rowHospital = (row.hospital as Partial<typeof audienceFallback.hospital> | null) ?? {};
     return {
-      doctor: (row.doctor as typeof audienceFallback.doctor) ?? audienceFallback.doctor,
-      hospital: (row.hospital as typeof audienceFallback.hospital) ?? audienceFallback.hospital,
+      doctor: {
+        title: rowDoctor.title ?? audienceFallback.doctor.title,
+        body: rowDoctor.body ?? audienceFallback.doctor.body,
+        cta: rowDoctor.cta ?? audienceFallback.doctor.cta,
+        href: rowDoctor.href ?? audienceFallback.doctor.href,
+      },
+      hospital: {
+        title: rowHospital.title ?? audienceFallback.hospital.title,
+        body: rowHospital.body ?? audienceFallback.hospital.body,
+        chip: rowHospital.chip ?? audienceFallback.hospital.chip,
+        cta: rowHospital.cta ?? audienceFallback.hospital.cta,
+        href: rowHospital.href ?? audienceFallback.hospital.href,
+      },
     };
   },
   ["global", "audience-split"],
