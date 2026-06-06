@@ -101,6 +101,11 @@ async function upsert<T extends Record<string, unknown>>(
   rows: T[],
   log: string[],
   prune = false,
+  // The publish-gate hook (blockEditorPublish) only allows `_status:
+  // "published"` writes from a super_admin. The seed therefore runs its writes
+  // as the seed admin user so case studies / posts publish cleanly.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  user?: any,
 ) {
   const seededValues = new Set<string>();
   for (const row of rows) {
@@ -119,11 +124,13 @@ async function upsert<T extends Record<string, unknown>>(
         id: (existing.docs[0] as { id: string | number }).id,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data: row as any,
+        overrideAccess: true,
+        user,
       });
       log.push(`updated ${collection}: ${value}`);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await payload.create({ collection, data: row as any });
+      await payload.create({ collection, data: row as any, overrideAccess: true, user });
       log.push(`created ${collection}: ${value}`);
     }
   }
@@ -137,7 +144,7 @@ async function upsert<T extends Record<string, unknown>>(
   for (const doc of all.docs as Array<Record<string, unknown>>) {
     const value = doc[uniqueField];
     if (typeof value !== "string" || seededValues.has(value)) continue;
-    await payload.delete({ collection, id: doc.id as string | number });
+    await payload.delete({ collection, id: doc.id as string | number, overrideAccess: true, user });
     log.push(`pruned ${collection}: ${value}`);
   }
 }
@@ -159,6 +166,37 @@ export async function POST(req: Request) {
 
   try {
     const payload = await getPayloadClient();
+
+    // ---------- Super-admin user (publishing requires one) ----------
+    // The publish-gate hook only lets a super_admin write `_status:
+    // "published"`. Ensure one exists, then run publish-gated writes as it.
+    // Credentials come from env (override in prod) with safe local defaults.
+    const adminEmail = process.env.SEED_ADMIN_EMAIL ?? "admin@jatayu.health";
+    const adminPassword =
+      process.env.SEED_ADMIN_PASSWORD ?? "ChangeMe!Jatayu2026";
+    const existingAdmins = await payload.find({
+      collection: "users",
+      where: { role: { equals: "super_admin" } },
+      limit: 1,
+      depth: 0,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let seedUser: any = existingAdmins.docs[0];
+    if (!seedUser) {
+      seedUser = await payload.create({
+        collection: "users",
+        data: {
+          email: adminEmail,
+          password: adminPassword,
+          fullName: "Jatayu Super Admin",
+          role: "super_admin",
+        },
+        overrideAccess: true,
+      });
+      log.push(`created super_admin user: ${adminEmail}`);
+    } else {
+      log.push(`super_admin user exists: ${(seedUser as { email: string }).email}`);
+    }
 
     // ---------- Media uploads (idempotent) ----------
     const mediaIds: Record<string, string | number | null> = {};
@@ -316,6 +354,7 @@ export async function POST(req: Request) {
       })),
       log,
       prune,
+      seedUser,
     );
 
     await upsert(
@@ -331,6 +370,7 @@ export async function POST(req: Request) {
       })),
       log,
       prune,
+      seedUser,
     );
 
     await upsert(
@@ -381,6 +421,7 @@ export async function POST(req: Request) {
       }),
       log,
       prune,
+      seedUser,
     );
 
     await upsert(
@@ -396,6 +437,7 @@ export async function POST(req: Request) {
       })),
       log,
       pruneTestimonials,
+      seedUser,
     );
 
     await upsert(
@@ -411,6 +453,7 @@ export async function POST(req: Request) {
       })),
       log,
       prune,
+      seedUser,
     );
 
     await upsert(
@@ -427,6 +470,7 @@ export async function POST(req: Request) {
       })),
       log,
       prune,
+      seedUser,
     );
 
     await upsert(
@@ -444,6 +488,7 @@ export async function POST(req: Request) {
       })),
       log,
       prune,
+      seedUser,
     );
 
     // Bust the unstable_cache layer so the frontend re-reads fresh data.
