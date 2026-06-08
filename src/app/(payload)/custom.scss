@@ -1,1 +1,95 @@
-/* Payload admin custom styles. Add overrides here later if you want to brand the admin UI. */
+@import "../../components/admin/AccountMenu/index.scss";
+
+/* Hide default sidebar logout — account menu in header handles sign-out */
+.nav__log-out {
+  display: none !important;
+}
+
+/* Hide default account link — replaced by AccountMenu dropdown */
+.app-header__account {
+  display: none !important;
+}
+
+/* Hide default Payload login form — replaced by MFA-aware form */
+.login__form:not(.jatayu-mfa-login) {
+  display: none !important;
+}
+
+.jatayu-review-badge {
+  align-items: center;
+  color: var(--theme-warning-500);
+  display: inline-flex;
+  font-size: 13px;
+  margin-right: var(--base);
+}
+
+.jatayu-review-queue {
+  max-width: 960px;
+  padding: calc(var(--base) * 2);
+
+  h1 {
+    margin: 0 0 8px;
+  }
+
+  &__list {
+    display: grid;
+    gap: 12px;
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+
+    li {
+      align-items: center;
+      background: var(--theme-elevation-50);
+      border: 1px solid var(--theme-elevation-150);
+      border-radius: 8px;
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      padding: 16px;
+    }
+  }
+}
+
+.jatayu-review-nav-link {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.jatayu-mfa-login {
+  &__hint,
+  &__forgot {
+    display: block;
+    margin-bottom: 12px;
+  }
+}
+
+.jatayu-mfa-setup {
+  border-top: 1px solid var(--theme-elevation-150);
+  margin-top: 24px;
+  padding-top: 24px;
+
+  &__enabled {
+    color: var(--theme-success-500);
+  }
+
+  &__enroll {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+    max-width: 280px;
+
+    img {
+      background: white;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    input {
+      background: var(--theme-elevation-50);
+      border: 1px solid var(--theme-elevation-150);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+  }
+}

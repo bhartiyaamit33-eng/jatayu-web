@@ -8,6 +8,7 @@ import { azureStorage } from "@payloadcms/storage-azure";
 import { gcsStorage } from "@payloadcms/storage-gcs";
 
 import { Users } from "./collections/Users";
+import { AuditLogs } from "./collections/AuditLogs";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
 import { Products } from "./collections/Products";
@@ -39,6 +40,7 @@ import { ForHospitalsPage } from "./globals/ForHospitalsPage";
 import { SiteFooter } from "./globals/SiteFooter";
 import { AboutPage } from "./globals/AboutPage";
 import { UseCasesPage } from "./globals/UseCasesPage";
+import { cmsWorkflowPlugin } from "./plugins/cmsWorkflow";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -98,6 +100,20 @@ const plugins = gcsBucket
       ]
     : [];
 
+// Origins trusted for CORS + CSRF. The configured site URL plus the standard
+// local dev origins, de-duplicated. Adding the localhost variants is safe in
+// production too: cookies are domain-scoped, so a localhost page can never
+// carry the production admin cookie.
+const trustedOrigins = Array.from(
+  new Set(
+    [
+      process.env.NEXT_PUBLIC_SITE_URL,
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+    ].filter(Boolean) as string[],
+  ),
+);
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -108,9 +124,29 @@ export default buildConfig({
         { rel: "apple-touch-icon", sizes: "180x180", url: "/apple-icon.png" },
       ],
     },
+    components: {
+      actions: ["/src/components/admin/AccountMenu#AccountMenu"],
+      beforeLogin: ["/src/components/admin/MfaLoginForm#MfaLoginForm"],
+      beforeNavLinks: [
+        "/src/components/admin/ReviewQueueNavLink#ReviewQueueNavLink",
+      ],
+      logout: {
+        Button: false,
+      },
+      views: {
+        reviewQueue: {
+          Component: "/src/components/admin/ReviewQueue#ReviewQueue",
+          path: "/review-queue",
+          meta: {
+            title: "Review queue",
+          },
+        },
+      },
+    },
   },
   collections: [
     Users,
+    AuditLogs,
     Media,
     Posts,
     Products,
@@ -145,7 +181,7 @@ export default buildConfig({
     UseCasesPage,
   ],
   editor: lexicalEditor({}),
-  plugins,
+  plugins: [cmsWorkflowPlugin, ...plugins],
   sharp,
   secret: process.env.PAYLOAD_SECRET ?? "dev-secret-change-me-in-prod",
   typescript: {
@@ -168,10 +204,13 @@ export default buildConfig({
     //     before any deploy that introduces schema changes.
     push: process.env.NODE_ENV !== "production",
   }),
-  cors: [process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"].filter(
-    Boolean,
-  ),
-  csrf: [process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"].filter(
-    Boolean,
-  ),
+  // Trusted origins for CORS and CSRF. Payload only honours the admin login
+  // cookie for write/publish requests whose Origin is in the `csrf` list, so
+  // this MUST include every origin the admin is actually opened from. We always
+  // include the local dev variants (localhost AND 127.0.0.1) in addition to the
+  // configured site URL — otherwise opening the admin at 127.0.0.1 (or with
+  // NEXT_PUBLIC_SITE_URL pointed at production) silently rejects every save with
+  // "You are not allowed to perform this action".
+  cors: trustedOrigins,
+  csrf: trustedOrigins,
 });
