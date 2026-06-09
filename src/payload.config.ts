@@ -133,6 +133,9 @@ export default buildConfig({
       logout: {
         Button: false,
       },
+      providers: [
+        "/src/components/admin/SessionEndProvider#SessionEndProvider",
+      ],
       views: {
         reviewQueue: {
           Component: "/src/components/admin/ReviewQueue#ReviewQueue",

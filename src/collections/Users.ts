@@ -1,6 +1,7 @@
 import type { CollectionBeforeChangeHook, CollectionConfig } from "payload";
 import { superAdminOnly } from "@/lib/access";
 import { requireMfaVerification } from "@/lib/mfa-hooks";
+import { enforceSingleActiveSession } from "@/lib/session-hooks";
 
 const stripMfaSecretUnlessAllowed: CollectionBeforeChangeHook = async ({
   data,
@@ -16,7 +17,8 @@ const stripMfaSecretUnlessAllowed: CollectionBeforeChangeHook = async ({
 export const Users: CollectionConfig = {
   slug: "users",
   auth: {
-    tokenExpiration: 60 * 60 * 24 * 7,
+    tokenExpiration: 60 * 60 * 24, // 24 hours; session revoked on browser/tab close
+    useSessions: true,
     cookies: {
       sameSite: "Lax",
       secure: process.env.NODE_ENV === "production",
@@ -37,6 +39,7 @@ export const Users: CollectionConfig = {
   },
   hooks: {
     beforeLogin: [requireMfaVerification],
+    afterLogin: [enforceSingleActiveSession],
     beforeChange: [stripMfaSecretUnlessAllowed],
   },
   fields: [
