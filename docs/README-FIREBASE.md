@@ -9,6 +9,7 @@ Three docs cover deploying and operating it:
 | **[FIREBASE-APP-HOSTING-SETUP.md](./FIREBASE-APP-HOSTING-SETUP.md)** | You want to set this code up on **your own** Firebase project + Cloud SQL, from scratch (Windows + VS Code). Includes all version pins and the two build fixes. |
 | **[FIREBASE-DEPLOYMENT-PROCESS.md](./FIREBASE-DEPLOYMENT-PROCESS.md)** | You want the **record of the original go-live** — the 5 blockers we hit, how each was diagnosed and fixed, the commits made, and the open follow-ups. |
 | **[MEDIA-STORAGE-SETUP.md](./MEDIA-STORAGE-SETUP.md)** | You want to put **media on a Google Cloud Storage bucket** — how storage is wired, the bucket structure, enabling GCS, and migrating existing media. |
+| **[DATABASE-HOSTING-OPTIONS.md](./DATABASE-HOSTING-OPTIONS.md)** | You want to **cut database cost** — Cloud SQL vs Neon vs Supabase vs VPS, connection strings, and migrating with `npm run db:migrate`. |
 
 ## 30-second mental model
 

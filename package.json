@@ -15,6 +15,7 @@
     "db:down": "docker compose down",
     "db:logs": "docker compose logs -f postgres",
     "sync-prod-schema": "bash scripts/sync-prod-schema.sh",
+    "db:migrate": "bash scripts/migrate-postgres.sh",
     "docs:screenshots": "node scripts/take-shots.mjs",
     "docs:guidebook-docx": "pandoc docs/cms-guidebook.md -o docs/Jatayu-CMS-Guidebook.docx --resource-path=docs --toc --toc-depth=3 --metadata title=\"Jatayu CMS Guidebook\" --metadata author=\"Jatayu Healthcare Technologies\" --metadata date=\"May 2026\""
   },
