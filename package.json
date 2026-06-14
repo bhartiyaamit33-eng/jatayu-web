@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap",
     "payload": "payload",
     "seed": "curl -sS -X POST -H \"x-seed-secret: $(grep ^PAYLOAD_SECRET .env.local | cut -d= -f2)\" http://localhost:3000/api/seed | node -e 'let d=\"\";process.stdin.on(\"data\",c=>d+=c).on(\"end\",()=>{const j=JSON.parse(d);console.log(j.ok?\"OK \"+j.count+\" ops\":\"FAIL: \"+j.error);(j.log||[]).forEach(l=>console.log(\"  \"+l));process.exit(j.ok?0:1)})'",
     "db:up": "docker compose up -d postgres",

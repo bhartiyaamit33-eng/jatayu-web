@@ -70,14 +70,17 @@ export function AccountMenu() {
             <p className="jatayu-account-menu__role">{roleLabel}</p>
           </div>
 
-          <a
+          <button
+            type="button"
             className="jatayu-account-menu__item"
-            href={accountHref}
             role="menuitem"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              router.push(accountHref);
+            }}
           >
             {t("authentication:account")}
-          </a>
+          </button>
 
           <button
             type="button"

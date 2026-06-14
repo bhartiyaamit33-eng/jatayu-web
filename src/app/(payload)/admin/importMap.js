@@ -27,6 +27,7 @@ import { AccountMenu as AccountMenu_f431bd340e84164c59e8602488aecd83 } from '../
 import { MfaLoginForm as MfaLoginForm_a34d1f0798af6ff79541aae71ba124f6 } from '../../../../src/components/admin/MfaLoginForm'
 import { ReviewQueueNavLink as ReviewQueueNavLink_a0ed2576bf27488cb1dbed295229232f } from '../../../../src/components/admin/ReviewQueueNavLink'
 import { ReviewQueue as ReviewQueue_adaf720e1989c0c6ad4d859a61cd5f9a } from '../../../../src/components/admin/ReviewQueue'
+import { SessionEndProvider as SessionEndProvider_c4a8e1f92b3d5a6e7f8c9d0e1f2a3b4c } from '../../../../src/components/admin/SessionEndProvider'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -60,5 +61,6 @@ export const importMap = {
   "/src/components/admin/MfaLoginForm#MfaLoginForm": MfaLoginForm_a34d1f0798af6ff79541aae71ba124f6,
   "/src/components/admin/ReviewQueueNavLink#ReviewQueueNavLink": ReviewQueueNavLink_a0ed2576bf27488cb1dbed295229232f,
   "/src/components/admin/ReviewQueue#ReviewQueue": ReviewQueue_adaf720e1989c0c6ad4d859a61cd5f9a,
+  "/src/components/admin/SessionEndProvider#SessionEndProvider": SessionEndProvider_c4a8e1f92b3d5a6e7f8c9d0e1f2a3b4c,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

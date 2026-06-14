@@ -10,8 +10,10 @@
   display: none !important;
 }
 
-/* Hide default Payload login form — replaced by MFA-aware form */
-.login__form:not(.jatayu-mfa-login) {
+/* Hide default Payload login form only once the MFA form has mounted.
+   Without :has(), a slow JS load or client error leaves the page blank because
+   the default form is hidden before the MFA form appears. */
+.login:has(.jatayu-mfa-login) .login__form:not(.jatayu-mfa-login) {
   display: none !important;
 }
 
